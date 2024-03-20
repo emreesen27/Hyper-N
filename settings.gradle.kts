@@ -15,7 +15,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-
+        maven(url = "https://jitpack.io")
         maven(url = "${rootProject.projectDir}/explode/build/host/outputs/repo")
         maven(url = "$storageUrl/download.flutter.io")
     }

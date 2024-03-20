@@ -1,6 +1,7 @@
-package com.snstudio.hyper
+package com.snstudio.hyper.module
 
 import android.app.Application
+import com.snstudio.hyper.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

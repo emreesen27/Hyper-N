@@ -1,6 +1,7 @@
-package com.snstudio.hyper
+package com.snstudio.hyper.ui.shared
 
 import androidx.recyclerview.widget.DiffUtil
+import com.snstudio.hyper.data.Media
 
 class MediaDiffCallback(
     private val oldList: List<Media>,

@@ -1,4 +1,4 @@
-package com.snstudio.hyper.core
+package com.snstudio.hyper.core.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
