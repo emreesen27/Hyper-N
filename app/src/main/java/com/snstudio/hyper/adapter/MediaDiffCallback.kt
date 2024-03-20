@@ -1,4 +1,4 @@
-package com.snstudio.hyper.ui.shared
+package com.snstudio.hyper.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.snstudio.hyper.data.Media

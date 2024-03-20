@@ -1,4 +1,4 @@
-package com.snstudio.hyper.ui.shared
+package com.snstudio.hyper.shared
 
 import android.app.Application
 import android.content.ComponentName

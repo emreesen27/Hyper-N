@@ -4,8 +4,8 @@ import android.net.Uri
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import com.snstudio.hyper.util.DATA_KEY
-import com.snstudio.hyper.ui.shared.MediaItemAdapter
-import com.snstudio.hyper.ui.shared.MediaViewModel
+import com.snstudio.hyper.adapter.MediaItemAdapter
+import com.snstudio.hyper.shared.MediaViewModel
 import com.snstudio.hyper.util.RECEIVED
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.addDivider

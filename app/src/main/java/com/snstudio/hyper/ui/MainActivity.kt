@@ -13,7 +13,7 @@ import com.snstudio.hyper.R
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.core.extension.visibility
 import com.snstudio.hyper.databinding.ActivityMainBinding
-import com.snstudio.hyper.ui.shared.MediaViewModel
+import com.snstudio.hyper.shared.MediaViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

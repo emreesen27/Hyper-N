@@ -1,4 +1,4 @@
-package com.snstudio.hyper.ui.shared
+package com.snstudio.hyper.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
