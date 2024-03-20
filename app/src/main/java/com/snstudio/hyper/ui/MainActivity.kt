@@ -56,10 +56,10 @@ class MainActivity : AppCompatActivity() {
     private fun observeData() {
         with(mediaViewModel) {
             observe(playerLiveData) { player ->
-                binding.playerMenu.player = player
+                binding.playerView.player = player
             }
-            observe(playerVisibleLiveData) { visibility ->
-                binding.playerMenu.visibility(visibility)
+            observe(playerStatusLiveData) { isPlaying ->
+                binding.playerView.visibility(isPlaying)
             }
         }
     }
