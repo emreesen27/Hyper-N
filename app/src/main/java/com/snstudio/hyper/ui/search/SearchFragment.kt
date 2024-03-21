@@ -35,6 +35,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
         initMediaViewModel()
         initAdapter()
         initSearch()
+        setDataBinding()
     }
 
     override fun observeData() {
@@ -43,6 +44,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
                 when (it.method) {
                     RECEIVED.SEARCH_RECEIVED.received -> {
                         it.argument<List<HashMap<String, String>>>(DATA_KEY)?.let { data ->
+                            viewModel.searchProgressObservable.set(false)
                             mediaItemAdapter?.setItems(data.toMediaList(1))
                         }
                     }
@@ -111,6 +113,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
 
     private fun initMediaViewModel() {
         mediaViewModel = ViewModelProvider(requireActivity())[MediaViewModel::class.java]
+    }
+
+    private fun setDataBinding() {
+        binding.vm = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
 }

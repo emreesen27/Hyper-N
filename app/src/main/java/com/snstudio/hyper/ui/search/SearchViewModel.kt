@@ -1,5 +1,6 @@
 package com.snstudio.hyper.ui.search
 
+import androidx.databinding.ObservableBoolean
 import com.snstudio.hyper.util.INVOKE
 import com.snstudio.hyper.util.RECEIVED
 import com.snstudio.hyper.core.base.BaseViewModel
@@ -13,6 +14,7 @@ class SearchViewModel @Inject constructor(
     private val methodChannel: MethodChannel
 ) : BaseViewModel(methodChannel) {
 
+    val searchProgressObservable = ObservableBoolean(false)
     var selectedMedia: Media? = null
     var mediaUrl: String? = null
 
@@ -25,6 +27,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun search(query: String) {
+        searchProgressObservable.set(true)
         methodChannel.invokeMethod(INVOKE.SEARCH.invoke, query)
     }
 

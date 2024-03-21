@@ -2,4 +2,5 @@
     <string name="app_name">Hyper</string>
     <string name="home">Home</string>
     <string name="highlights">Highlights</string>
+    <string name="searching">Searching...</string>
 </resources>
