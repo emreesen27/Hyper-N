@@ -16,7 +16,6 @@ class SearchViewModel @Inject constructor(
 
     val searchProgressObservable = ObservableBoolean(false)
     var selectedMedia: Media? = null
-    var mediaUrl: String? = null
 
     init {
         receivedData(

@@ -12,7 +12,7 @@
 
 
         <action
-            android:id="@+id/actionHomeToSearch"
+            android:id="@+id/goToSearch"
             app:destination="@id/searchFragment">
 
         </action>

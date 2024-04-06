@@ -39,7 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     private fun initMenuClick() {
         binding.search.setOnClickListener {
-            navigate(HomeFragmentDirections.actionHomeToSearch())
+            navigate(HomeFragmentDirections.goToSearch())
         }
     }
 

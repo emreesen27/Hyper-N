@@ -1,21 +1,21 @@
 package com.snstudio.hyper.ui.search
 
-import android.net.Uri
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
-import com.snstudio.hyper.util.DATA_KEY
 import com.snstudio.hyper.adapter.MediaItemAdapter
-import com.snstudio.hyper.shared.MediaViewModel
-import com.snstudio.hyper.util.RECEIVED
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.addDivider
 import com.snstudio.hyper.core.extension.addOnScrolledToEnd
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.core.extension.toMediaList
 import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.MediaItemBuilder
 import com.snstudio.hyper.databinding.FragmentSearchBinding
 import com.snstudio.hyper.service.JobCompletedCallback
 import com.snstudio.hyper.service.JobService
+import com.snstudio.hyper.shared.MediaViewModel
+import com.snstudio.hyper.util.DATA_KEY
+import com.snstudio.hyper.util.RECEIVED
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,9 +52,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
                     RECEIVED.AUDIO_URL_RECEIVED.received -> {
                         it.argument<String>(DATA_KEY)?.let { url ->
                             viewModel.selectedMedia?.let { media ->
-                                //startDownloadService(media, url)
-                                //(activity as MainActivity).playMedia(url)
-                                mediaViewModel.playMediaItem(Uri.parse(url))
+                                val item = MediaItemBuilder().setMediaId(url).setMediaTitle(media.title).build()
+                                mediaViewModel.playMediaItem(item)
                             }
                         }
                     }
