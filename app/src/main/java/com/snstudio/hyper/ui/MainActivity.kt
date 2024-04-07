@@ -1,5 +1,6 @@
 package com.snstudio.hyper.ui
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -13,6 +14,7 @@ import com.snstudio.hyper.R
 import com.snstudio.hyper.core.extension.gone
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.core.extension.startColorAnimation
+import com.snstudio.hyper.core.extension.stopColorAnimation
 import com.snstudio.hyper.core.extension.visible
 import com.snstudio.hyper.databinding.ActivityMainBinding
 import com.snstudio.hyper.shared.MediaViewModel
@@ -20,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private var animator: ValueAnimator? = null
     private val mediaViewModel: MediaViewModel by viewModels()
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -59,12 +62,19 @@ class MainActivity : AppCompatActivity() {
             observe(playerLiveData) { player ->
                 binding.playerView.player = player
             }
-            observe(playerStatusLiveData) { isPlaying ->
-                if (isPlaying) {
+            observe(playbackStateLiveData) { isReady ->
+                if (isReady) {
                     binding.playerMenu.visible()
-                    binding.playerMenu.startColorAnimation()
                 }
             }
+            observe(playerWhenReadyLiveData) { ready ->
+                if (ready) {
+                    animator = binding.playerMenu.startColorAnimation()
+                } else {
+                    binding.playerMenu.stopColorAnimation(animator)
+                }
+            }
+
         }
     }
 

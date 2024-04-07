@@ -23,11 +23,14 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
     private val _playerLiveData = MutableLiveData<Player>()
     val playerLiveData: LiveData<Player> = _playerLiveData
 
-    private val _playerStatusLiveData = MutableLiveData<Boolean>()
-    val playerStatusLiveData: LiveData<Boolean> = _playerStatusLiveData
+    private val _playbackStateLiveData = MutableLiveData<Boolean>()
+    val playbackStateLiveData: LiveData<Boolean> = _playbackStateLiveData
 
     private val _metaDataLiveData = MutableLiveData<MediaMetadata>()
     val metaDataLiveData: LiveData<MediaMetadata> = _metaDataLiveData
+
+    private val _playerWhenReadyLiveData = MutableLiveData<Boolean>()
+    val playerWhenReadyLiveData: LiveData<Boolean> = _playerWhenReadyLiveData
 
     init {
         initMediaController()
@@ -50,13 +53,21 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
     private fun initPlayerListener() {
         player.addListener(
             object : Player.Listener {
-                override fun onIsPlayingChanged(isPlaying: Boolean) {
-                    _playerStatusLiveData.postValue(isPlaying)
-                }
 
                 override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
                     _metaDataLiveData.postValue(mediaMetadata)
                 }
+
+                override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+                    _playerWhenReadyLiveData.postValue(playWhenReady)
+                }
+
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    if (playbackState == Player.STATE_READY) {
+                        _playbackStateLiveData.postValue(true)
+                    }
+                }
+
             }
         )
     }
