@@ -10,6 +10,8 @@ import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.core.extension.toMediaList
 import com.snstudio.hyper.data.Media
 import com.snstudio.hyper.data.MediaItemBuilder
+import com.snstudio.hyper.data.OperationData
+import com.snstudio.hyper.data.OperationType
 import com.snstudio.hyper.databinding.FragmentSearchBinding
 import com.snstudio.hyper.service.JobCompletedCallback
 import com.snstudio.hyper.service.JobService
@@ -51,9 +53,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
 
                     RECEIVED.AUDIO_URL_RECEIVED.received -> {
                         it.argument<String>(DATA_KEY)?.let { url ->
-                            viewModel.selectedMedia?.let { media ->
-                                val item = MediaItemBuilder().setMediaId(url).setMediaTitle(media.title).build()
-                                mediaViewModel.playMediaItem(item)
+                            viewModel.getOperationData()?.let { data ->
+                                if (data.operationType == OperationType.PLAY) {
+                                    val item =
+                                        MediaItemBuilder().setMediaId(url)
+                                            .setMediaTitle(data.media.title)
+                                            .build()
+                                    mediaViewModel.playMediaItem(item)
+                                } else {
+                                    startDownloadService(data.media, url)
+                                }
                             }
                         }
                     }
@@ -96,15 +105,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
 
     private fun initAdapter() {
         if (mediaItemAdapter == null) {
-            mediaItemAdapter = MediaItemAdapter(onClick = { media ->
+            mediaItemAdapter = MediaItemAdapter { media, type ->
                 with(viewModel) {
-                    selectedMedia = media
+                    setOperationData(OperationData(media, type))
                     getAudioUrl(media.id)
                 }
-            })
+            }
         }
         with(binding.recyclerMedia) {
             adapter = mediaItemAdapter
+            itemAnimator = null
             addDivider(requireContext())
             addOnScrolledToEnd { viewModel.next() }
         }
