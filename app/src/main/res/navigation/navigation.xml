@@ -13,16 +13,18 @@
 
         <action
             android:id="@+id/goToSearch"
-            app:destination="@id/searchFragment">
+            app:destination="@id/searchFragment" />
 
-        </action>
 
+        <action
+            android:id="@+id/goToLibrary"
+            app:destination="@id/libraryFragment" />
 
     </fragment>
 
 
     <fragment
-        android:id="@+id/audioFragment"
+        android:id="@+id/libraryFragment"
         android:name="com.snstudio.hyper.ui.library.LibraryFragment"
         tools:layout="@layout/fragment_library" />
 

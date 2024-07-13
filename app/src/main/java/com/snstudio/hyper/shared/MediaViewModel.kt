@@ -14,6 +14,7 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
+import com.snstudio.hyper.data.Media
 import com.snstudio.hyper.service.MusicPlayerService
 
 class MediaViewModel(application: Application) : AndroidViewModel(application) {
@@ -23,11 +24,17 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
     private val _playerLiveData = MutableLiveData<Player>()
     val playerLiveData: LiveData<Player> = _playerLiveData
 
-    private val _playerStatusLiveData = MutableLiveData<Boolean>()
-    val playerStatusLiveData: LiveData<Boolean> = _playerStatusLiveData
+    private val _playbackStateLiveData = MutableLiveData<Boolean>()
+    val playbackStateLiveData: LiveData<Boolean> = _playbackStateLiveData
 
     private val _metaDataLiveData = MutableLiveData<MediaMetadata>()
     val metaDataLiveData: LiveData<MediaMetadata> = _metaDataLiveData
+
+    private val _playerWhenReadyLiveData = MutableLiveData<Boolean>()
+    val playerWhenReadyLiveData: LiveData<Boolean> = _playerWhenReadyLiveData
+
+    private val _currentMediaLiveData = MutableLiveData<Media>()
+    val currentMediaLiveData: LiveData<Media> = _currentMediaLiveData
 
     init {
         initMediaController()
@@ -50,16 +57,29 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
     private fun initPlayerListener() {
         player.addListener(
             object : Player.Listener {
-                override fun onIsPlayingChanged(isPlaying: Boolean) {
-                    _playerStatusLiveData.postValue(isPlaying)
-                }
 
                 override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
                     _metaDataLiveData.postValue(mediaMetadata)
                 }
+
+                override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+                    _playerWhenReadyLiveData.postValue(playWhenReady)
+                }
+
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    if (playbackState == Player.STATE_READY) {
+                        _playbackStateLiveData.postValue(!_currentMediaLiveData.value?.localPath.isNullOrEmpty())
+                    }
+                }
+
             }
         )
     }
+
+    fun getCurrentMediaUrl(): String =
+        player.currentMediaItem?.localConfiguration?.uri.toString()
+
+    fun getMediaMetaData(): MediaMetadata = player.mediaMetadata
 
     fun playMediaItem(item: MediaItem) {
         player.setMediaItem(item)
@@ -69,6 +89,10 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
 
     fun stopPlayer() {
         player.stop()
+    }
+
+    fun setCurrentMedia(media: Media) {
+        _currentMediaLiveData.value = media
     }
 
 }

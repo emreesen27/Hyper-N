@@ -18,6 +18,20 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:text="@string/app_name"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_16ssp"
+            app:layout_constraintBottom_toBottomOf="@+id/search"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/search"
             android:layout_width="@dimen/_45sdp"
@@ -37,52 +51,26 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/highlightsTitle"
-            android:layout_width="match_parent"
+        <include
+            android:id="@+id/musicCard"
+            layout="@layout/layout_music_card"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_5sdp"
-            android:text="@string/highlights"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_20ssp"
+            android:layout_marginTop="@dimen/_20sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search" />
 
-
-        <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
-            android:id="@+id/recyclerMedia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/highlightsTitle"
-            tools:listitem="@layout/item_media" />
-
-        <com.sn.lib.NestedProgress
+        <include
+            android:id="@+id/playList"
+            layout="@layout/layout_play_list_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
-            android:visibility="@{vm.highlightsProgress == true ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/highlightsTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/musicCard" />
 
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/mediaTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:padding="@dimen/_5sdp"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_16ssp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerMedia" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

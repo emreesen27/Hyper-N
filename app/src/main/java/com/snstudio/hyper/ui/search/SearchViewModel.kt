@@ -1,10 +1,10 @@
 package com.snstudio.hyper.ui.search
 
 import androidx.databinding.ObservableBoolean
-import com.snstudio.hyper.util.INVOKE
-import com.snstudio.hyper.util.RECEIVED
 import com.snstudio.hyper.core.base.BaseViewModel
 import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.util.INVOKE
+import com.snstudio.hyper.util.RECEIVED
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flutter.plugin.common.MethodChannel
 import javax.inject.Inject
@@ -15,7 +15,8 @@ class SearchViewModel @Inject constructor(
 ) : BaseViewModel(methodChannel) {
 
     val searchProgressObservable = ObservableBoolean(false)
-    var selectedMedia: Media? = null
+    var currentMedia: Media? = null
+        private set
 
     init {
         receivedData(
@@ -34,9 +35,9 @@ class SearchViewModel @Inject constructor(
         methodChannel.invokeMethod(INVOKE.NEXT.invoke, null)
     }
 
-    fun getAudioUrl(id: String) {
-        methodChannel.invokeMethod(INVOKE.AUDIO_URL.invoke, id)
+    fun getAudioUrl(media: Media) {
+        currentMedia = media
+        methodChannel.invokeMethod(INVOKE.AUDIO_URL.invoke, media.id)
     }
-
 
 }

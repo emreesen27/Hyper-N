@@ -57,7 +57,5 @@
             app:layout_constraintTop_toBottomOf="@+id/title"
             tools:text="@string/app_name" />
 
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

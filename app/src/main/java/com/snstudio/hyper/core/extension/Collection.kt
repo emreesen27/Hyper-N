@@ -44,7 +44,9 @@ fun List<HashMap<String, String>>.toMediaList(type: Int): MutableList<Media> {
             publishYear = hashMap["publishYear"],
             uploadYear = hashMap["uploadYear"],
             viewCount = hashMap["viewCount"] ?: "",
-            type = type
+            type = type,
+            bitmap = null,
+            localPath = null
         )
     }.toMutableList()
 }

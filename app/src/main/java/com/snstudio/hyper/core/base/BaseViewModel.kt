@@ -22,4 +22,15 @@ open class BaseViewModel(private val methodChannel: MethodChannel) : ViewModel()
         }
     }
 
+    fun observeMethodCall(methodName: String, action: (MethodCall) -> Unit) {
+        methodChannel.setMethodCallHandler { call, result ->
+            if (call.method == methodName) {
+                action(call)
+                result.success(null)
+            } else {
+                result.notImplemented()
+            }
+        }
+    }
+
 }
