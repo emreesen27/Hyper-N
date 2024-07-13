@@ -77,11 +77,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>() {
 
     private fun initAdapter() {
         if (mediaItemAdapter == null) {
-            mediaItemAdapter = MediaItemAdapter { media ->
+            mediaItemAdapter = MediaItemAdapter(onClick = { media ->
                 with(viewModel) {
                     getAudioUrl(media)
                 }
-            }
+            })
         }
         with(binding.recyclerMedia) {
             adapter = mediaItemAdapter

@@ -14,7 +14,8 @@ import com.snstudio.hyper.databinding.ItemMediaBinding
 import com.snstudio.hyper.databinding.ItemMediaSearchBinding
 
 class MediaItemAdapter(
-    private val onClick: ((Media) -> Unit)? = null
+    private val onClick: ((Media) -> Unit)? = null,
+    private val onLongClick: ((Media) -> Unit)? = null
 ) : RecyclerView.Adapter<MediaItemAdapter.AutoCompleteViewHolder>() {
     private var mediaItems: List<Media> = emptyList()
 
@@ -85,6 +86,10 @@ class MediaItemAdapter(
             val itemBinding = binding as ItemMediaBinding
             itemBinding.root.click {
                 adapter.onClick?.invoke(media)
+            }
+            itemBinding.root.setOnLongClickListener {
+                adapter.onLongClick?.invoke(media)
+                true
             }
         }
 

@@ -8,6 +8,7 @@ import com.snstudio.hyper.data.Media
 import com.snstudio.hyper.data.MediaItemBuilder
 import com.snstudio.hyper.databinding.FragmentLibraryBinding
 import com.snstudio.hyper.shared.MediaViewModel
+import com.snstudio.hyper.ui.DetailBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,8 +33,10 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
 
     private fun initAdapter() {
         if (mediaItemAdapter == null) {
-            mediaItemAdapter = MediaItemAdapter { media ->
+            mediaItemAdapter = MediaItemAdapter({ media ->
                 playMedia(media)
+            }) { media ->
+                showDetailBottomSheet(media)
             }
         }
         binding.recyclerMedia.adapter = mediaItemAdapter
@@ -53,6 +56,13 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
 
     private fun initMediaViewModel() {
         mediaViewModel = ViewModelProvider(requireActivity())[MediaViewModel::class.java]
+    }
+
+    private fun showDetailBottomSheet(media: Media) {
+        val bottomSheet = DetailBottomSheet(media = media, onDelete = {
+            viewModel.deleteMedia(media)
+        })
+        bottomSheet.show(childFragmentManager, DetailBottomSheet.TAG)
     }
 
 }

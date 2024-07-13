@@ -8,4 +8,6 @@
     <string name="song_desc">Listen to or manage downloaded songs</string>
     <string name="play_list">Playlist</string>
     <string name="play_list_desc">Create and manage playlists</string>
+    <string name="delete">Delete</string>
+    <string name="detail">Detail</string>
 </resources>
