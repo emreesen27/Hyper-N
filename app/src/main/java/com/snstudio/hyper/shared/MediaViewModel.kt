@@ -14,6 +14,7 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
+import com.snstudio.hyper.data.Media
 import com.snstudio.hyper.service.MusicPlayerService
 
 class MediaViewModel(application: Application) : AndroidViewModel(application) {
@@ -31,6 +32,9 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _playerWhenReadyLiveData = MutableLiveData<Boolean>()
     val playerWhenReadyLiveData: LiveData<Boolean> = _playerWhenReadyLiveData
+
+    private val _currentMediaLiveData = MutableLiveData<Media>()
+    val currentMediaLiveData: LiveData<Media> = _currentMediaLiveData
 
     init {
         initMediaController()
@@ -64,13 +68,18 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
 
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     if (playbackState == Player.STATE_READY) {
-                        _playbackStateLiveData.postValue(true)
+                        _playbackStateLiveData.postValue(!_currentMediaLiveData.value?.localPath.isNullOrEmpty())
                     }
                 }
 
             }
         )
     }
+
+    fun getCurrentMediaUrl(): String =
+        player.currentMediaItem?.localConfiguration?.uri.toString()
+
+    fun getMediaMetaData(): MediaMetadata = player.mediaMetadata
 
     fun playMediaItem(item: MediaItem) {
         player.setMediaItem(item)
@@ -80,6 +89,10 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
 
     fun stopPlayer() {
         player.stop()
+    }
+
+    fun setCurrentMedia(media: Media) {
+        _currentMediaLiveData.value = media
     }
 
 }

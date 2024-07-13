@@ -1,25 +1,22 @@
 package com.snstudio.hyper.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.snstudio.hyper.BR
 import com.snstudio.hyper.R
+import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.data.Media
-import com.snstudio.hyper.data.OperationType
 import com.snstudio.hyper.databinding.ItemMediaBinding
 import com.snstudio.hyper.databinding.ItemMediaSearchBinding
 
 class MediaItemAdapter(
-    private val onClick: ((Media, OperationType) -> Unit)? = null,
+    private val onClick: ((Media) -> Unit)? = null
 ) : RecyclerView.Adapter<MediaItemAdapter.AutoCompleteViewHolder>() {
     private var mediaItems: List<Media> = emptyList()
-    private var lastSelectedPosition = RecyclerView.NO_POSITION
 
     fun setItems(newItems: List<Media>) {
         val diffResult = DiffUtil.calculateDiff(MediaDiffCallback(mediaItems, newItems))
@@ -85,47 +82,16 @@ class MediaItemAdapter(
         }
 
         private fun bindMedia(media: Media) {
-            println(media)
+            val itemBinding = binding as ItemMediaBinding
+            itemBinding.root.click {
+                adapter.onClick?.invoke(media)
+            }
         }
 
         private fun bindMediaSearchType(media: Media) {
-            val isSelected = absoluteAdapterPosition == adapter.lastSelectedPosition
             val itemBinding = binding as ItemMediaSearchBinding
-            val itemClick: (OperationType) -> Unit = { operationType ->
-                adapter.lastSelectedPosition = RecyclerView.NO_POSITION
-                toggleMenu(true)
-                adapter.onClick?.invoke(media, operationType)
-            }
-
-            itemBinding.root.setOnClickListener {
-                if (adapter.lastSelectedPosition != absoluteAdapterPosition) {
-                    adapter.notifyItemChanged(adapter.lastSelectedPosition)
-                    adapter.lastSelectedPosition = absoluteAdapterPosition
-                }
-
-                toggleMenu(!isSelected)
-                adapter.notifyItemChanged(absoluteAdapterPosition)
-                adapter.lastSelectedPosition =
-                    if (isSelected) RecyclerView.NO_POSITION else absoluteAdapterPosition
-            }
-
-            itemBinding.menu.visibility = if (isSelected) View.VISIBLE else View.GONE
-
-            itemBinding.play.setOnClickListener {
-                itemClick(OperationType.PLAY)
-            }
-            itemBinding.download.setOnClickListener {
-                itemClick(OperationType.DOWNLOAD)
-            }
-            binding.info.setOnClickListener {
-                itemClick(OperationType.INFO)
-            }
-
-        }
-
-        private fun toggleMenu(isSelected: Boolean) {
-            (binding as ItemMediaSearchBinding).menu.apply {
-                isVisible = !isSelected
+            itemBinding.root.click {
+                adapter.onClick?.invoke(media)
             }
         }
 

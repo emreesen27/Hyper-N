@@ -8,31 +8,19 @@ import com.snstudio.hyper.core.extension.addDivider
 import com.snstudio.hyper.core.extension.addOnScrolledToEnd
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.core.extension.toMediaList
-import com.snstudio.hyper.data.Media
 import com.snstudio.hyper.data.MediaItemBuilder
-import com.snstudio.hyper.data.OperationData
-import com.snstudio.hyper.data.OperationType
 import com.snstudio.hyper.databinding.FragmentSearchBinding
-import com.snstudio.hyper.service.JobCompletedCallback
-import com.snstudio.hyper.service.JobService
 import com.snstudio.hyper.shared.MediaViewModel
 import com.snstudio.hyper.util.DATA_KEY
 import com.snstudio.hyper.util.RECEIVED
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
-    JobCompletedCallback {
+class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>() {
     private lateinit var mediaViewModel: MediaViewModel
     private var mediaItemAdapter: MediaItemAdapter? = null
     override fun getViewModelClass() = SearchViewModel::class.java
     override fun getViewBinding() = FragmentSearchBinding.inflate(layoutInflater)
-
-    override fun onJobProgress(progress: Int) {
-    }
-
-    override fun onJobCompleted() {}
-
     override fun setupViews() {
         initMediaViewModel()
         initAdapter()
@@ -53,17 +41,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
 
                     RECEIVED.AUDIO_URL_RECEIVED.received -> {
                         it.argument<String>(DATA_KEY)?.let { url ->
-                            viewModel.getOperationData()?.let { data ->
-                                if (data.operationType == OperationType.PLAY) {
-                                    val item =
-                                        MediaItemBuilder().setMediaId(url)
-                                            .setMediaTitle(data.media.title)
-                                            .build()
-                                    mediaViewModel.playMediaItem(item)
-                                } else {
-                                    startDownloadService(data.media, url)
-                                }
-                            }
+                            val item =
+                                MediaItemBuilder().setMediaId(url)
+                                    .setMediaTitle(currentMedia?.title.orEmpty())
+                                    .build()
+                            mediaViewModel.playMediaItem(item)
+                            currentMedia?.let { media -> mediaViewModel.setCurrentMedia(media) }
                         }
                     }
 
@@ -78,17 +61,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
         }
     }
 
-    private fun startDownloadService(
-        media: Media,
-        url: String,
-    ) {
-        JobService.download(
-            media,
-            url,
-            this@SearchFragment,
-            requireContext(),
-        )
-    }
 
     private fun initSearch() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -105,10 +77,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
 
     private fun initAdapter() {
         if (mediaItemAdapter == null) {
-            mediaItemAdapter = MediaItemAdapter { media, type ->
+            mediaItemAdapter = MediaItemAdapter { media ->
                 with(viewModel) {
-                    setOperationData(OperationData(media, type))
-                    getAudioUrl(media.id)
+                    getAudioUrl(media)
                 }
             }
         }

@@ -1,10 +1,11 @@
 package com.snstudio.hyper.service
 
-import android.os.Environment
+import androidx.media3.common.MediaMetadata
 import com.snstudio.hyper.R
-import com.snstudio.hyper.data.Media
 import com.snstudio.hyper.core.base.BaseJob
 import com.snstudio.hyper.core.extension.postNotification
+import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.util.PathProvider
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.IOException
@@ -13,14 +14,17 @@ import java.io.FileOutputStream
 
 class DownloadJob(
     private val media: Media,
+    private val mediaMetadata: MediaMetadata,
     private val url: String,
     private val callback: JobCompletedCallback,
 ) : BaseJob() {
 
-    override fun run() {
-        val client = OkHttpClient()
+    private var filePath: String? = null
 
-        println(url)
+    override fun run() {
+        val pathProvider = PathProvider(service.application)
+        callback.onJobStart(media.id)
+        val client = OkHttpClient()
         val request = Request.Builder()
             .url(url)
             .build()
@@ -32,8 +36,8 @@ class DownloadJob(
             var downloadedBytes = 0L
 
             val inputStream = response.body!!.byteStream()
-            val file =
-                File("${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath}/${media.title}.mp3")
+            val file = File("${pathProvider.musicDirPath}/${mediaMetadata.title}.mp3")
+            filePath = file.absolutePath
             val outputStream = FileOutputStream(file)
 
             val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
@@ -53,8 +57,8 @@ class DownloadJob(
         }
     }
 
-
     override fun onCompleted() {
-        callback.onJobCompleted()
+        val newMedia: Media = media.copy(localPath = filePath)
+        callback.onJobCompleted(newMedia)
     }
 }

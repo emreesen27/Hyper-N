@@ -34,7 +34,7 @@
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:background="@color/secondary_background_color"
+                android:background="@color/background_color"
                 app:closeIcon="@drawable/ic_close"
                 app:iconifiedByDefault="false"
                 app:searchHintIcon="@drawable/ic_search_hint"

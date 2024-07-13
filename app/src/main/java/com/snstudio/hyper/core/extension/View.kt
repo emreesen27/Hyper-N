@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.snstudio.hyper.R
+import com.snstudio.hyper.util.SafeClickListener
 
 fun View.visible() {
     this.visibility = View.VISIBLE
@@ -11,6 +12,10 @@ fun View.visible() {
 
 fun View.gone() {
     this.visibility = View.GONE
+}
+
+fun View.invisible() {
+    this.visibility = View.INVISIBLE
 }
 
 fun View.visibility(visibility: Boolean) {
@@ -42,4 +47,12 @@ fun View.startColorAnimation(): ValueAnimator {
 fun View.stopColorAnimation(animator: ValueAnimator?) {
     this.setBackgroundColor(ContextCompat.getColor(context, R.color.background_color))
     animator?.cancel()
+}
+
+fun View.click(onClick: (View) -> Unit) {
+    val safeClickListener =
+        SafeClickListener {
+            onClick(it)
+        }
+    setOnClickListener(safeClickListener)
 }

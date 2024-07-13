@@ -1,14 +1,15 @@
 package com.snstudio.hyper.service
 
-import com.snstudio.hyper.util.FrNotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import androidx.annotation.MainThread
-import com.snstudio.hyper.data.Media
+import androidx.media3.common.MediaMetadata
 import com.snstudio.hyper.core.base.BaseJob
 import com.snstudio.hyper.core.extension.removeFirst
+import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.util.FrNotificationManager
 import com.snstudio.hyper.util.WakeWifiLock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -110,11 +111,12 @@ class JobService : Service() {
 
         fun download(
             media: Media,
+            mediaMetadata: MediaMetadata,
             url: String,
             completed: JobCompletedCallback,
             context: Context,
         ) {
-            startJob(DownloadJob(media, url, completed), context)
+            startJob(DownloadJob(media, mediaMetadata, url, completed), context)
         }
 
 
