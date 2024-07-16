@@ -1,8 +1,9 @@
-package com.snstudio.hyper.data.local
+package com.snstudio.hyper.data.local.repository
 
 
 import androidx.annotation.WorkerThread
-import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.model.Media
+import com.snstudio.hyper.data.local.dao.MediaDao
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -19,6 +20,4 @@ class MediaRepository @Inject constructor(private val mediaDao: MediaDao) {
     suspend fun delete(media: Media) {
         return mediaDao.delete(media)
     }
-
-
 }

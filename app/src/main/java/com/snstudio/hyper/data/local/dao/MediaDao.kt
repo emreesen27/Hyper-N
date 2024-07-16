@@ -1,11 +1,11 @@
-package com.snstudio.hyper.data.local
+package com.snstudio.hyper.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.model.Media
 import kotlinx.coroutines.flow.Flow
 
 
@@ -17,7 +17,7 @@ interface MediaDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(media: Media)
 
-    @Delete()
+    @Delete
     suspend fun delete(media: Media)
 
 }

@@ -21,7 +21,6 @@
             android:textColor="@color/text_color"
             android:textSize="@dimen/_13ssp"
             app:layout_constraintEnd_toStartOf="@id/iv_close"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

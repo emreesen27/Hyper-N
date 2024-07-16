@@ -1,4 +1,4 @@
-package com.snstudio.hyper.ui.home
+package com.snstudio.hyper.feature.home
 
 import android.Manifest
 import android.content.Context
@@ -42,6 +42,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
             musicCard.root.click {
                 navigate(HomeFragmentDirections.goToLibrary())
+            }
+            playList.root.click {
+                navigate(HomeFragmentDirections.goToPlaylist())
             }
         }
     }

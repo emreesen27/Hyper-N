@@ -1,14 +1,14 @@
-package com.snstudio.hyper.ui.library
+package com.snstudio.hyper.feature.library
 
 import androidx.lifecycle.ViewModelProvider
 import com.snstudio.hyper.adapter.MediaItemAdapter
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.observe
-import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.data.MediaItemBuilder
 import com.snstudio.hyper.databinding.FragmentLibraryBinding
 import com.snstudio.hyper.shared.MediaViewModel
-import com.snstudio.hyper.ui.DetailBottomSheet
+import com.snstudio.hyper.feature.DetailBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

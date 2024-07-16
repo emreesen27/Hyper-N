@@ -1,6 +1,6 @@
 package com.snstudio.hyper.service
 
-import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.model.Media
 
 interface JobCompletedCallback {
     fun onJobStart(id: String)

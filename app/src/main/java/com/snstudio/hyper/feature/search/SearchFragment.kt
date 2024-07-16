@@ -1,4 +1,4 @@
-package com.snstudio.hyper.ui.search
+package com.snstudio.hyper.feature.search
 
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider

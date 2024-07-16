@@ -1,4 +1,4 @@
-package com.snstudio.hyper.ui
+package com.snstudio.hyper.feature
 
 import android.animation.ValueAnimator
 import android.os.Bundle
@@ -15,7 +15,7 @@ import com.snstudio.hyper.core.extension.gone
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.core.extension.startColorAnimation
 import com.snstudio.hyper.core.extension.visible
-import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.databinding.ActivityMainBinding
 import com.snstudio.hyper.service.JobCompletedCallback
 import com.snstudio.hyper.service.JobService

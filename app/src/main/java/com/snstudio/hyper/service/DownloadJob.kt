@@ -4,7 +4,7 @@ import androidx.media3.common.MediaMetadata
 import com.snstudio.hyper.R
 import com.snstudio.hyper.core.base.BaseJob
 import com.snstudio.hyper.core.extension.postNotification
-import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.util.PathProvider
 import okhttp3.OkHttpClient
 import okhttp3.Request

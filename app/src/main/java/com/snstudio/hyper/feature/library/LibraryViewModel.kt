@@ -1,11 +1,11 @@
-package com.snstudio.hyper.ui.library
+package com.snstudio.hyper.feature.library
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.snstudio.hyper.data.Media
-import com.snstudio.hyper.data.local.MediaRepository
+import com.snstudio.hyper.data.model.Media
+import com.snstudio.hyper.data.local.repository.MediaRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

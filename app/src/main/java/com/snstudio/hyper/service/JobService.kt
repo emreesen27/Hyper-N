@@ -8,7 +8,7 @@ import androidx.annotation.MainThread
 import androidx.media3.common.MediaMetadata
 import com.snstudio.hyper.core.base.BaseJob
 import com.snstudio.hyper.core.extension.removeFirst
-import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.util.FrNotificationManager
 import com.snstudio.hyper.util.WakeWifiLock
 import kotlinx.coroutines.CoroutineScope

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.snstudio.hyper.BR
 import com.snstudio.hyper.R
 import com.snstudio.hyper.core.extension.click
-import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.databinding.ItemMediaBinding
 import com.snstudio.hyper.databinding.ItemMediaSearchBinding
 

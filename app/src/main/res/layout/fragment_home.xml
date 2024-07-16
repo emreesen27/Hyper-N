@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.snstudio.hyper.ui.home.HomeViewModel" />
+            type="com.snstudio.hyper.feature.home.HomeViewModel" />
 
     </data>
 
@@ -16,7 +16,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.home.HomeFragment">
+        tools:context=".feature.home.HomeFragment">
 
 
         <com.google.android.material.textview.MaterialTextView

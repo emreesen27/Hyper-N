@@ -1,4 +1,4 @@
-package com.snstudio.hyper.ui
+package com.snstudio.hyper.feature
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.snstudio.hyper.core.extension.click
-import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.databinding.FragmentDetailBottomSheetBinding
 
 class DetailBottomSheet(

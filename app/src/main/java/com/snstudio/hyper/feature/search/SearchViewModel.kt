@@ -1,8 +1,8 @@
-package com.snstudio.hyper.ui.search
+package com.snstudio.hyper.feature.search
 
 import androidx.databinding.ObservableBoolean
 import com.snstudio.hyper.core.base.BaseViewModel
-import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.util.INVOKE
 import com.snstudio.hyper.util.RECEIVED
 import dagger.hilt.android.lifecycle.HiltViewModel

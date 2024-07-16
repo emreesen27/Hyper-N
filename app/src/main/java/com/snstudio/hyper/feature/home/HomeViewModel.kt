@@ -1,4 +1,4 @@
-package com.snstudio.hyper.ui.home
+package com.snstudio.hyper.feature.home
 
 import com.snstudio.hyper.core.base.BaseViewModel
 import com.snstudio.hyper.util.PrefsTag

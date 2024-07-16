@@ -10,4 +10,8 @@
     <string name="play_list_desc">Create and manage playlists</string>
     <string name="delete">Delete</string>
     <string name="detail">Detail</string>
+    <string name="playlist_name">Playlist Name</string>
+    <string name="save">Save</string>
+    <string name="create_playlist">Create Playlist</string>
+    <string name="create">Create</string>
 </resources>

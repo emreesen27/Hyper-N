@@ -2,8 +2,10 @@ package com.snstudio.hyper.module
 
 import android.content.Context
 import androidx.room.Room
-import com.snstudio.hyper.data.local.MediaDao
-import com.snstudio.hyper.data.local.RoomDatabase
+import com.snstudio.hyper.data.local.dao.MediaDao
+import com.snstudio.hyper.data.local.dao.PlaylistDao
+import com.snstudio.hyper.data.local.dao.PlaylistMediaCrossRefDao
+import com.snstudio.hyper.data.local.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,17 +17,27 @@ import javax.inject.Singleton
 @Module
 object DatabaseModule {
     @Provides
-    fun provideLocalMediaDao(roomDatabase: RoomDatabase): MediaDao {
-        return roomDatabase.localMediaDao()
+    fun provideLocalMediaDao(appDatabase: AppDatabase): MediaDao {
+        return appDatabase.localMediaDao()
+    }
+
+    @Provides
+    fun providePlaylistDap(appDatabase: AppDatabase): PlaylistDao {
+        return appDatabase.playlistDao()
+    }
+
+    @Provides
+    fun providePlaylistMediaCrossRefDao(appDatabase: AppDatabase): PlaylistMediaCrossRefDao {
+        return appDatabase.playlistMediaCrossRefDao()
     }
 
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): RoomDatabase {
+    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
         return Room.databaseBuilder(
             appContext,
-            RoomDatabase::class.java,
+            AppDatabase::class.java,
             "Hyper"
-        ).allowMainThreadQueries().build()
+        ).fallbackToDestructiveMigration().build()
     }
 }

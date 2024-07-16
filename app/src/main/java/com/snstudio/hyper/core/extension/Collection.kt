@@ -1,6 +1,6 @@
 package com.snstudio.hyper.core.extension
 
-import com.snstudio.hyper.data.Media
+import com.snstudio.hyper.data.model.Media
 
 fun <T> MutableCollection<T>.removeFirst(): T {
     val iterator = iterator()
