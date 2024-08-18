@@ -12,9 +12,17 @@ class PlaylistMediaCrossRepository @Inject constructor(
     private val playlistMediaCrossRefDao: PlaylistMediaCrossRefDao
 ) {
     @WorkerThread
-    suspend fun addMediaToPlaylist(playlistId: Long, mediaId: String) {
+    suspend fun insertMediaToPlaylist(playlistId: Long, mediaId: String) {
         val crossRef = PlaylistMediaCrossRef(playlistId, mediaId)
         playlistMediaCrossRefDao.insert(crossRef)
+    }
+
+    @WorkerThread
+    suspend fun insertMediaListToPlaylist(playlistId: Long, mediaIds: List<String>) {
+        val crossRefs = mediaIds.map { mediaId ->
+            PlaylistMediaCrossRef(playlistId = playlistId, id = mediaId)
+        }
+        playlistMediaCrossRefDao.insertAll(crossRefs)
     }
 
     fun getPlaylistWithMedia(playlistId: Long): Flow<PlaylistWithMedia> {

@@ -14,6 +14,9 @@ interface PlaylistMediaCrossRefDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(crossRef: PlaylistMediaCrossRef)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(crossRefs: List<PlaylistMediaCrossRef>)
+
     @Transaction
     @Query("SELECT * FROM playlist WHERE playlistId = :playlistId")
     fun getPlaylistWithMedia(playlistId: Long): Flow<PlaylistWithMedia>

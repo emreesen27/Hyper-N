@@ -11,9 +11,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel>() {
+    private val playlistAdapter by lazy {
+        PlaylistAdapter(onClick = {
+            navigatePlaylistDetail(it)
+        })
+    }
 
-    private val playlistAdapter by lazy { PlaylistAdapter(requireContext()) }
-
+    override var useSharedViewModel = true
     override fun getViewModelClass() = PlaylistViewModel::class.java
     override fun getViewBinding() = FragmentPlaylistBinding.inflate(layoutInflater)
 
@@ -23,7 +27,7 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
     }
 
     override fun observeData() {
-        observe(viewModel.playListLiveData) {
+        observe(viewModel.playlistLiveData) {
             playlistAdapter.setItems(it)
         }
     }
@@ -37,12 +41,17 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
             noItem.click {
                 val dialog = CreatePlaylistDialog()
                 dialog.onClick = { playlistName ->
-                    viewModel.insertPlayList(Playlist(name = playlistName))
+                    viewModel.insertPlaylist(Playlist(name = playlistName))
                     dialog.dismiss()
                 }
                 dialog.showDialog(childFragmentManager)
             }
         }
+    }
+
+    private fun navigatePlaylistDetail(playlist: Playlist) {
+        val action = PlaylistFragmentDirections.goToPlaylistDetail(playlist.playlistId)
+        navigate(action)
     }
 
 }

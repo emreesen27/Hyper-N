@@ -17,19 +17,34 @@ class MediaItemAdapter(
     private val onClick: ((Media) -> Unit)? = null,
     private val onLongClick: ((Media) -> Unit)? = null
 ) : RecyclerView.Adapter<MediaItemAdapter.AutoCompleteViewHolder>() {
-    private var mediaItems: List<Media> = emptyList()
+     var mediaItems: MutableList<Media> = mutableListOf()
 
-    fun setItems(newItems: List<Media>) {
+    fun setItems(newItems: MutableList<Media>) {
         val diffResult = DiffUtil.calculateDiff(MediaDiffCallback(mediaItems, newItems))
         mediaItems = newItems
         diffResult.dispatchUpdatesTo(this)
     }
 
-    fun addItem(newItems: List<Media>) {
-        val updatedList = mediaItems.toMutableList().apply { addAll(newItems) }
-        val diffResult = DiffUtil.calculateDiff(MediaDiffCallback(mediaItems, updatedList))
-        mediaItems = updatedList
+    fun addItem(newItems: MutableList<Media>) {
+        val diffResult = DiffUtil.calculateDiff(MediaDiffCallback(mediaItems, newItems))
+        mediaItems = newItems
         diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun moveItem(fromPosition: Int, toPosition: Int) {
+        val item = mediaItems.removeAt(fromPosition)
+        mediaItems.add(toPosition, item)
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
+    fun removeItem(position: Int) {
+        mediaItems.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun restoreItem(item: Media, position: Int) {
+        mediaItems.add(position, item)
+        notifyItemInserted(position)
     }
 
 
@@ -100,16 +115,15 @@ class MediaItemAdapter(
             }
         }
 
-
         companion object {
             fun create(
-                inflater: LayoutInflater?,
+                inflater: LayoutInflater,
                 parent: ViewGroup?,
                 viewType: Int,
                 adapter: MediaItemAdapter,
             ): AutoCompleteViewHolder {
                 val binding =
-                    DataBindingUtil.inflate<ViewDataBinding>(inflater!!, viewType, parent, false)
+                    DataBindingUtil.inflate<ViewDataBinding>(inflater, viewType, parent, false)
                 return AutoCompleteViewHolder(
                     binding,
                     adapter,
@@ -117,5 +131,4 @@ class MediaItemAdapter(
             }
         }
     }
-
 }

@@ -27,7 +27,8 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
 
     override fun observeData() {
         observe(viewModel.localMediaLiveData) { mediaList ->
-            mediaItemAdapter?.setItems(mediaList)
+            println("emre"+ mediaList)
+            mediaItemAdapter?.setItems(mediaList.toMutableList())
         }
     }
 
