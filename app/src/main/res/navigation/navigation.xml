@@ -40,6 +40,23 @@
     <fragment
         android:id="@+id/playlistFragment"
         android:name="com.snstudio.hyper.feature.playlist.PlaylistFragment"
-        tools:layout="@layout/fragment_playlist" />
+        tools:layout="@layout/fragment_playlist">
+
+        <action
+            android:id="@+id/goToPlaylistDetail"
+            app:destination="@id/playlistDetail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playlistDetail"
+        android:name="com.snstudio.hyper.feature.playlist.PlaylistDetailFragment"
+        tools:layout="@layout/fragment_playlist_detail">
+
+        <argument
+            android:name="playListId"
+            app:argType="long"
+            app:nullable="false" />
+
+    </fragment>
 
 </navigation>

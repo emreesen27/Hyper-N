@@ -7,6 +7,7 @@ import com.snstudio.hyper.databinding.DialogCreatePlayListBinding
 class CreatePlaylistDialog(
 ) : BaseDialog<DialogCreatePlayListBinding>() {
     var onClick: ((String) -> Unit)? = null
+
     override val dialogTag: String
         get() = "CONFIRMATION_DIALOG"
 
@@ -16,6 +17,7 @@ class CreatePlaylistDialog(
 
     override fun setupViews() {
         with(binding) {
+            // Todo check empty string
             close.click { dismiss() }
             btnSave.click { onClick?.invoke(playlistName.text.toString()) }
         }

@@ -2,7 +2,7 @@ package com.snstudio.hyper.feature.search
 
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
-import com.snstudio.hyper.adapter.MediaItemAdapter
+import com.snstudio.hyper.shared.MediaItemAdapter
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.addDivider
 import com.snstudio.hyper.core.extension.addOnScrolledToEnd

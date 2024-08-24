@@ -30,6 +30,6 @@ fun ImageView.loadBitmapWithGlide(
         .centerCrop()
         // .fitCenter()
         .placeholder(R.drawable.layer_placeholder)
-        .error(R.drawable.layer_placeholder) // change err
-        .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(this)
+        .error(R.drawable.layer_placeholder)
+        .diskCacheStrategy(DiskCacheStrategy.NONE).into(this)
 }
