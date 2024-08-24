@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.snstudio.hyper.BR
-import com.snstudio.hyper.adapter.MediaDiffCallback
 import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.databinding.ItemMusicPickerBinding
+import com.snstudio.hyper.shared.MediaListDiffCallback
 
 class MediaPickerAdapter : RecyclerView.Adapter<MediaPickerAdapter.MediaViewHolder>() {
 
@@ -15,7 +15,12 @@ class MediaPickerAdapter : RecyclerView.Adapter<MediaPickerAdapter.MediaViewHold
     private val selectedItems: MutableList<Media> = mutableListOf()
 
     fun setItems(newItems: List<Media>) {
-        val diffResult = DiffUtil.calculateDiff(MediaDiffCallback(mediaItems, newItems))
+        val diffResult = DiffUtil.calculateDiff(
+            MediaListDiffCallback(
+                mediaItems,
+                newItems
+            )
+        )
         mediaItems = newItems
         diffResult.dispatchUpdatesTo(this)
     }
@@ -53,7 +58,7 @@ class MediaPickerAdapter : RecyclerView.Adapter<MediaPickerAdapter.MediaViewHold
             setVariable(BR.mediaItem, media)
             executePendingBindings()
 
-            cbSelected.isChecked = selectedItems.contains(media)
+            cbSelected.isChecked = selectedItems.any { it.id == media.id }
             cbSelected.setOnCheckedChangeListener { _, isChecked ->
                 updateItemSelection(media, isChecked)
             }

@@ -3,7 +3,7 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="vm"
@@ -24,8 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:visibility="@{vm.playlistLiveData.empty ? View.GONE : View.VISIBLE}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_play_list" />
 
 
@@ -37,7 +37,7 @@
             android:text="Henüz bir liste oluşturmadınız oluşturmak için tıklayın."
             android:textColor="@color/text_color"
             android:textSize="@dimen/_13ssp"
-            android:visibility="visible"
+            android:visibility="@{vm.playlistLiveData.empty ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

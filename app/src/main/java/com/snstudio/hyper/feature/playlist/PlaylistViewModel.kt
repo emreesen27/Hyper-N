@@ -8,7 +8,6 @@ import com.snstudio.hyper.data.local.repository.PlaylistMediaCrossRepository
 import com.snstudio.hyper.data.local.repository.PlaylistRepository
 import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.data.model.Playlist
-import com.snstudio.hyper.data.model.PlaylistWithMedia
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -23,14 +22,23 @@ class PlaylistViewModel @Inject constructor(
     private val _playlistLiveData = MutableLiveData<List<Playlist>>()
     val playlistLiveData: LiveData<List<Playlist>> = _playlistLiveData
 
-    private val _playlistWithMediaLiveData = MutableLiveData<PlaylistWithMedia>()
-    val playlistWithMediaLiveData: LiveData<PlaylistWithMedia> = _playlistWithMediaLiveData
+    private val _playlistWithMediaLiveData = MutableLiveData<List<Media>>()
+    val playlistWithMediaLiveData: LiveData<List<Media>> = _playlistWithMediaLiveData
+
+    private val _swapOrdersLiveData = MutableLiveData<Pair<String, String>>()
+    val swapOrderLiveData: LiveData<Pair<String, String>> = _swapOrdersLiveData
+
+    private val _deleteMediaLiveData = MutableLiveData<Int>()
+    val deleteMediaLiveData: LiveData<Int> = _deleteMediaLiveData
+
 
     init {
-        viewModelScope.launch {
-            playlistRepository.allPlaylists.collect {
-                _playlistLiveData.value = it
-            }
+        getPlayList()
+    }
+
+    private fun getPlayList() = viewModelScope.launch {
+        playlistRepository.allPlaylists.collectLatest { playlist ->
+            _playlistLiveData.value = playlist
         }
     }
 
@@ -42,7 +50,6 @@ class PlaylistViewModel @Inject constructor(
         playlistRepository.delete(playlist)
     }
 
-
     fun insertMediaListToPlaylist(playlistId: Long, mediaList: List<Media>) =
         viewModelScope.launch {
             playlistMediaCrossRepository.insertMediaListToPlaylist(
@@ -50,10 +57,22 @@ class PlaylistViewModel @Inject constructor(
                 mediaList.map { it.id })
         }
 
-    fun getPlaylistWithMedia(playlistId: Long) = viewModelScope.launch {
-        playlistMediaCrossRepository.getPlaylistWithMedia(playlistId).collectLatest {
-            _playlistWithMediaLiveData.value = it
+    fun updateOrders(playlistId: Long, fromId: String, fromOrder: Int, toId: String, toOrder: Int) =
+        viewModelScope.launch {
+            playlistMediaCrossRepository.updateOrders(playlistId, fromId, fromOrder, toId, toOrder)
         }
+
+
+    fun getMediaForPlaylistOrdered(playlistId: Long) = viewModelScope.launch {
+        val mediaList = playlistMediaCrossRepository.getMediaForPlaylistOrdered(playlistId)
+        _playlistWithMediaLiveData.postValue(mediaList)
     }
+
+    fun deleteMediaFromPlaylist(playlistId: Long, mediaId: String, pos: Int) =
+        viewModelScope.launch {
+            playlistMediaCrossRepository.deleteMediaFromPlaylist(playlistId, mediaId)
+        }.invokeOnCompletion { throwable ->
+            if (throwable == null) _deleteMediaLiveData.postValue(pos)
+        }
 
 }

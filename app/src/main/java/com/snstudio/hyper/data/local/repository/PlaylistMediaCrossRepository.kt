@@ -2,30 +2,45 @@ package com.snstudio.hyper.data.local.repository
 
 import androidx.annotation.WorkerThread
 import com.snstudio.hyper.data.local.dao.PlaylistMediaCrossRefDao
+import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.data.model.PlaylistMediaCrossRef
-import com.snstudio.hyper.data.model.PlaylistWithMedia
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-
 
 class PlaylistMediaCrossRepository @Inject constructor(
     private val playlistMediaCrossRefDao: PlaylistMediaCrossRefDao
 ) {
     @WorkerThread
-    suspend fun insertMediaToPlaylist(playlistId: Long, mediaId: String) {
-        val crossRef = PlaylistMediaCrossRef(playlistId, mediaId)
-        playlistMediaCrossRefDao.insert(crossRef)
+    suspend fun getMediaForPlaylistOrdered(playlistId: Long): List<Media> {
+        return playlistMediaCrossRefDao.getMediaForPlaylistOrdered(playlistId)
     }
 
     @WorkerThread
     suspend fun insertMediaListToPlaylist(playlistId: Long, mediaIds: List<String>) {
-        val crossRefs = mediaIds.map { mediaId ->
-            PlaylistMediaCrossRef(playlistId = playlistId, id = mediaId)
+        val maxOrder = playlistMediaCrossRefDao.getMaxOrderForPlaylist(playlistId) ?: 0
+        val crossRefs = mediaIds.mapIndexed { index, mediaId ->
+            PlaylistMediaCrossRef(
+                playlistId = playlistId,
+                id = mediaId,
+                order = maxOrder + index + 1
+            )
         }
         playlistMediaCrossRefDao.insertAll(crossRefs)
     }
 
-    fun getPlaylistWithMedia(playlistId: Long): Flow<PlaylistWithMedia> {
-        return playlistMediaCrossRefDao.getPlaylistWithMedia(playlistId)
+    @WorkerThread
+    suspend fun updateOrders(
+        playlistId: Long,
+        fromId: String,
+        fromOrder: Int,
+        toId: String,
+        toOrder: Int
+    ) {
+        playlistMediaCrossRefDao.updateOrders(playlistId, fromId, fromOrder, toId, toOrder)
     }
+
+    @WorkerThread
+    suspend fun deleteMediaFromPlaylist(playlistId: Long, mediaId: String) {
+        playlistMediaCrossRefDao.deleteMediaFromPlaylist(playlistId, mediaId)
+    }
+
 }

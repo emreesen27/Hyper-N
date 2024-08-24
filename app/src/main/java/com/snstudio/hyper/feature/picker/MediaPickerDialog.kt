@@ -21,7 +21,7 @@ class MediaPickerDialog(
     override fun getViewBinding() = DialogMusicPickerBinding.inflate(layoutInflater)
 
     override val dialogTag: String
-        get() = "MUSIC_PICKER_DIALOG"
+        get() = "MEDIA_PICKER_DIALOG"
 
     override fun onStart() {
         super.onStart()
@@ -51,6 +51,7 @@ class MediaPickerDialog(
     private fun initCLickListener() {
         binding.btnSave.click {
             selectedCallback?.invoke(mediaPickerAdapter.getSelectedItems())
+            dismiss()
         }
     }
 

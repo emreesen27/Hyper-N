@@ -1,4 +1,4 @@
-package com.snstudio.hyper.adapter
+package com.snstudio.hyper.shared
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,26 +15,32 @@ import com.snstudio.hyper.databinding.ItemMediaSearchBinding
 
 class MediaItemAdapter(
     private val onClick: ((Media) -> Unit)? = null,
-    private val onLongClick: ((Media) -> Unit)? = null
+    private val onLongClick: ((Media) -> Unit)? = null,
 ) : RecyclerView.Adapter<MediaItemAdapter.AutoCompleteViewHolder>() {
-     var mediaItems: MutableList<Media> = mutableListOf()
+    var mediaItems: MutableList<Media> = mutableListOf()
 
     fun setItems(newItems: MutableList<Media>) {
-        val diffResult = DiffUtil.calculateDiff(MediaDiffCallback(mediaItems, newItems))
+        val diffResult = DiffUtil.calculateDiff(MediaListDiffCallback(mediaItems, newItems))
         mediaItems = newItems
         diffResult.dispatchUpdatesTo(this)
     }
 
     fun addItem(newItems: MutableList<Media>) {
-        val diffResult = DiffUtil.calculateDiff(MediaDiffCallback(mediaItems, newItems))
+        val diffResult = DiffUtil.calculateDiff(MediaListDiffCallback(mediaItems, newItems))
         mediaItems = newItems
         diffResult.dispatchUpdatesTo(this)
     }
 
     fun moveItem(fromPosition: Int, toPosition: Int) {
-        val item = mediaItems.removeAt(fromPosition)
-        mediaItems.add(toPosition, item)
         notifyItemMoved(fromPosition, toPosition)
+    }
+
+    fun movedItem(fromId: String, toId: String) {
+        val fromIndex = mediaItems.indexOfFirst { it.id == fromId }
+        val toIndex = mediaItems.indexOfFirst { it.id == toId }
+
+        val item = mediaItems.removeAt(fromIndex)
+        mediaItems.add(toIndex, item)
     }
 
     fun removeItem(position: Int) {

@@ -1,6 +1,5 @@
 package com.snstudio.hyper.feature.playlist
 
-import com.snstudio.hyper.adapter.PlaylistAdapter
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.observe

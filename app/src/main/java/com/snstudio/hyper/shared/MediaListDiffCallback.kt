@@ -1,9 +1,9 @@
-package com.snstudio.hyper.adapter
+package com.snstudio.hyper.shared
 
 import androidx.recyclerview.widget.DiffUtil
 import com.snstudio.hyper.data.model.Media
 
-class MediaDiffCallback(
+class MediaListDiffCallback(
     private val oldList: List<Media>,
     private val newList: List<Media>,
 ) : DiffUtil.Callback() {
@@ -22,6 +22,9 @@ class MediaDiffCallback(
         oldItemPosition: Int,
         newItemPosition: Int,
     ): Boolean {
-        return oldList[oldItemPosition] == newList[newItemPosition]
+        return oldList[oldItemPosition].id == newList[newItemPosition].id &&
+                oldList[oldItemPosition].thumbnail == newList[newItemPosition].thumbnail &&
+                oldList[oldItemPosition].duration == newList[newItemPosition].duration &&
+                oldList[oldItemPosition].url == newList[newItemPosition].url
     }
 }

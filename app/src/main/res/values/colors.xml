@@ -10,6 +10,7 @@
     <color name="main_color_light">#FF66AAFF</color>
     <color name="main_color_dark">#FF004C99</color>
     <color name="dark_transparent">#33000000</color>
+    <color name="delete_red">#CCB00020</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
