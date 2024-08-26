@@ -23,11 +23,13 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
     override fun setupViews() {
         initAdapter()
         initMediaViewModel()
+        with(binding) {
+            attachToolbar(colorizedBar, recyclerMedia)
+        }
     }
 
     override fun observeData() {
         observe(viewModel.localMediaLiveData) { mediaList ->
-            println("emre"+ mediaList)
             mediaItemAdapter?.setItems(mediaList.toMutableList())
         }
     }

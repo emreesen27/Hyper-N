@@ -17,12 +17,17 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
     }
 
     override var useSharedViewModel = true
+
     override fun getViewModelClass() = PlaylistViewModel::class.java
+
     override fun getViewBinding() = FragmentPlaylistBinding.inflate(layoutInflater)
 
     override fun setupViews() {
         initAdapter()
-        initListener()
+        initClickListener()
+        with(binding) {
+            attachToolbar(colorizedBar, recyclerPlaylist)
+        }
     }
 
     override fun observeData() {
@@ -35,7 +40,7 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
         binding.recyclerPlaylist.adapter = playlistAdapter
     }
 
-    private fun initListener() {
+    private fun initClickListener() {
         with(binding) {
             noItem.click {
                 val dialog = CreatePlaylistDialog()
@@ -49,7 +54,8 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
     }
 
     private fun navigatePlaylistDetail(playlist: Playlist) {
-        val action = PlaylistFragmentDirections.goToPlaylistDetail(playlist.playlistId)
+        val action =
+            PlaylistFragmentDirections.goToPlaylistDetail(playlist.playlistId, playlist.name)
         navigate(action)
     }
 

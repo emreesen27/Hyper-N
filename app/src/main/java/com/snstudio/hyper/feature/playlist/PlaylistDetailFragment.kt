@@ -26,17 +26,16 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     override fun setupViews() {
         initMediaRecycler()
         initClickListener()
-        viewModel.getMediaForPlaylistOrdered(args.playListId)
+        getMediaForPlaylistOrdered()
         with(binding) {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
+            attachToolbar(colorizedBar, recyclerMedia, args.playListName)
         }
     }
 
     override fun observeData() = with(viewModel) {
         observe(playlistWithMediaLiveData) { mediaList ->
-            println("amcik${mediaList[0].id}")
-            println("amcik${mediaList[1].id}")
             mediaItemAdapter.setItems(mediaList.toMutableList())
         }
         observe(swapOrderLiveData) {
@@ -50,12 +49,16 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     }
 
     private fun initClickListener() {
-        with(binding) {
-            addMusic.click {
-                showPathSelectionDialog()
-                //viewModel.cacik(args.playListId, listOf())
+        binding.colorizedBar.setOnIconClickListener { index ->
+            when (index) {
+                0 -> showPathSelectionDialog()
+                else -> return@setOnIconClickListener
             }
         }
+    }
+
+    private fun getMediaForPlaylistOrdered() {
+        viewModel.getMediaForPlaylistOrdered(args.playListId)
     }
 
     private fun showPathSelectionDialog() {

@@ -18,38 +18,15 @@
         android:layout_height="match_parent"
         tools:context=".feature.home.HomeFragment">
 
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="0dp"
+        <com.snstudio.hyper.core.component.HyperColorizedBar
+            android:id="@+id/colorizedBar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:text="@string/app_name"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/_16ssp"
-            app:layout_constraintBottom_toBottomOf="@+id/search"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/search"
-            android:layout_width="@dimen/_45sdp"
-            android:layout_height="@dimen/_45sdp"
-            android:backgroundTint="@color/background_color"
-            android:src="@drawable/ic_search"
-            app:layout_constraintEnd_toStartOf="@+id/settings"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/settings"
-            android:layout_width="@dimen/_45sdp"
-            android:layout_height="@dimen/_45sdp"
-            android:backgroundTint="@color/background_color"
-            android:src="@drawable/ic_settings"
+            app:iconDrawables="@array/home_drawables"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleText="@string/app_name" />
 
         <include
             android:id="@+id/musicCard"
@@ -59,7 +36,7 @@
             android:layout_marginTop="@dimen/_20sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search" />
+            app:layout_constraintTop_toBottomOf="@+id/colorizedBar" />
 
         <include
             android:id="@+id/playList"
@@ -70,7 +47,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/musicCard" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

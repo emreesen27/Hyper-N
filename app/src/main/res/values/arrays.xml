@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="home_drawables">
+        <item>@drawable/ic_search</item>
+        <item>@drawable/ic_settings</item>
+    </array>
+    <array name="playlist_detail_drawables">
+        <item>@drawable/ic_add</item>
+    </array>
+</resources>

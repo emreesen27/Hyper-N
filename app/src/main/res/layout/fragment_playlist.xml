@@ -18,14 +18,25 @@
         android:layout_height="match_parent"
         tools:context=".feature.playlist.PlaylistFragment">
 
+        <com.snstudio.hyper.core.component.HyperColorizedBar
+            android:id="@+id/colorizedBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleText="@string/playlists" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPlaylist"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
             android:orientation="vertical"
             android:visibility="@{vm.playlistLiveData.empty ? View.GONE : View.VISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/colorizedBar"
             tools:listitem="@layout/item_play_list" />
 
 
@@ -33,6 +44,7 @@
             android:id="@+id/noItem"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_10sdp"
             android:gravity="center"
             android:text="Henüz bir liste oluşturmadınız oluşturmak için tıklayın."
             android:textColor="@color/text_color"
