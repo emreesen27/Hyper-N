@@ -18,40 +18,28 @@
         android:layout_height="match_parent"
         tools:context=".feature.playlist.PlaylistDetailFragment">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="0dp"
+
+        <com.snstudio.hyper.core.component.HyperColorizedBar
+            android:id="@+id/colorizedBar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:text="@string/app_name"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/_16ssp"
-            app:layout_constraintBottom_toBottomOf="@+id/addMusic"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/addMusic"
-            android:layout_width="@dimen/_45sdp"
-            android:layout_height="@dimen/_45sdp"
-            android:backgroundTint="@color/background_color"
-            android:src="@drawable/ic_add"
+            app:iconDrawables="@array/playlist_detail_drawables"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleText="@string/playlists" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerMedia"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:paddingTop="@dimen/_20sdp"
             android:visibility="@{vm.playlistWithMediaLiveData != null &amp;&amp; vm.playlistWithMediaLiveData.size() > 0 ? View.VISIBLE : View.GONE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addMusic"
+            app:layout_constraintTop_toBottomOf="@+id/colorizedBar"
             tools:listitem="@layout/item_media" />
 
 

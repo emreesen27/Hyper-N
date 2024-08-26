@@ -32,19 +32,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun setupViews() {
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        initMenuClick()
+        initClickListener()
     }
 
-    private fun initMenuClick() {
+    private fun initClickListener() {
         with(binding) {
-            search.click {
-                navigate(HomeFragmentDirections.goToSearch())
-            }
             musicCard.root.click {
                 navigate(HomeFragmentDirections.goToLibrary())
             }
             playList.root.click {
                 navigate(HomeFragmentDirections.goToPlaylist())
+            }
+            colorizedBar.setOnIconClickListener { index ->
+                when (index) {
+                    0 -> navigate(HomeFragmentDirections.goToSearch())
+                    else -> return@setOnIconClickListener
+                }
             }
         }
     }

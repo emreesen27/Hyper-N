@@ -25,7 +25,7 @@ fun View.visibility(visibility: Boolean) {
 fun View.startColorAnimation(): ValueAnimator {
     val colors = intArrayOf(
         resources.getColor(R.color.main_color, null),
-        resources.getColor(R.color.main_color_dark, null),
+        resources.getColor(R.color.main_color_mid, null),
         resources.getColor(R.color.purple_700, null),
         resources.getColor(R.color.purple_500, null),
     )

@@ -5,12 +5,14 @@
     <string name="searching">Searching…</string>
     <string name="progress">%% %1$d</string>
     <string name="song_library">Song library</string>
+    <string name="library">Library</string>
     <string name="song_desc">Listen to or manage downloaded songs</string>
     <string name="play_list">Playlist</string>
     <string name="play_list_desc">Create and manage playlists</string>
     <string name="delete">Delete</string>
     <string name="detail">Detail</string>
     <string name="playlist_name">Playlist Name</string>
+    <string name="playlists">Playlists</string>
     <string name="save">Save</string>
     <string name="create_playlist">Create Playlist</string>
     <string name="create">Create</string>

@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.snstudio.hyper.core.component.HyperColorizedBar
 
 abstract class BaseFragment<VBinding : ViewBinding, VModel : ViewModel> : Fragment() {
     open var useSharedViewModel: Boolean = false
@@ -54,6 +56,18 @@ abstract class BaseFragment<VBinding : ViewBinding, VModel : ViewModel> : Fragme
 
     fun invalidateOptionsMenu() {
         requireActivity().invalidateOptionsMenu()
+    }
+
+    open fun attachToolbar(
+        colorizedBar: HyperColorizedBar,
+        recyclerView: RecyclerView,
+        title: String? = null
+    ) {
+        colorizedBar.apply {
+            setupWithRecyclerView(recyclerView)
+            setActivity(requireActivity())
+            title?.let { setTitle(it) }
+        }
     }
 
     private fun init() {
