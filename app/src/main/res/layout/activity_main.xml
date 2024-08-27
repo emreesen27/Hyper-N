@@ -106,8 +106,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnDownload"
                 app:show_buffering="when_playing"
                 app:show_fastforward_button="true"
-                app:show_next_button="false"
-                app:show_previous_button="false"
+                app:show_next_button="true"
+                app:show_previous_button="true"
                 app:show_rewind_button="true"
                 app:show_shuffle_button="false"
                 app:show_timeout="-1" />

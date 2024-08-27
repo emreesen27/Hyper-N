@@ -30,6 +30,11 @@ class MediaItemAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
+    fun getSubMediaItems(media: Media): MutableList<Media> {
+        val index = mediaItems.indexOf(media)
+        return mediaItems.subList(index, mediaItems.size)
+    }
+
     fun moveItem(fromPosition: Int, toPosition: Int) {
         notifyItemMoved(fromPosition, toPosition)
     }
