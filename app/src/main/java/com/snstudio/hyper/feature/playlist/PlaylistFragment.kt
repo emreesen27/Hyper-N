@@ -1,11 +1,13 @@
 package com.snstudio.hyper.feature.playlist
 
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.data.model.Playlist
 import com.snstudio.hyper.databinding.FragmentPlaylistBinding
 import com.snstudio.hyper.feature.CreatePlaylistDialog
+import com.snstudio.hyper.util.ItemTouchHelperCallback
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,8 +25,8 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
     override fun getViewBinding() = FragmentPlaylistBinding.inflate(layoutInflater)
 
     override fun setupViews() {
-        initAdapter()
         initClickListener()
+        initPlaylistRecycler()
         with(binding) {
             attachToolbar(colorizedBar, recyclerPlaylist)
         }
@@ -34,10 +36,6 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
         observe(viewModel.playlistLiveData) {
             playlistAdapter.setItems(it)
         }
-    }
-
-    private fun initAdapter() {
-        binding.recyclerPlaylist.adapter = playlistAdapter
     }
 
     private fun initClickListener() {
@@ -51,6 +49,16 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
                 dialog.showDialog(childFragmentManager)
             }
         }
+    }
+
+    private fun initPlaylistRecycler() {
+        val callback = ItemTouchHelperCallback(
+            requireContext(),
+            onSwipedCallback = { pos -> viewModel.deletePlaylist(playlistAdapter.getItemWithPos(pos)) },
+        )
+        val itemTouchHelper = ItemTouchHelper(callback)
+        binding.recyclerPlaylist.adapter = playlistAdapter
+        itemTouchHelper.attachToRecyclerView(binding.recyclerPlaylist)
     }
 
     private fun navigatePlaylistDetail(playlist: Playlist) {

@@ -13,8 +13,8 @@ import kotlin.math.abs
 
 class ItemTouchHelperCallback(
     context: Context,
-    private val onMoveCallback: ((Int, Int) -> Unit),
-    private val onMovedCallback: ((Int, Int) -> Unit),
+    private val onMoveCallback: ((Int, Int) -> Unit)? = null,
+    private val onMovedCallback: ((Int, Int) -> Unit)? = null,
     private val onSwipedCallback: ((Int) -> Unit)
 ) : ItemTouchHelper.Callback() {
 
@@ -28,13 +28,13 @@ class ItemTouchHelperCallback(
     private var toPosition: Int = 0
 
     override fun isLongPressDragEnabled(): Boolean {
-        return true
+        return onMoveCallback != null
     }
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
         if (currentActionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-            onMovedCallback.invoke(fromPosition, toPosition)
+            onMovedCallback?.invoke(fromPosition, toPosition)
         }
     }
 
@@ -55,7 +55,7 @@ class ItemTouchHelperCallback(
     ): Boolean {
         fromPosition = viewHolder.absoluteAdapterPosition
         toPosition = target.absoluteAdapterPosition
-        onMoveCallback.invoke(fromPosition, toPosition)
+        onMoveCallback?.invoke(fromPosition, toPosition)
         return true
     }
 

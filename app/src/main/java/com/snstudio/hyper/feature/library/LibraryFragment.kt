@@ -1,6 +1,7 @@
 package com.snstudio.hyper.feature.library
 
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.snstudio.hyper.shared.MediaItemAdapter
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.observe
@@ -8,7 +9,7 @@ import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.data.MediaItemBuilder
 import com.snstudio.hyper.databinding.FragmentLibraryBinding
 import com.snstudio.hyper.shared.MediaViewModel
-import com.snstudio.hyper.feature.DetailBottomSheet
+import com.snstudio.hyper.util.ItemTouchHelperCallback
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,7 +22,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
     override fun getViewBinding() = FragmentLibraryBinding.inflate(layoutInflater)
 
     override fun setupViews() {
-        initAdapter()
+        initMediaRecycler()
         initMediaViewModel()
         with(binding) {
             attachToolbar(colorizedBar, recyclerMedia)
@@ -34,15 +35,25 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
         }
     }
 
-    private fun initAdapter() {
+    private fun initMediaRecycler() {
         if (mediaItemAdapter == null) {
-            mediaItemAdapter = MediaItemAdapter({ media ->
+            mediaItemAdapter = MediaItemAdapter { media ->
                 playMedia(media)
-            }) { media ->
-                showDetailBottomSheet(media)
             }
+            val callback = ItemTouchHelperCallback(
+                requireContext(),
+                onSwipedCallback = { pos -> deleteMedia(pos) },
+            )
+            val itemTouchHelper = ItemTouchHelper(callback)
+            binding.recyclerMedia.adapter = mediaItemAdapter
+            itemTouchHelper.attachToRecyclerView(binding.recyclerMedia)
         }
-        binding.recyclerMedia.adapter = mediaItemAdapter
+    }
+
+    private fun deleteMedia(pos: Int) {
+        mediaItemAdapter?.let { adapter ->
+            viewModel.deleteMedia(adapter.mediaItems[pos])
+        }
     }
 
     private fun playMedia(media: Media) {
@@ -59,13 +70,6 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
 
     private fun initMediaViewModel() {
         mediaViewModel = ViewModelProvider(requireActivity())[MediaViewModel::class.java]
-    }
-
-    private fun showDetailBottomSheet(media: Media) {
-        val bottomSheet = DetailBottomSheet(media = media, onDelete = {
-            viewModel.deleteMedia(media)
-        })
-        bottomSheet.show(childFragmentManager, DetailBottomSheet.TAG)
     }
 
 }

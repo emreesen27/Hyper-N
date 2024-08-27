@@ -10,13 +10,15 @@ import com.snstudio.hyper.databinding.ItemPlayListBinding
 
 class PlaylistAdapter(private val onClick: ((Playlist) -> Unit)? = null) :
     RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
-    private var items: List<Playlist> = emptyList()
+    private var items: MutableList<Playlist> = mutableListOf()
 
     fun setItems(newItems: List<Playlist>) {
         val diffResult = DiffUtil.calculateDiff(PlaylistDiffCallback(items, newItems))
-        items = newItems
+        items = newItems.toMutableList()
         diffResult.dispatchUpdatesTo(this)
     }
+
+    fun getItemWithPos(pos: Int): Playlist = items[pos]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder =
         PlaylistViewHolder(
