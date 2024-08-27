@@ -43,4 +43,10 @@ class MusicPlayerService : MediaLibraryService() {
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession {
         return session
     }
+
+    override fun onDestroy() {
+        player.release()
+        session.release()
+        super.onDestroy()
+    }
 }

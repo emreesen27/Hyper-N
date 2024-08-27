@@ -1,22 +1,28 @@
 package com.snstudio.hyper.feature.playlist
 
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.snstudio.hyper.util.ItemTouchHelperCallback
-import com.snstudio.hyper.shared.MediaItemAdapter
 import com.snstudio.hyper.core.base.BaseFragment
-import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.observe
+import com.snstudio.hyper.data.MediaItemBuilder
+import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.databinding.FragmentPlaylistDetailBinding
 import com.snstudio.hyper.feature.picker.MediaPickerDialog
+import com.snstudio.hyper.shared.MediaItemAdapter
+import com.snstudio.hyper.shared.MediaViewModel
+import com.snstudio.hyper.util.ItemTouchHelperCallback
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, PlaylistViewModel>() {
 
+    private lateinit var mediaViewModel: MediaViewModel
     private val args: PlaylistDetailFragmentArgs by navArgs()
     private val mediaItemAdapter by lazy {
-        MediaItemAdapter(onClick = {})
+        MediaItemAdapter(onClick = {
+            setPlayList(it)
+        })
     }
 
     override fun getViewModelClass() = PlaylistViewModel::class.java
@@ -24,6 +30,7 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     override fun getViewBinding() = FragmentPlaylistDetailBinding.inflate(layoutInflater)
 
     override fun setupViews() {
+        initMediaViewModel()
         initMediaRecycler()
         initClickListener()
         getMediaForPlaylistOrdered()
@@ -48,10 +55,14 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
         }
     }
 
+    private fun initMediaViewModel() {
+        mediaViewModel = ViewModelProvider(requireActivity())[MediaViewModel::class.java]
+    }
+
     private fun initClickListener() {
         binding.colorizedBar.setOnIconClickListener { index ->
             when (index) {
-                0 -> showPathSelectionDialog()
+                0 -> showMediaPickerDialog()
                 else -> return@setOnIconClickListener
             }
         }
@@ -61,7 +72,19 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
         viewModel.getMediaForPlaylistOrdered(args.playListId)
     }
 
-    private fun showPathSelectionDialog() {
+    private fun setPlayList(media: Media) {
+        mediaItemAdapter.getSubMediaItems(media).let { mediaList ->
+            val mediaItems = mediaList.map { media ->
+                MediaItemBuilder()
+                    .setMediaId(media.localPath.orEmpty())
+                    .setMediaTitle(media.title)
+                    .build()
+            }
+            mediaViewModel.setPlaylist(mediaItems)
+        }
+    }
+
+    private fun showMediaPickerDialog() {
         MediaPickerDialog(
             selectedCallback = { mediaList ->
                 mediaList?.let { viewModel.insertMediaListToPlaylist(args.playListId, it) }

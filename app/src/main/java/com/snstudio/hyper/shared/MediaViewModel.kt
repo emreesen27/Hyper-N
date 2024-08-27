@@ -36,6 +36,8 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
     private val _currentMediaLiveData = MutableLiveData<Media>()
     val currentMediaLiveData: LiveData<Media> = _currentMediaLiveData
 
+    private val playlist = mutableListOf<MediaItem>()
+
     init {
         initMediaController()
     }
@@ -71,7 +73,6 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
                         _playbackStateLiveData.postValue(!_currentMediaLiveData.value?.localPath.isNullOrEmpty())
                     }
                 }
-
             }
         )
     }
@@ -95,4 +96,11 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
         _currentMediaLiveData.value = media
     }
 
+    fun setPlaylist(mediaItems: List<MediaItem>) {
+        playlist.clear()
+        playlist.addAll(mediaItems)
+        player.setMediaItems(mediaItems)
+        player.prepare()
+        player.play()
+    }
 }
