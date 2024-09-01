@@ -1,20 +1,36 @@
 package com.snstudio.hyper.feature.search
 
 import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.snstudio.hyper.core.base.BaseViewModel
+import com.snstudio.hyper.data.local.repository.MediaRepository
 import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.util.INVOKE
 import com.snstudio.hyper.util.RECEIVED
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val methodChannel: MethodChannel
+    private val methodChannel: MethodChannel,
+    private val localMediaRepository: MediaRepository
 ) : BaseViewModel(methodChannel) {
 
+    private val _localMediaListLiveData = MutableLiveData<List<Media>>()
+    val localMediaListLiveData: LiveData<List<Media>> = _localMediaListLiveData
+
     val searchProgressObservable = ObservableBoolean(false)
+
+    var audioActionType: AudioActionType = AudioActionType.PLAY
+        private set
+
     var currentMedia: Media? = null
         private set
 
@@ -24,20 +40,47 @@ class SearchViewModel @Inject constructor(
             RECEIVED.AUDIO_URL_RECEIVED.received,
             RECEIVED.NEXT_RECEIVED.received
         )
+        collectLocalMediaData()
     }
 
-    fun search(query: String) {
+    fun invokeSearch(query: String) {
         searchProgressObservable.set(true)
         methodChannel.invokeMethod(INVOKE.SEARCH.invoke, query)
     }
 
-    fun next() {
+    fun invokeNext() {
         methodChannel.invokeMethod(INVOKE.NEXT.invoke, null)
     }
 
-    fun getAudioUrl(media: Media) {
+    fun invokeAudioUrl(media: Media, type: AudioActionType) {
+        audioActionType = type
         currentMedia = media
         methodChannel.invokeMethod(INVOKE.AUDIO_URL.invoke, media.id)
+    }
+
+    fun insertMediaJob(media: Media) {
+        val job = Job()
+        val scope = CoroutineScope(Dispatchers.IO + job)
+        scope.launch {
+            try {
+                localMediaRepository.insert(media)
+            } finally {
+                job.cancel()
+            }
+        }
+    }
+
+    private fun collectLocalMediaData() = viewModelScope.launch {
+        localMediaRepository.localMediaList.collect {
+            _localMediaListLiveData.value = it
+        }
+    }
+
+    fun isMediaSavedLocally(media: Media): Boolean =
+        localMediaListLiveData.value?.any { media.id == it.id } ?: false
+
+    enum class AudioActionType {
+        PLAY, DOWNLOAD
     }
 
 }

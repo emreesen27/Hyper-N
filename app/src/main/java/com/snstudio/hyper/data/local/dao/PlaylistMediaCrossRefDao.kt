@@ -36,15 +36,7 @@ interface PlaylistMediaCrossRefDao {
     suspend fun getMediaForPlaylistOrdered(playlistId: Long): List<Media>
 
 
-    @Transaction
-    @Query("""
-    UPDATE PlaylistMediaCrossRef
-    SET `order` = CASE 
-        WHEN id = :fromId THEN :fromOrder
-        WHEN id = :toId THEN :toOrder
-    END
-    WHERE playlistId = :playlistId AND (id = :fromId OR id = :toId)
-""")
-    suspend fun updateOrders(playlistId: Long, fromId: String, fromOrder: Int, toId: String, toOrder: Int)
+    @Query("UPDATE PlaylistMediaCrossRef SET `order` = :newOrder WHERE playlistId = :playlistId AND id = :id")
+    suspend fun updateOrder(playlistId: Long, id: String, newOrder: Int)
 
 }

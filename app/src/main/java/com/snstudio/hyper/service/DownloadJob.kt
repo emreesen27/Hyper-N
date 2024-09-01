@@ -1,6 +1,5 @@
 package com.snstudio.hyper.service
 
-import androidx.media3.common.MediaMetadata
 import com.snstudio.hyper.R
 import com.snstudio.hyper.core.base.BaseJob
 import com.snstudio.hyper.core.extension.postNotification
@@ -14,7 +13,6 @@ import java.io.FileOutputStream
 
 class DownloadJob(
     private val media: Media,
-    private val mediaMetadata: MediaMetadata,
     private val url: String,
     private val callback: JobCompletedCallback,
 ) : BaseJob() {
@@ -36,7 +34,7 @@ class DownloadJob(
             var downloadedBytes = 0L
 
             val inputStream = response.body!!.byteStream()
-            val file = File("${pathProvider.musicDirPath}/${mediaMetadata.title}.mp3")
+            val file = File("${pathProvider.musicDirPath}/${media.title}.mp3")
             filePath = file.absolutePath
             val outputStream = FileOutputStream(file)
 

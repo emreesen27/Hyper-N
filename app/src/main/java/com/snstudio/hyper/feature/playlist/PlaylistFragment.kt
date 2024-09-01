@@ -27,6 +27,7 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
     override fun setupViews() {
         initClickListener()
         initPlaylistRecycler()
+        createTouchHelperCallback()
         with(binding) {
             attachToolbar(colorizedBar, recyclerPlaylist)
         }
@@ -52,12 +53,15 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
     }
 
     private fun initPlaylistRecycler() {
+        binding.recyclerPlaylist.adapter = playlistAdapter
+    }
+
+    private fun createTouchHelperCallback() {
         val callback = ItemTouchHelperCallback(
             requireContext(),
             onSwipedCallback = { pos -> viewModel.deletePlaylist(playlistAdapter.getItemWithPos(pos)) },
         )
         val itemTouchHelper = ItemTouchHelper(callback)
-        binding.recyclerPlaylist.adapter = playlistAdapter
         itemTouchHelper.attachToRecyclerView(binding.recyclerPlaylist)
     }
 

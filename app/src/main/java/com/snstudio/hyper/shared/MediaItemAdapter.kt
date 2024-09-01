@@ -12,11 +12,13 @@ import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.databinding.ItemMediaBinding
 import com.snstudio.hyper.databinding.ItemMediaSearchBinding
+import com.snstudio.hyper.util.MediaItemType
 
 class MediaItemAdapter(
     private val onClick: ((Media) -> Unit)? = null
 ) : RecyclerView.Adapter<MediaItemAdapter.AutoCompleteViewHolder>() {
     var mediaItems: MutableList<Media> = mutableListOf()
+        private set
 
     fun setItems(newItems: MutableList<Media>) {
         val diffResult = DiffUtil.calculateDiff(MediaListDiffCallback(mediaItems, newItems))
@@ -25,8 +27,9 @@ class MediaItemAdapter(
     }
 
     fun addItem(newItems: MutableList<Media>) {
+        val updatedList = mediaItems.apply { addAll(newItems) }
         val diffResult = DiffUtil.calculateDiff(MediaListDiffCallback(mediaItems, newItems))
-        mediaItems = newItems
+        mediaItems = updatedList
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -36,15 +39,9 @@ class MediaItemAdapter(
     }
 
     fun moveItem(fromPosition: Int, toPosition: Int) {
+        val item = mediaItems.removeAt(fromPosition)
+        mediaItems.add(toPosition, item)
         notifyItemMoved(fromPosition, toPosition)
-    }
-
-    fun movedItem(fromId: String, toId: String) {
-        val fromIndex = mediaItems.indexOfFirst { it.id == fromId }
-        val toIndex = mediaItems.indexOfFirst { it.id == toId }
-
-        val item = mediaItems.removeAt(fromIndex)
-        mediaItems.add(toIndex, item)
     }
 
     fun removeItem(position: Int) {
@@ -52,7 +49,7 @@ class MediaItemAdapter(
         notifyItemRemoved(position)
     }
 
-    fun restoreItem(item: Media, position: Int) {
+    fun restoreItem(item: Media, position: Int) { // Todo
         mediaItems.add(position, item)
         notifyItemInserted(position)
     }
@@ -61,8 +58,8 @@ class MediaItemAdapter(
     override fun getItemViewType(position: Int): Int {
         val item = mediaItems[position]
         return when (item.type) {
-            0 -> R.layout.item_media
-            1 -> R.layout.item_media_search
+            MediaItemType.LOCAL.key -> R.layout.item_media
+            MediaItemType.SEARCH.key -> R.layout.item_media_search
             else -> throw RuntimeException("invalid object")
         }
     }
@@ -104,7 +101,6 @@ class MediaItemAdapter(
                 is ItemMediaBinding -> bindMedia(data)
                 is ItemMediaSearchBinding -> bindMediaSearchType(data)
             }
-
         }
 
         private fun bindMedia(media: Media) {

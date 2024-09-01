@@ -1,45 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <import type="android.view.View" />
 
         <variable
             name="vm"
             type="com.snstudio.hyper.shared.MediaViewModel" />
-
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         tools:context=".feature.MainActivity">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/baseNavHost"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             app:defaultNavHost="true"
-            app:layout_constraintBottom_toTopOf="@+id/playerMenu"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/navigation" />
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/playerMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible">
 
             <com.google.android.material.textview.MaterialTextView
@@ -53,41 +43,11 @@
                 android:text="@{vm.metaDataLiveData.title}"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/_12ssp"
-                app:layout_constraintBottom_toBottomOf="@+id/btnDownload"
-                app:layout_constraintEnd_toStartOf="@+id/btnDownload"
+                app:layout_constraintBottom_toBottomOf="@+id/btnClose"
+                app:layout_constraintEnd_toStartOf="@+id/btnClose"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/app_name" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/btnDownload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/transparent"
-                android:src="@drawable/ic_download"
-                app:layout_constraintEnd_toStartOf="@+id/btnInfo"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_13ssp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/btnDownload"
-                app:layout_constraintEnd_toEndOf="@+id/btnDownload"
-                app:layout_constraintStart_toStartOf="@+id/btnDownload"
-                app:layout_constraintTop_toTopOf="@+id/btnDownload" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/btnInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/transparent"
-                android:src="@drawable/ic_info"
-                app:layout_constraintEnd_toStartOf="@+id/btnClose"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnClose"
@@ -103,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnDownload"
+                app:layout_constraintTop_toBottomOf="@+id/btnClose"
                 app:show_buffering="when_playing"
                 app:show_fastforward_button="true"
                 app:show_next_button="true"
@@ -114,5 +74,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

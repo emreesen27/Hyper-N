@@ -11,7 +11,7 @@ fun RecyclerView.addOnScrolledToEnd(onScrolledToEnd: () -> Unit) {
 
     this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-        private val VISIBLE_THRESHOLD = 5
+        private val VISIBLE_THRESHOLD = 8
 
         private var loading = true
         private var previousTotal = 0
@@ -20,21 +20,17 @@ fun RecyclerView.addOnScrolledToEnd(onScrolledToEnd: () -> Unit) {
             recyclerView: RecyclerView,
             newState: Int
         ) {
-
             with(layoutManager as LinearLayoutManager) {
-
                 val visibleItemCount = childCount
                 val totalItemCount = itemCount
                 val firstVisibleItem = findFirstVisibleItemPosition()
 
                 if (loading && totalItemCount > previousTotal) {
-
                     loading = false
                     previousTotal = totalItemCount
                 }
 
                 if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + VISIBLE_THRESHOLD)) {
-
                     onScrolledToEnd()
                     loading = true
                 }
@@ -50,4 +46,13 @@ fun RecyclerView.addDivider(context: Context) {
         dividerItemDecoration.setDrawable(divider)
         this.addItemDecoration(dividerItemDecoration)
     }
+}
+
+fun RecyclerView.restoreScrollPosition() {
+    val layoutManager = this.layoutManager as? LinearLayoutManager
+    val firstVisiblePosition =
+        layoutManager?.findFirstVisibleItemPosition() ?: RecyclerView.NO_POSITION
+    val firstVisibleView = layoutManager?.findViewByPosition(firstVisiblePosition)
+    val topOffset = firstVisibleView?.top ?: 0
+    layoutManager?.scrollToPositionWithOffset(firstVisiblePosition, topOffset)
 }

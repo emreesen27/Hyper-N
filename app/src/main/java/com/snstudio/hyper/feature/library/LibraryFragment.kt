@@ -2,12 +2,12 @@ package com.snstudio.hyper.feature.library
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.snstudio.hyper.shared.MediaItemAdapter
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.observe
-import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.data.MediaItemBuilder
+import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.databinding.FragmentLibraryBinding
+import com.snstudio.hyper.shared.MediaItemAdapter
 import com.snstudio.hyper.shared.MediaViewModel
 import com.snstudio.hyper.util.ItemTouchHelperCallback
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,13 +16,20 @@ import dagger.hilt.android.AndroidEntryPoint
 class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>() {
 
     private lateinit var mediaViewModel: MediaViewModel
-    private var mediaItemAdapter: MediaItemAdapter? = null
+
+    private val mediaItemAdapter: MediaItemAdapter by lazy {
+        MediaItemAdapter(onClick = { media ->
+            playMedia(media)
+        })
+    }
+
     override fun getViewModelClass() = LibraryViewModel::class.java
 
     override fun getViewBinding() = FragmentLibraryBinding.inflate(layoutInflater)
 
     override fun setupViews() {
         initMediaRecycler()
+        createTouchHelperCallback()
         initMediaViewModel()
         with(binding) {
             attachToolbar(colorizedBar, recyclerMedia)
@@ -31,29 +38,25 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
 
     override fun observeData() {
         observe(viewModel.localMediaLiveData) { mediaList ->
-            mediaItemAdapter?.setItems(mediaList.toMutableList())
+            mediaItemAdapter.setItems(mediaList.toMutableList())
         }
     }
 
     private fun initMediaRecycler() {
-        if (mediaItemAdapter == null) {
-            mediaItemAdapter = MediaItemAdapter { media ->
-                playMedia(media)
-            }
-            val callback = ItemTouchHelperCallback(
-                requireContext(),
-                onSwipedCallback = { pos -> deleteMedia(pos) },
-            )
-            val itemTouchHelper = ItemTouchHelper(callback)
-            binding.recyclerMedia.adapter = mediaItemAdapter
-            itemTouchHelper.attachToRecyclerView(binding.recyclerMedia)
-        }
+        binding.recyclerMedia.adapter = mediaItemAdapter
+    }
+
+    private fun createTouchHelperCallback() {
+        val callback = ItemTouchHelperCallback(
+            requireContext(),
+            onSwipedCallback = { pos -> deleteMedia(pos) },
+        )
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerMedia)
     }
 
     private fun deleteMedia(pos: Int) {
-        mediaItemAdapter?.let { adapter ->
-            viewModel.deleteMedia(adapter.mediaItems[pos])
-        }
+        viewModel.deleteMedia(mediaItemAdapter.mediaItems[pos])
     }
 
     private fun playMedia(media: Media) {
@@ -63,7 +66,6 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
                 .build()
             with(mediaViewModel) {
                 playMediaItem(item)
-                setCurrentMedia(media)
             }
         }
     }

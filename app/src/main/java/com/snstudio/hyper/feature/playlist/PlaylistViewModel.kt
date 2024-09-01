@@ -25,9 +25,6 @@ class PlaylistViewModel @Inject constructor(
     private val _playlistWithMediaLiveData = MutableLiveData<List<Media>>()
     val playlistWithMediaLiveData: LiveData<List<Media>> = _playlistWithMediaLiveData
 
-    private val _swapOrdersLiveData = MutableLiveData<Pair<String, String>>()
-    val swapOrderLiveData: LiveData<Pair<String, String>> = _swapOrdersLiveData
-
     private val _deleteMediaLiveData = MutableLiveData<Int>()
     val deleteMediaLiveData: LiveData<Int> = _deleteMediaLiveData
 
@@ -57,9 +54,9 @@ class PlaylistViewModel @Inject constructor(
                 mediaList.map { it.id })
         }
 
-    fun updateOrders(playlistId: Long, fromId: String, fromOrder: Int, toId: String, toOrder: Int) =
+    fun updateOrders(playlistId: Long, mediaList: List<Media>) =
         viewModelScope.launch {
-            playlistMediaCrossRepository.updateOrders(playlistId, fromId, fromOrder, toId, toOrder)
+            playlistMediaCrossRepository.updateOrders(playlistId, mediaList)
         }
 
 
