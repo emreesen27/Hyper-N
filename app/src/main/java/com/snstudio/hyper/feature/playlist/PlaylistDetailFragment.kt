@@ -32,6 +32,7 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     override fun setupViews() {
         initMediaViewModel()
         initMediaRecycler()
+        createTouchHelperCallback()
         initClickListener()
         getMediaForPlaylistOrdered()
         with(binding) {
@@ -44,11 +45,6 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     override fun observeData() = with(viewModel) {
         observe(playlistWithMediaLiveData) { mediaList ->
             mediaItemAdapter.setItems(mediaList.toMutableList())
-        }
-        observe(swapOrderLiveData) {
-            activity?.runOnUiThread {
-                mediaItemAdapter.movedItem(it.first, it.second)
-            }
         }
         observe(deleteMediaLiveData) { deletedItemPos ->
             mediaItemAdapter.removeItem(deletedItemPos)
@@ -94,14 +90,17 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     }
 
     private fun initMediaRecycler() {
+        binding.recyclerMedia.adapter = mediaItemAdapter
+    }
+
+    private fun createTouchHelperCallback() {
         val callback = ItemTouchHelperCallback(
             requireContext(),
-            onMovedCallback = { from, to -> movedItem(from, to) },
+            onMovedCallback = { movedItem() },
             onSwipedCallback = { pos -> removeItem(pos) },
             onMoveCallback = { from, to -> moveItem(from, to) }
         )
         val itemTouchHelper = ItemTouchHelper(callback)
-        binding.recyclerMedia.adapter = mediaItemAdapter
         itemTouchHelper.attachToRecyclerView(binding.recyclerMedia)
     }
 
@@ -109,14 +108,10 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
         mediaItemAdapter.moveItem(from, to)
     }
 
-    private fun movedItem(from: Int, to: Int) {
-        val fromId = mediaItemAdapter.mediaItems[from].id
-        val toId = mediaItemAdapter.mediaItems[to].id
-
+    private fun movedItem() {
         viewModel.updateOrders(
             args.playListId,
-            fromId, to,
-            toId, from
+            mediaItemAdapter.mediaItems
         )
     }
 

@@ -14,7 +14,6 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
-import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.service.MusicPlayerService
 
 class MediaViewModel(application: Application) : AndroidViewModel(application) {
@@ -24,17 +23,14 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
     private val _playerLiveData = MutableLiveData<Player>()
     val playerLiveData: LiveData<Player> = _playerLiveData
 
-    private val _playbackStateLiveData = MutableLiveData<Boolean>()
-    val playbackStateLiveData: LiveData<Boolean> = _playbackStateLiveData
+    private val _playbackStateLiveData = MutableLiveData<Unit>()
+    val playbackStateLiveData: LiveData<Unit> = _playbackStateLiveData
 
     private val _metaDataLiveData = MutableLiveData<MediaMetadata>()
     val metaDataLiveData: LiveData<MediaMetadata> = _metaDataLiveData
 
     private val _playerWhenReadyLiveData = MutableLiveData<Boolean>()
     val playerWhenReadyLiveData: LiveData<Boolean> = _playerWhenReadyLiveData
-
-    private val _currentMediaLiveData = MutableLiveData<Media>()
-    val currentMediaLiveData: LiveData<Media> = _currentMediaLiveData
 
     private val playlist = mutableListOf<MediaItem>()
 
@@ -70,7 +66,7 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
 
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     if (playbackState == Player.STATE_READY) {
-                        _playbackStateLiveData.postValue(!_currentMediaLiveData.value?.localPath.isNullOrEmpty())
+                        _playbackStateLiveData.postValue(Unit)
                     }
                 }
             }
@@ -90,10 +86,6 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
 
     fun stopPlayer() {
         player.stop()
-    }
-
-    fun setCurrentMedia(media: Media) {
-        _currentMediaLiveData.value = media
     }
 
     fun setPlaylist(mediaItems: List<MediaItem>) {

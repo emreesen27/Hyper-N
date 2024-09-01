@@ -72,6 +72,7 @@ class Explode {
       "publishYear": video.publishDate?.year.toString() ?? "",
       "uploadYear": video.uploadDate?.year.toString() ?? "",
       "viewCount": video.engagement.viewCount.toString(),
+      "isLive": video.isLive.toString()
     };
     return videoData;
   }

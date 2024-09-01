@@ -1,6 +1,7 @@
 package com.snstudio.hyper.core.extension
 
 import com.snstudio.hyper.data.model.Media
+import com.snstudio.hyper.util.MediaItemType
 
 fun <T> MutableCollection<T>.removeFirst(): T {
     val iterator = iterator()
@@ -31,22 +32,25 @@ fun <T> MutableCollection<T>.removeFirst(predicate: (T) -> Boolean): T? {
 fun <K, V> MutableMap<K, V>.removeFirst(predicate: (Map.Entry<K, V>) -> Boolean): Map.Entry<K, V>? =
     entries.removeFirst(predicate)
 
-fun List<HashMap<String, String>>.toMediaList(type: Int): MutableList<Media> {
-    return this.map { hashMap ->
-        Media(
-            id = hashMap["id"] ?: "",
-            title = hashMap["title"] ?: "",
-            description = hashMap["description"] ?: "",
-            author = hashMap["author"] ?: "",
-            url = hashMap["url"] ?: "",
-            duration = hashMap["duration"]?.toLong() ?: 0L,
-            thumbnail = hashMap["thumbnail"] ?: "",
-            publishYear = hashMap["publishYear"],
-            uploadYear = hashMap["uploadYear"],
-            viewCount = hashMap["viewCount"] ?: "",
-            type = type,
-            bitmap = null,
-            localPath = null,
-        )
-    }.toMutableList()
+fun List<HashMap<String, String>>.toMediaList(type: MediaItemType): MutableList<Media> {
+    return this
+        .filter { hashMap -> hashMap["isLive"]?.toBooleanStrictOrNull() == false }
+        .map { hashMap ->
+            Media(
+                id = hashMap["id"] ?: "",
+                title = hashMap["title"] ?: "",
+                description = hashMap["description"] ?: "",
+                author = hashMap["author"] ?: "",
+                url = hashMap["url"] ?: "",
+                duration = hashMap["duration"]?.toLongOrNull() ?: 0L,
+                thumbnail = hashMap["thumbnail"] ?: "",
+                publishYear = hashMap["publishYear"],
+                uploadYear = hashMap["uploadYear"],
+                viewCount = hashMap["viewCount"] ?: "",
+                type = type.key,
+                bitmap = null,
+                localPath = null,
+                progress = -1
+            )
+        }.toMutableList()
 }

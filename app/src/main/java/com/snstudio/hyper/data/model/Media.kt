@@ -19,5 +19,6 @@ data class Media(
     val viewCount: String?,
     val type: Int,
     val bitmap: Bitmap?,
-    val localPath: String?
+    val localPath: String?,
+    var progress: Int?
 )

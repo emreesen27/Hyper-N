@@ -13,14 +13,19 @@ import kotlin.math.abs
 
 class ItemTouchHelperCallback(
     context: Context,
+    private val swipeAction: SwipeAction = SwipeAction.DELETE,
     private val onMoveCallback: ((Int, Int) -> Unit)? = null,
-    private val onMovedCallback: ((Int, Int) -> Unit)? = null,
+    private val onMovedCallback: (() -> Unit)? = null,
     private val onSwipedCallback: ((Int) -> Unit)
 ) : ItemTouchHelper.Callback() {
 
     private val deleteIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_delete)
+    private val downloadIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_download)
+
     private val deleteBackground =
         ColorDrawable(ContextCompat.getColor(context, R.color.delete_red))
+    private val downloadBackground =
+        ColorDrawable(ContextCompat.getColor(context, R.color.main_color))
 
     private var currentActionState: Int = ItemTouchHelper.ACTION_STATE_IDLE
 
@@ -34,10 +39,9 @@ class ItemTouchHelperCallback(
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
         if (currentActionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-            onMovedCallback?.invoke(fromPosition, toPosition)
+            onMovedCallback?.invoke()
         }
     }
-
 
     override fun getMovementFlags(
         recyclerView: RecyclerView,
@@ -82,24 +86,39 @@ class ItemTouchHelperCallback(
     }
 
     private fun handleSwipe(canvas: Canvas, itemView: View, dX: Float) {
-        deleteIcon?.let { icon ->
+        val icon: Drawable?
+        val background: ColorDrawable
+
+        when (swipeAction) {
+            SwipeAction.DELETE -> {
+                icon = deleteIcon
+                background = deleteBackground
+            }
+
+            SwipeAction.DOWNLOAD -> {
+                icon = downloadIcon
+                background = downloadBackground
+            }
+        }
+
+        icon?.let {
             if (dX < 0 && abs(dX) > 150) {
-                val iconMargin = (itemView.height - icon.intrinsicHeight) / 2
+                val iconMargin = (itemView.height - it.intrinsicHeight) / 2
                 val iconTop = itemView.top + iconMargin
-                val iconBottom = iconTop + icon.intrinsicHeight
-                val iconLeft = itemView.right - iconMargin - icon.intrinsicWidth
+                val iconBottom = iconTop + it.intrinsicHeight
+                val iconLeft = itemView.right - iconMargin - it.intrinsicWidth
                 val iconRight = itemView.right - iconMargin
 
-                deleteBackground.setBounds(
+                background.setBounds(
                     itemView.right + dX.toInt(),
                     itemView.top,
                     itemView.right,
                     itemView.bottom
                 )
-                deleteBackground.draw(canvas)
+                background.draw(canvas)
 
-                icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
-                icon.draw(canvas)
+                it.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+                it.draw(canvas)
             }
         }
     }

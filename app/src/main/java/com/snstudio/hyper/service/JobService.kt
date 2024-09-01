@@ -111,12 +111,11 @@ class JobService : Service() {
 
         fun download(
             media: Media,
-            mediaMetadata: MediaMetadata,
             url: String,
             completed: JobCompletedCallback,
             context: Context,
         ) {
-            startJob(DownloadJob(media, mediaMetadata, url, completed), context)
+            startJob(DownloadJob(media, url, completed), context)
         }
 
 

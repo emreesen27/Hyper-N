@@ -30,12 +30,11 @@ class PlaylistMediaCrossRepository @Inject constructor(
     @WorkerThread
     suspend fun updateOrders(
         playlistId: Long,
-        fromId: String,
-        fromOrder: Int,
-        toId: String,
-        toOrder: Int
+        mediaList: List<Media>
     ) {
-        playlistMediaCrossRefDao.updateOrders(playlistId, fromId, fromOrder, toId, toOrder)
+        mediaList.forEachIndexed { index, media ->
+            playlistMediaCrossRefDao.updateOrder(playlistId, media.id, index)
+        }
     }
 
     @WorkerThread
