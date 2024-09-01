@@ -45,7 +45,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/duration"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_5sdp"
@@ -54,23 +54,10 @@
             android:text="@{LongKt.toDuration(item.duration)}"
             android:textColor="@color/secondary_text_color"
             android:textSize="@dimen/_13ssp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/thumbnail"
             app:layout_constraintTop_toBottomOf="@+id/title"
             tools:text="@string/app_name" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/secondary_text_color"
-            android:textSize="@dimen/_13ssp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            tools:text="%100" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
