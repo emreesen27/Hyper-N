@@ -5,8 +5,6 @@
 
         <import type="com.snstudio.hyper.core.extension.LongKt" />
 
-        <import type="android.view.View" />
-
         <variable
             name="item"
             type="com.snstudio.hyper.data.model.Media" />
