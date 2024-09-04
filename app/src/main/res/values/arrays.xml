@@ -4,6 +4,9 @@
         <item>@drawable/ic_search</item>
         <item>@drawable/ic_settings</item>
     </array>
+    <array name="playlist_drawables">
+        <item>@drawable/ic_add</item>
+    </array>
     <array name="playlist_detail_drawables">
         <item>@drawable/ic_add</item>
     </array>

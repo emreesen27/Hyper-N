@@ -1,17 +1,22 @@
 package com.snstudio.hyper.feature.search
 
 import android.annotation.SuppressLint
-import android.widget.Toast
+import android.os.Build
+import android.util.TypedValue
+import android.widget.EditText
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.snstudio.hyper.R
 import com.snstudio.hyper.core.base.BaseFragment
-import com.snstudio.hyper.core.extension.addDivider
 import com.snstudio.hyper.core.extension.addOnScrolledToEnd
 import com.snstudio.hyper.core.extension.convertToBitmap
+import com.snstudio.hyper.core.extension.infoToast
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.core.extension.restoreScrollPosition
 import com.snstudio.hyper.core.extension.toMediaList
+import com.snstudio.hyper.core.extension.waningToast
 import com.snstudio.hyper.data.MediaItemBuilder
 import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.databinding.FragmentSearchBinding
@@ -57,6 +62,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
                     RECEIVED.SEARCH_RECEIVED.received -> {
                         it.argument<List<HashMap<String, String>>>(DATA_KEY)?.let { data ->
                             viewModel.searchProgressObservable.set(false)
+                            viewModel.searchResultIsEmptyObservable.set(data.isEmpty())
                             mediaItemAdapter.setItems(data.toMediaList(MediaItemType.SEARCH))
                         }
                     }
@@ -123,23 +129,38 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
     }
 
     private fun initSearch() {
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                viewModel.invokeSearch(query)
-                return true
-            }
+        with(binding.searchView) {
+            findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+                .apply {
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        setTextCursorDrawable(R.drawable.cursor_color)
+                    }
+                    setHintTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.text_color
+                        )
+                    )
+                }
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    viewModel.invokeSearch(query)
+                    return true
+                }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                return true
-            }
-        })
+                override fun onQueryTextChange(newText: String): Boolean {
+                    return true
+                }
+            })
+        }
     }
 
     private fun initMediaRecycler() {
         with(binding.recyclerMedia) {
             adapter = mediaItemAdapter
             itemAnimator = null
-            addDivider(requireContext())
+            //addDivider(requireContext())
             addOnScrolledToEnd { viewModel.invokeNext() }
         }
     }
@@ -161,16 +182,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
 
     private fun getAudioUrlForDownload(media: Media) {
         if (viewModel.isMediaSavedLocally(media)) {
-            Toast.makeText(requireContext(), "öğe zaten indirilmiş", Toast.LENGTH_SHORT).show()
+            context?.infoToast(getString(R.string.already_in_lib))
             return
         }
 
         if (JobService.runningJobCount > 0) {
-            Toast.makeText(
-                requireContext(),
-                "mevcut öğenin indirilmesini bekleyin",
-                Toast.LENGTH_SHORT
-            ).show()
+            context?.waningToast(getString(R.string.please_wait_download))
             return
         }
 

@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
+import com.snstudio.hyper.R
 
 
 class FrNotificationManager(
@@ -19,11 +20,11 @@ class FrNotificationManager(
     init {
         val channel =
             NotificationChannel(
-                "FileOperationChannel",
-                "File Operation Channel",
+                service.getString(R.string.notification_id),
+                service.getString(R.string.notification_name),
                 NotificationManager.IMPORTANCE_HIGH,
             ).apply {
-                description = "Notification channel for file operation service"
+                description = service.getString(R.string.notification_desc)
             }
         notificationManager.createNotificationChannel(channel)
     }

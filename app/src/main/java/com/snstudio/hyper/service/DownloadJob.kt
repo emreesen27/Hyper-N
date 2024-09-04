@@ -1,6 +1,5 @@
 package com.snstudio.hyper.service
 
-import com.snstudio.hyper.R
 import com.snstudio.hyper.core.base.BaseJob
 import com.snstudio.hyper.core.extension.postNotification
 import com.snstudio.hyper.data.model.Media
@@ -47,7 +46,7 @@ class DownloadJob(
                         output.write(buffer, 0, bytesRead)
                         downloadedBytes += bytesRead
                         val progress = ((downloadedBytes.toDouble() / totalBytes) * 100).toInt()
-                        postNotification(R.string.app_name, progress)
+                        postNotification(media.title, progress)
                         callback.onJobProgress(progress)
                     }
                 }

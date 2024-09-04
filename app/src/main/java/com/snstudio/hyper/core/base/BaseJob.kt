@@ -2,9 +2,7 @@ package com.snstudio.hyper.core.base
 
 import android.os.Handler
 import android.os.Looper
-import com.snstudio.hyper.R
 import com.snstudio.hyper.service.JobService
-import com.snstudio.hyper.core.extension.postNotification
 import java.io.IOException
 import java.io.InterruptedIOException
 import java.util.Random
@@ -19,7 +17,6 @@ abstract class BaseJob {
     fun runOn(service: JobService) {
         this.service = service
         try {
-            postNotification(R.string.app_name,0)
             run()
             onCompleted()
         } catch (e: InterruptedIOException) {

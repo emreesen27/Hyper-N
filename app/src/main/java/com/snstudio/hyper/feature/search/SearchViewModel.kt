@@ -24,9 +24,9 @@ class SearchViewModel @Inject constructor(
 ) : BaseViewModel(methodChannel) {
 
     private val _localMediaListLiveData = MutableLiveData<List<Media>>()
-    val localMediaListLiveData: LiveData<List<Media>> = _localMediaListLiveData
 
     val searchProgressObservable = ObservableBoolean(false)
+    val searchResultIsEmptyObservable = ObservableBoolean(false)
 
     var audioActionType: AudioActionType = AudioActionType.PLAY
         private set
@@ -77,7 +77,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun isMediaSavedLocally(media: Media): Boolean =
-        localMediaListLiveData.value?.any { media.id == it.id } ?: false
+        _localMediaListLiveData.value?.any { media.id == it.id } ?: false
 
     enum class AudioActionType {
         PLAY, DOWNLOAD

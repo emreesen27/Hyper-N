@@ -1,5 +1,6 @@
 package com.snstudio.hyper.feature.picker
 
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -14,5 +15,7 @@ class MediaPickerViewModel @Inject constructor(
 ) : ViewModel() {
 
     val localMediaLiveData: LiveData<List<Media>> = mediaRepository.localMediaList.asLiveData()
+
+    val containsItemIsEmptyObservable = ObservableBoolean(false)
 
 }

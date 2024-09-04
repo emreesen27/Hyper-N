@@ -3,6 +3,7 @@ package com.snstudio.hyper.feature.library
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.snstudio.hyper.core.base.BaseFragment
+import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.data.MediaItemBuilder
 import com.snstudio.hyper.data.model.Media
@@ -31,8 +32,11 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
         initMediaRecycler()
         createTouchHelperCallback()
         initMediaViewModel()
+        initClickListener()
         with(binding) {
-            attachToolbar(colorizedBar, recyclerMedia)
+            attachToolbar(colorizedBar, null)
+            binding.vm = viewModel
+            binding.lifecycleOwner = viewLifecycleOwner
         }
     }
 
@@ -44,6 +48,12 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
 
     private fun initMediaRecycler() {
         binding.recyclerMedia.adapter = mediaItemAdapter
+    }
+
+    private fun initClickListener() {
+        binding.noMusicItem.click {
+            navigate(LibraryFragmentDirections.goToSearch())
+        }
     }
 
     private fun createTouchHelperCallback() {
