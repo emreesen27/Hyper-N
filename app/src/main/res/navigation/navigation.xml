@@ -30,7 +30,13 @@
     <fragment
         android:id="@+id/libraryFragment"
         android:name="com.snstudio.hyper.feature.library.LibraryFragment"
-        tools:layout="@layout/fragment_library" />
+        tools:layout="@layout/fragment_library">
+
+        <action
+            android:id="@+id/goToSearch"
+            app:destination="@id/searchFragment" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/searchFragment"

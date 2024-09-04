@@ -6,12 +6,13 @@
     <color name="text_color">#FFFFFFFF</color>
     <color name="secondary_text_color">#FFCCCCCC</color>
     <color name="divider_color">#808080</color>
-    <color name="main_color">#FF007FFF</color>
+    <color name="main_color">#FF004C99</color>
+    <color name="main_color_transparent">#33004C99</color>
     <color name="main_color_light">#FF66AAFF</color>
-    <color name="main_color_mid">#FF004C99</color>
+    <color name="main_color_mid">#FF007FFF</color>
     <color name="dark_transparent">#33000000</color>
     <color name="delete_red">#CCB00020</color>
-    <color name="colorAccent">#FF007FFF</color>
+    <color name="colorAccent">#FF004C99</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

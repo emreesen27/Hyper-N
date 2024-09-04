@@ -1,22 +1,21 @@
 package com.snstudio.hyper.core.extension
 
-import androidx.annotation.StringRes
-import com.snstudio.hyper.core.base.BaseJob
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.CATEGORY_PROGRESS
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import com.snstudio.hyper.R
+import com.snstudio.hyper.core.base.BaseJob
 
 fun BaseJob.postNotification(
-    @StringRes title: Int,
+    title: String,
     progress: Int,
 ) {
     val notificationBuilder =
-        NotificationCompat.Builder(service, "FileOperationChannel")
+        NotificationCompat.Builder(service, service.getString(R.string.notification_id))
     val notification =
-        notificationBuilder.setContentTitle("File Operation Service")
-            .setContentText(service.getString(title))
-            .setSmallIcon(R.drawable.launcher_icon)
+        notificationBuilder.setContentTitle(service.getString(R.string.notification_name))
+            .setContentText(title)
+            .setSmallIcon(R.mipmap.ic_launcher_main)
             .setPriority(PRIORITY_HIGH)
             .setOngoing(true)
             .setOnlyAlertOnce(true)

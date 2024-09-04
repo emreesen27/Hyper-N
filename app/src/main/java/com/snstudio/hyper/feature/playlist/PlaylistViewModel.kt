@@ -1,5 +1,6 @@
 package com.snstudio.hyper.feature.playlist
 
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,8 @@ class PlaylistViewModel @Inject constructor(
     private val _deleteMediaLiveData = MutableLiveData<Int>()
     val deleteMediaLiveData: LiveData<Int> = _deleteMediaLiveData
 
+    val isLoading = ObservableBoolean(true)
+
 
     init {
         getPlayList()
@@ -36,7 +39,15 @@ class PlaylistViewModel @Inject constructor(
     private fun getPlayList() = viewModelScope.launch {
         playlistRepository.allPlaylists.collectLatest { playlist ->
             _playlistLiveData.value = playlist
+            isLoading.set(false)
         }
+    }
+
+    fun getMediaForPlaylistOrdered(playlistId: Long) = viewModelScope.launch {
+        playlistMediaCrossRepository.getMediaForPlaylistOrdered(playlistId)
+            .collectLatest { mediaList ->
+                _playlistWithMediaLiveData.postValue(mediaList)
+            }
     }
 
     fun insertPlaylist(playlist: Playlist) = viewModelScope.launch {
@@ -58,12 +69,6 @@ class PlaylistViewModel @Inject constructor(
         viewModelScope.launch {
             playlistMediaCrossRepository.updateOrders(playlistId, mediaList)
         }
-
-
-    fun getMediaForPlaylistOrdered(playlistId: Long) = viewModelScope.launch {
-        val mediaList = playlistMediaCrossRepository.getMediaForPlaylistOrdered(playlistId)
-        _playlistWithMediaLiveData.postValue(mediaList)
-    }
 
     fun deleteMediaFromPlaylist(playlistId: Long, mediaId: String, pos: Int) =
         viewModelScope.launch {

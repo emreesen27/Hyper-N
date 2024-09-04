@@ -6,7 +6,6 @@ import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.data.model.Playlist
 import com.snstudio.hyper.databinding.FragmentPlaylistBinding
-import com.snstudio.hyper.feature.CreatePlaylistDialog
 import com.snstudio.hyper.util.ItemTouchHelperCallback
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,7 +28,9 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
         initPlaylistRecycler()
         createTouchHelperCallback()
         with(binding) {
-            attachToolbar(colorizedBar, recyclerPlaylist)
+            attachToolbar(colorizedBar, null)
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
         }
     }
 
@@ -41,15 +42,22 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
 
     private fun initClickListener() {
         with(binding) {
-            noItem.click {
-                val dialog = CreatePlaylistDialog()
-                dialog.onClick = { playlistName ->
-                    viewModel.insertPlaylist(Playlist(name = playlistName))
-                    dialog.dismiss()
-                }
-                dialog.showDialog(childFragmentManager)
+            noPlaylistItem.click {
+                showCreatePlaylistDialog()
+            }
+            colorizedBar.setOnIconClickListener {
+                showCreatePlaylistDialog()
             }
         }
+    }
+
+    private fun showCreatePlaylistDialog() {
+        val dialog = CreatePlaylistDialog()
+        dialog.onClick = { playlistName ->
+            viewModel.insertPlaylist(Playlist(name = playlistName))
+            dialog.dismiss()
+        }
+        dialog.showDialog(childFragmentManager)
     }
 
     private fun initPlaylistRecycler() {

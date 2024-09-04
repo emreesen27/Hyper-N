@@ -4,13 +4,15 @@ import androidx.annotation.WorkerThread
 import com.snstudio.hyper.data.local.dao.PlaylistMediaCrossRefDao
 import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.data.model.PlaylistMediaCrossRef
+import kotlinx.coroutines.flow.Flow
+
 import javax.inject.Inject
 
 class PlaylistMediaCrossRepository @Inject constructor(
     private val playlistMediaCrossRefDao: PlaylistMediaCrossRefDao
 ) {
-    @WorkerThread
-    suspend fun getMediaForPlaylistOrdered(playlistId: Long): List<Media> {
+
+    fun getMediaForPlaylistOrdered(playlistId: Long): Flow<List<Media>> {
         return playlistMediaCrossRefDao.getMediaForPlaylistOrdered(playlistId)
     }
 

@@ -16,4 +16,20 @@
     <string name="save">Save</string>
     <string name="create_playlist">Create Playlist</string>
     <string name="create">Create</string>
+    <string name="playlist_empty_click">You haven\'t created a list yet\n Tap here to create one</string>
+    <string name="music_empty_click">You haven\'t added any music yet\n Tap here to add some</string>
+    <string name="library_music_empty_click">You haven\'t downloaded any music yet\n Tap here to go to the search screen</string>
+    <string name="no_music">No music available to add to the list</string>
+    <string name="already_in_lib">This music is already in your library</string>
+    <string name="please_wait_download">Please wait for the current item to finish downloading</string>
+    <string name="search_music">Search music</string>
+    <string name="notification_name">Hyper Download Service</string>
+    <string name="notification_desc">Notification channel for Hyper\'s download service</string>
+    <string name="no_result_found">No results found</string>
+    <string name="cannot_be_empty">Cannot be empty</string>
+    <string name="three_characters_required">At least 3 characters required</string>
+    <string name="music_already_added_info">Music that are already added will not be listed here</string>
+
+    <!--id-->
+    <string name="notification_id" translatable="false">"download_service_channel"</string>
 </resources>

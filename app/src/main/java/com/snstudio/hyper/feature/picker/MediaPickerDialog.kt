@@ -35,6 +35,10 @@ class MediaPickerDialog(
         initAdapter()
         observeData()
         initCLickListener()
+        with(binding) {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
     }
 
     private fun observeData() {
@@ -43,6 +47,7 @@ class MediaPickerDialog(
                 val filteredList = mediaList.filterNot { mediaItem ->
                     containsItem.any { it.id == mediaItem.id }
                 }
+                viewModel.containsItemIsEmptyObservable.set(filteredList.isEmpty())
                 mediaPickerAdapter.setItems(filteredList)
             }
         }

@@ -22,6 +22,7 @@
             android:id="@+id/colorizedBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:iconDrawables="@array/playlist_drawables"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -36,17 +37,20 @@
             android:visibility="@{vm.playlistLiveData.empty ? View.GONE : View.VISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/colorizedBar"
             tools:listitem="@layout/item_play_list" />
 
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/noItem"
+            android:id="@+id/noPlaylistItem"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
+            android:drawableTop="@drawable/ic_playlist"
             android:gravity="center"
-            android:text="Henüz bir liste oluşturmadınız oluşturmak için tıklayın."
+            android:text="@string/playlist_empty_click"
             android:textColor="@color/text_color"
             android:textSize="@dimen/_13ssp"
             android:visibility="@{vm.playlistLiveData.empty ? View.VISIBLE : View.GONE}"

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.snstudio.hyper.core.base.BaseFragment
+import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.data.MediaItemBuilder
 import com.snstudio.hyper.data.model.Media
@@ -16,7 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, PlaylistViewModel>() {
-
     private lateinit var mediaViewModel: MediaViewModel
     private val args: PlaylistDetailFragmentArgs by navArgs()
     private val mediaItemAdapter by lazy {
@@ -38,7 +38,7 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
         with(binding) {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner
-            attachToolbar(colorizedBar, recyclerMedia, args.playListName)
+            attachToolbar(colorizedBar, null, args.playListName)
         }
     }
 
@@ -61,6 +61,9 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
                 0 -> showMediaPickerDialog()
                 else -> return@setOnIconClickListener
             }
+        }
+        binding.noMusicItem.click {
+            showMediaPickerDialog()
         }
     }
 

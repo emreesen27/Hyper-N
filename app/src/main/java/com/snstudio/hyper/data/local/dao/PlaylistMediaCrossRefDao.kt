@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.data.model.PlaylistMediaCrossRef
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlaylistMediaCrossRefDao {
@@ -33,8 +34,7 @@ interface PlaylistMediaCrossRefDao {
     ORDER BY PlaylistMediaCrossRef.`order` ASC
     """
     )
-    suspend fun getMediaForPlaylistOrdered(playlistId: Long): List<Media>
-
+    fun getMediaForPlaylistOrdered(playlistId: Long): Flow<List<Media>>
 
     @Query("UPDATE PlaylistMediaCrossRef SET `order` = :newOrder WHERE playlistId = :playlistId AND id = :id")
     suspend fun updateOrder(playlistId: Long, id: String, newOrder: Int)
