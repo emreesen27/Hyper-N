@@ -1,7 +1,5 @@
 package com.snstudio.hyper.core.base
 
-import android.os.Handler
-import android.os.Looper
 import com.snstudio.hyper.service.JobService
 import java.io.IOException
 import java.io.InterruptedIOException
@@ -10,7 +8,7 @@ import java.util.Random
 abstract class BaseJob {
     val id = Random().nextInt()
 
-    internal val handler = Handler(Looper.getMainLooper())
+    //internal val handler = Handler(Looper.getMainLooper())
     internal lateinit var service: JobService
         private set
 

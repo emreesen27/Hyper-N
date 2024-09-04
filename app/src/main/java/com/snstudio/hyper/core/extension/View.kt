@@ -14,14 +14,6 @@ fun View.gone() {
     this.visibility = View.GONE
 }
 
-fun View.invisible() {
-    this.visibility = View.INVISIBLE
-}
-
-fun View.visibility(visibility: Boolean) {
-    if (visibility) this.visible() else this.gone()
-}
-
 fun View.startColorAnimation(): ValueAnimator {
     val colors = intArrayOf(
         resources.getColor(R.color.main_color, null),

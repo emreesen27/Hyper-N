@@ -2,7 +2,7 @@
 <resources>
     <array name="home_drawables">
         <item>@drawable/ic_search</item>
-        <item>@drawable/ic_settings</item>
+        <!-- Todo <item>@drawable/ic_settings</item> -->
     </array>
     <array name="playlist_drawables">
         <item>@drawable/ic_add</item>

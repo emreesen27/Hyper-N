@@ -29,6 +29,7 @@
     <string name="cannot_be_empty">Cannot be empty</string>
     <string name="three_characters_required">At least 3 characters required</string>
     <string name="music_already_added_info">Music that are already added will not be listed here</string>
+    <string name="downloading">Downloading…</string>
 
     <!--id-->
     <string name="notification_id" translatable="false">"download_service_channel"</string>

@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val progressSnackBar =
-        SnackProgressBar(SnackProgressBar.TYPE_CIRCULAR, "Loading...")
+        SnackProgressBar(SnackProgressBar.TYPE_CIRCULAR, getString(R.string.downloading))
             .setIsIndeterminate(false)
             .setProgressMax(100)
             .setAllowUserInput(true)
@@ -61,12 +61,14 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.vm = mediaViewModel
-        binding.lifecycleOwner = this
         viewModel.createMusicFolder()
         observeData()
         initPlayerMenuButtonsListener()
         initSnackDisplayListener()
+        with(binding) {
+            vm = mediaViewModel
+            lifecycleOwner = this@MainActivity
+        }
     }
 
     @OptIn(UnstableApi::class)

@@ -1,6 +1,5 @@
 package com.snstudio.hyper.feature.playlist
 
-import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,8 +28,6 @@ class PlaylistViewModel @Inject constructor(
     private val _deleteMediaLiveData = MutableLiveData<Int>()
     val deleteMediaLiveData: LiveData<Int> = _deleteMediaLiveData
 
-    val isLoading = ObservableBoolean(true)
-
 
     init {
         getPlayList()
@@ -39,7 +36,6 @@ class PlaylistViewModel @Inject constructor(
     private fun getPlayList() = viewModelScope.launch {
         playlistRepository.allPlaylists.collectLatest { playlist ->
             _playlistLiveData.value = playlist
-            isLoading.set(false)
         }
     }
 
