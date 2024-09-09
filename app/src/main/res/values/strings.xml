@@ -1,4 +1,7 @@
 <resources>
+    <!--id-->
+    <string name="notification_id" translatable="false">"download_service_channel"</string>
+
     <string name="app_name">Hyper</string>
     <string name="home">Home</string>
     <string name="highlights">Highlights</string>
@@ -30,7 +33,8 @@
     <string name="three_characters_required">At least 3 characters required</string>
     <string name="music_already_added_info">Music that are already added will not be listed here</string>
     <string name="downloading">Downloading…</string>
-
-    <!--id-->
-    <string name="notification_id" translatable="false">"download_service_channel"</string>
+    <string name="new_version_available">New version available</string>
+    <string name="download_new_version">To continue using the app, please download the new version</string>
+    <string name="cancel">Cancel</string>
+    <string name="download">Download</string>
 </resources>

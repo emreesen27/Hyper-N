@@ -1,4 +1,4 @@
-package com.snstudio.hyper.feature
+package com.snstudio.hyper
 
 import androidx.lifecycle.ViewModel
 import com.snstudio.hyper.util.PathProvider

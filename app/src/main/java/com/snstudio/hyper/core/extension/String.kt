@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import org.json.JSONException
+import org.json.JSONObject
 
 fun String.convertToBitmap(context: Context, onSuccess: (Bitmap) -> Unit, onFailure: () -> Unit) {
     Glide.with(context)
@@ -23,4 +25,15 @@ fun String.convertToBitmap(context: Context, onSuccess: (Bitmap) -> Unit, onFail
 
             override fun onLoadCleared(placeholder: Drawable?) {}
         })
+}
+
+fun String?.parseObject(name: String): String? {
+    if (this == null) return null
+    return try {
+        val jsonObject = JSONObject(this)
+        jsonObject.getString(name)
+    } catch (e: JSONException) {
+        e.printStackTrace()
+        null
+    }
 }

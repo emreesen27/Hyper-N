@@ -1,4 +1,4 @@
-package com.snstudio.hyper.feature
+package com.snstudio.hyper
 
 import android.animation.ValueAnimator
 import android.os.Bundle
@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import androidx.media3.common.util.UnstableApi
-import com.snstudio.hyper.R
 import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.gone
 import com.snstudio.hyper.core.extension.observe
@@ -49,12 +48,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val progressSnackBar =
+    private val progressSnackBar by lazy {
         SnackProgressBar(SnackProgressBar.TYPE_CIRCULAR, getString(R.string.downloading))
             .setIsIndeterminate(false)
             .setProgressMax(100)
             .setAllowUserInput(true)
             .setShowProgressPercentage(true)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

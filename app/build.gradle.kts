@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.fir.declarations.builder.buildField
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -30,12 +28,11 @@ android {
     }
 
     val myChannelValue = "nativeBridgeChannel"
+    val releaseVersionUrl = "https://api.github.com/repos/emreesen27/Hyper-N/releases/latest"
     buildTypes {
         getByName("debug") {
-            buildConfigField(
-                "String", "MY_CHANNEL",
-                "\"$myChannelValue\""
-            )
+            buildConfigField("String", "MY_CHANNEL", "\"$myChannelValue\"")
+            buildConfigField("String", "RELEASE_VERSION", "\"$releaseVersionUrl\"")
         }
 
         getByName("release") {
@@ -44,10 +41,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField(
-                "String", "MY_CHANNEL",
-                "\"$myChannelValue\""
-            )
+            buildConfigField("String", "MY_CHANNEL", "\"$myChannelValue\"")
+            buildConfigField("String", "RELEASE_VERSION", "\"$releaseVersionUrl\"")
         }
     }
 

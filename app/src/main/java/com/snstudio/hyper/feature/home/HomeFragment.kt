@@ -9,8 +9,11 @@ import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.snstudio.hyper.BuildConfig
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.click
+import com.snstudio.hyper.core.extension.observe
+import com.snstudio.hyper.core.extension.openUrlInBrowser
 import com.snstudio.hyper.core.extension.startActivitySafely
 import com.snstudio.hyper.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +25,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun getViewBinding() = FragmentHomeBinding.inflate(layoutInflater)
 
-    override fun observeData() {}
+    override fun observeData() {
+        observe(viewModel.forceUpdateLiveData) { update ->
+            if (update) {
+                showVersionDialog()
+            }
+        }
+    }
 
     override fun onResume() {
         super.onResume()
@@ -100,6 +109,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 }
             context?.startActivitySafely(settingsIntent)
         }
+    }
+
+    private fun showVersionDialog() {
+        val dialog = VersionDialog()
+        dialog.onClick = { choose ->
+            if (choose) {
+                context?.openUrlInBrowser(BuildConfig.RELEASE_VERSION)
+            } else {
+                dialog.dismiss()
+                activity?.finish()
+            }
+        }
+        dialog.showDialog(childFragmentManager)
     }
 
 }

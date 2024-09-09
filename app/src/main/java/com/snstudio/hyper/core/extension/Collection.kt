@@ -50,7 +50,6 @@ fun List<HashMap<String, String>>.toMediaList(type: MediaItemType): MutableList<
                 type = type.key,
                 bitmap = null,
                 localPath = null,
-                progress = -1
             )
         }.toMutableList()
 }

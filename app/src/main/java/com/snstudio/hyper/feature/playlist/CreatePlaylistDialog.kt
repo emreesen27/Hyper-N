@@ -5,8 +5,7 @@ import com.snstudio.hyper.core.base.BaseDialog
 import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.databinding.DialogCreatePlayListBinding
 
-class CreatePlaylistDialog(
-) : BaseDialog<DialogCreatePlayListBinding>() {
+class CreatePlaylistDialog : BaseDialog<DialogCreatePlayListBinding>() {
     var onClick: ((String) -> Unit)? = null
 
     override val dialogTag: String
