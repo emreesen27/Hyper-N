@@ -8,6 +8,8 @@ void main() {
 
   final explode = Explode();
 
+  /// Sets up a handler for method calls coming from the native side through the MethodChannel.
+  /// Based on the method name received, it triggers the corresponding functionality in the Explode class.
   ChannelBridge.instance.channel.setMethodCallHandler((call) async {
     if (call.method == 'search') {
       explode.search(call.arguments);
@@ -17,10 +19,6 @@ void main() {
       explode.dispose();
     } else if (call.method == 'nextPage') {
       explode.nextPage();
-    } else if (call.method == 'highlights') {
-      List<dynamic> args = call.arguments;
-      List<String> highlights = args.cast<String>();
-      explode.getHighlights(highlights);
     }
   });
 }

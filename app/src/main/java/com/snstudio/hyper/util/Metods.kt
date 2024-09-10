@@ -5,7 +5,6 @@ const val DATA_KEY = "data"
 enum class RECEIVED(val received: String) {
     SEARCH_RECEIVED("receiveSearchData"),
     NEXT_RECEIVED("receiveNextSearchData"),
-    HIGHLIGHTS_RECEIVED("receiveHighlightsData"),
     AUDIO_URL_RECEIVED("receiveAudioUrl"),
 }
 

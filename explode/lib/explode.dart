@@ -30,24 +30,6 @@ class Explode {
         .invokeMethod('receiveAudioUrl', {'data': url});
   }
 
-  Future<void> getHighlights(List<String> highlights) async {
-    List<Map<String, String>> videoList = [];
-
-    List<Future<Video>> futures = [];
-    for (var element in highlights) {
-      futures.add(_explode.videos.get(element));
-    }
-
-    List<Video> videos = await Future.wait(futures);
-
-    for (var video in videos) {
-      videoList.add(_mapToVideo(video));
-    }
-
-    await ChannelBridge.instance.channel
-        .invokeMethod('receiveHighlightsData', {'data': videoList});
-  }
-
   List<Map<String, String>> _fetchVideoList(VideoSearchList? videos) {
     List<Map<String, String>> videoList = [];
 
