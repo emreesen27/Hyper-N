@@ -1,12 +1,11 @@
 <resources>
-    <!--id-->
+    <!--no translatable-->
     <string name="notification_id" translatable="false">"download_service_channel"</string>
+    <string name="app_name" translatable="false">Hyper</string>
+    <string name="progress" translatable="false">%% %1$d</string>
 
-    <string name="app_name">Hyper</string>
     <string name="home">Home</string>
-    <string name="highlights">Highlights</string>
     <string name="searching">Searching…</string>
-    <string name="progress">%% %1$d</string>
     <string name="song_library">Song library</string>
     <string name="library">Library</string>
     <string name="song_desc">Listen to or manage downloaded songs</string>
