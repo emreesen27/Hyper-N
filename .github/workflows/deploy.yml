@@ -23,6 +23,14 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Build Flutter AAR
+        run: flutter build aar
+
       - name: Create Google Services JSON
         id: create_google_json
         uses: jsdaniell/create-json@1.1.2
