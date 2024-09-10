@@ -59,3 +59,9 @@ android {
         jvmTarget = "11"
     }
 }
+
+tasks.register("printVersionName") {
+    doLast {
+        println(android.defaultConfig.versionName)
+    }
+}
