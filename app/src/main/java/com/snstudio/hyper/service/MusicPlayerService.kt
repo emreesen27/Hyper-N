@@ -1,5 +1,7 @@
 package com.snstudio.hyper.service
 
+import android.app.PendingIntent
+import android.content.Intent
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -9,6 +11,7 @@ import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
+import com.snstudio.hyper.MainActivity
 
 @UnstableApi
 class MusicPlayerService : MediaLibraryService() {
@@ -26,6 +29,19 @@ class MusicPlayerService : MediaLibraryService() {
                     ),
                 ).build()
 
+        val notificationIntent =
+            Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+
+        val pendingIntent =
+            PendingIntent.getActivity(
+                this,
+                0,
+                notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
+
         session =
             MediaLibrarySession.Builder(
                 this, player,
@@ -40,7 +56,17 @@ class MusicPlayerService : MediaLibraryService() {
                         return Futures.immediateFuture(updatedMediaItems)
                     }
                 },
-            ).build()
+            )
+                .setSessionActivity(pendingIntent)
+                .build()
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        stopSelf()
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        player.release()
+        session.release()
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession {
