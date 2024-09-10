@@ -30,7 +30,9 @@ jobs:
          git config --global --add safe.directory /opt/hostedtoolcache/flutter/stable-3.3.10-x64
 
       - name: Build Flutter AAR
-        run: flutter build aar
+        run: |
+          cd explode
+          flutter build aar
 
       - name: Create Google Services JSON
         id: create_google_json
