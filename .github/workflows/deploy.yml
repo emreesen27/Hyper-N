@@ -27,7 +27,7 @@ jobs:
         with:
          flutter-version: '3.24.2'
       - run: |
-         git config --global --add safe.directory /opt/hostedtoolcache/flutter/stable-3.3.10-x64
+         git config --global --add safe.directory /opt/hostedtoolcache/flutter/stable-3.24.2-x64
 
       - name: Build Flutter AAR
         run: |
