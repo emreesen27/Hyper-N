@@ -28,3 +28,10 @@ fun ImageView.loadBitmapWithGlide(path: Bitmap) {
         .error(R.drawable.layer_placeholder)
         .diskCacheStrategy(DiskCacheStrategy.NONE).into(this)
 }
+
+fun ImageView.loadGif(image: Int) {
+    Glide.with(context)
+        .asGif()
+        .load(image)
+        .into(this)
+}

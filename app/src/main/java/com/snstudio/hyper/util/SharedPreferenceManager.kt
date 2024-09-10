@@ -8,6 +8,8 @@ import javax.inject.Singleton
 
 enum class PrefsTag(val tag: String) {
     PERMISSION_NOTIFICATION("PERMISSION_NOTIFICATION"),
+    DOWNLOAD_INFO_DIALOG_SHOW("DOWNLOAD_INFO_DIALOG_SHOW"),
+    DELETE_INFO_DIALOG_SHOW("DELETE_INFO_DIALOG_SHOW"),
 }
 
 @Singleton

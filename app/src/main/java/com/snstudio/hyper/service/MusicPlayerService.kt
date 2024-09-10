@@ -52,13 +52,12 @@ class MusicPlayerService : MediaLibraryService() {
                         mediaItems: MutableList<MediaItem>,
                     ): ListenableFuture<MutableList<MediaItem>> {
                         val updatedMediaItems =
-                            mediaItems.map { it.buildUpon().setUri(it.mediaId).build() }.toMutableList()
+                            mediaItems.map { it.buildUpon().setUri(it.mediaId).build() }
+                                .toMutableList()
                         return Futures.immediateFuture(updatedMediaItems)
                     }
                 },
-            )
-                .setSessionActivity(pendingIntent)
-                .build()
+            ).setSessionActivity(pendingIntent).build()
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {

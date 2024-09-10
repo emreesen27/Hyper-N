@@ -2,6 +2,7 @@ package com.snstudio.hyper.feature.library
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.snstudio.hyper.R
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.observe
@@ -10,6 +11,7 @@ import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.databinding.FragmentLibraryBinding
 import com.snstudio.hyper.shared.MediaItemAdapter
 import com.snstudio.hyper.shared.MediaViewModel
+import com.snstudio.hyper.util.InfoDialog
 import com.snstudio.hyper.util.ItemTouchHelperCallback
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,6 +44,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
     override fun observeData() {
         observe(viewModel.localMediaLiveData) { mediaList ->
             mediaItemAdapter.setItems(mediaList.toMutableList())
+            if (mediaList.isNotEmpty()) showInfoDialog()
         }
     }
 
@@ -83,5 +86,15 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
 
     private fun initMediaViewModel() {
         mediaViewModel = ViewModelProvider(requireActivity())[MediaViewModel::class.java]
+    }
+
+    private fun showInfoDialog() {
+        if (!viewModel.getInfoDialogStatus()) {
+            InfoDialog(
+                titleResId = R.string.how_to_delete,
+                imageResId = R.drawable.delete_info,
+            ).showDialog(childFragmentManager)
+            viewModel.setTrueInfoDialogStatus()
+        }
     }
 }

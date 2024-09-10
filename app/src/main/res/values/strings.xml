@@ -37,4 +37,7 @@
     <string name="download_new_version">To continue using the app, please download the new version</string>
     <string name="cancel">Cancel</string>
     <string name="download">Download</string>
+    <string name="ok">OK</string>
+    <string name="how_do_download">You can start downloading the music you want by swiping left</string>
+    <string name="how_to_delete">Swipe left to delete music</string>
 </resources>

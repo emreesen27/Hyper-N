@@ -26,6 +26,7 @@ import com.snstudio.hyper.shared.MediaItemAdapter
 import com.snstudio.hyper.shared.MediaViewModel
 import com.snstudio.hyper.shared.ProgressLiveData
 import com.snstudio.hyper.util.DATA_KEY
+import com.snstudio.hyper.util.InfoDialog
 import com.snstudio.hyper.util.ItemTouchHelperCallback
 import com.snstudio.hyper.util.MediaItemType
 import com.snstudio.hyper.util.RECEIVED
@@ -50,10 +51,13 @@ class SearchFragment :
 
     override fun setupViews() {
         initMediaViewModel()
-        setDataBinding()
         initMediaRecycler()
         attachItemTouchHelperCallback()
         initSearch()
+        with(binding) {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
     }
 
     override fun observeData() {
@@ -65,6 +69,7 @@ class SearchFragment :
                             viewModel.searchProgressObservable.set(false)
                             viewModel.searchResultIsEmptyObservable.set(data.isEmpty())
                             mediaItemAdapter.setItems(data.toMediaList(MediaItemType.SEARCH))
+                            showInfoDialog()
                         }
                     }
 
@@ -212,8 +217,13 @@ class SearchFragment :
         mediaViewModel = ViewModelProvider(requireActivity())[MediaViewModel::class.java]
     }
 
-    private fun setDataBinding() {
-        binding.vm = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+    private fun showInfoDialog() {
+        if (!viewModel.getInfoDialogStatus()) {
+            InfoDialog(
+                titleResId = R.string.how_do_download,
+                imageResId = R.drawable.download_info,
+            ).showDialog(childFragmentManager)
+            viewModel.setTrueInfoDialogStatus()
+        }
     }
 }
