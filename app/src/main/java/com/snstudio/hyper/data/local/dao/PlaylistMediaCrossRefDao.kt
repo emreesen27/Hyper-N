@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlaylistMediaCrossRefDao {
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(crossRef: PlaylistMediaCrossRef)
 
@@ -19,8 +18,10 @@ interface PlaylistMediaCrossRefDao {
     suspend fun insertAll(crossRefs: List<PlaylistMediaCrossRef>)
 
     @Query("DELETE FROM PlaylistMediaCrossRef WHERE playlistId = :playlistId AND id = :mediaId")
-    suspend fun deleteMediaFromPlaylist(playlistId: Long, mediaId: String)
-
+    suspend fun deleteMediaFromPlaylist(
+        playlistId: Long,
+        mediaId: String,
+    )
 
     @Query("SELECT MAX(`order`) FROM PlaylistMediaCrossRef WHERE playlistId = :playlistId")
     suspend fun getMaxOrderForPlaylist(playlistId: Long): Int?
@@ -32,11 +33,14 @@ interface PlaylistMediaCrossRefDao {
     INNER JOIN PlaylistMediaCrossRef ON Media.id = PlaylistMediaCrossRef.id
     WHERE PlaylistMediaCrossRef.playlistId = :playlistId
     ORDER BY PlaylistMediaCrossRef.`order` ASC
-    """
+    """,
     )
     fun getMediaForPlaylistOrdered(playlistId: Long): Flow<List<Media>>
 
     @Query("UPDATE PlaylistMediaCrossRef SET `order` = :newOrder WHERE playlistId = :playlistId AND id = :id")
-    suspend fun updateOrder(playlistId: Long, id: String, newOrder: Int)
-
+    suspend fun updateOrder(
+        playlistId: Long,
+        id: String,
+        newOrder: Int,
+    )
 }

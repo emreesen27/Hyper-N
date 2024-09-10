@@ -65,10 +65,11 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
     }
 
     private fun createTouchHelperCallback() {
-        val callback = ItemTouchHelperCallback(
-            requireContext(),
-            onSwipedCallback = { pos -> viewModel.deletePlaylist(playlistAdapter.getItemWithPos(pos)) },
-        )
+        val callback =
+            ItemTouchHelperCallback(
+                requireContext(),
+                onSwipedCallback = { pos -> viewModel.deletePlaylist(playlistAdapter.getItemWithPos(pos)) },
+            )
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerPlaylist)
     }
@@ -78,5 +79,4 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
             PlaylistFragmentDirections.goToPlaylistDetail(playlist.playlistId, playlist.name)
         navigate(action)
     }
-
 }

@@ -23,8 +23,8 @@ class MediaListDiffCallback(
         newItemPosition: Int,
     ): Boolean {
         return oldList[oldItemPosition].id == newList[newItemPosition].id &&
-                oldList[oldItemPosition].thumbnail == newList[newItemPosition].thumbnail &&
-                oldList[oldItemPosition].duration == newList[newItemPosition].duration &&
-                oldList[oldItemPosition].url == newList[newItemPosition].url
+            oldList[oldItemPosition].thumbnail == newList[newItemPosition].thumbnail &&
+            oldList[oldItemPosition].duration == newList[newItemPosition].duration &&
+            oldList[oldItemPosition].url == newList[newItemPosition].url
     }
 }

@@ -3,7 +3,6 @@ package com.snstudio.hyper.service
 import com.snstudio.hyper.data.model.Media
 
 interface JobCompletedCallback {
-
     /**
      * Called when the job starts.
      *
@@ -24,5 +23,4 @@ interface JobCompletedCallback {
      * @param media The media object produced or processed by the job.
      */
     fun onJobCompleted(media: Media)
-
 }

@@ -61,7 +61,7 @@ abstract class BaseFragment<VBinding : ViewBinding, VModel : ViewModel> : Fragme
     open fun attachToolbar(
         colorizedBar: HyperColorizedBar,
         recyclerView: RecyclerView?,
-        title: String? = null
+        title: String? = null,
     ) {
         colorizedBar.apply {
             setActivity(requireActivity())

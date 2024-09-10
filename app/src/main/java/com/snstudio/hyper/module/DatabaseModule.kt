@@ -2,10 +2,10 @@ package com.snstudio.hyper.module
 
 import android.content.Context
 import androidx.room.Room
+import com.snstudio.hyper.data.local.AppDatabase
 import com.snstudio.hyper.data.local.dao.MediaDao
 import com.snstudio.hyper.data.local.dao.PlaylistDao
 import com.snstudio.hyper.data.local.dao.PlaylistMediaCrossRefDao
-import com.snstudio.hyper.data.local.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,11 +33,13 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
+    fun provideAppDatabase(
+        @ApplicationContext appContext: Context,
+    ): AppDatabase {
         return Room.databaseBuilder(
             appContext,
             AppDatabase::class.java,
-            "Hyper"
+            "Hyper",
         ).fallbackToDestructiveMigration().build()
     }
 }

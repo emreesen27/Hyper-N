@@ -8,7 +8,7 @@ import java.util.Random
 abstract class BaseJob {
     val id = Random().nextInt()
 
-    //internal val handler = Handler(Looper.getMainLooper())
+    // internal val handler = Handler(Looper.getMainLooper())
     internal lateinit var service: JobService
         private set
 
@@ -21,7 +21,7 @@ abstract class BaseJob {
             e.printStackTrace()
         } catch (e: Exception) {
             e.printStackTrace()
-            //handler.post { service.errorToast(e.toString()) }
+            // handler.post { service.errorToast(e.toString()) }
         } finally {
             service.notificationManager.cancel(id)
         }

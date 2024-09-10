@@ -15,7 +15,7 @@ import com.snstudio.hyper.databinding.ItemMediaSearchBinding
 import com.snstudio.hyper.util.MediaItemType
 
 class MediaItemAdapter(
-    private val onClick: ((Media) -> Unit)? = null
+    private val onClick: ((Media) -> Unit)? = null,
 ) : RecyclerView.Adapter<MediaItemAdapter.AutoCompleteViewHolder>() {
     var mediaItems: MutableList<Media> = mutableListOf()
         private set
@@ -38,7 +38,10 @@ class MediaItemAdapter(
         return mediaItems.subList(index, mediaItems.size)
     }
 
-    fun moveItem(fromPosition: Int, toPosition: Int) {
+    fun moveItem(
+        fromPosition: Int,
+        toPosition: Int,
+    ) {
         val item = mediaItems.removeAt(fromPosition)
         mediaItems.add(toPosition, item)
         notifyItemMoved(fromPosition, toPosition)
@@ -49,11 +52,13 @@ class MediaItemAdapter(
         notifyItemRemoved(position)
     }
 
-    fun restoreItem(item: Media, position: Int) { // Todo
+    fun restoreItem(
+        item: Media,
+        position: Int,
+    ) { // Todo
         mediaItems.add(position, item)
         notifyItemInserted(position)
     }
-
 
     override fun getItemViewType(position: Int): Int {
         val item = mediaItems[position]
@@ -87,12 +92,10 @@ class MediaItemAdapter(
         return mediaItems.size
     }
 
-
     class AutoCompleteViewHolder(
         private val binding: ViewDataBinding,
         private val adapter: MediaItemAdapter,
     ) : RecyclerView.ViewHolder(binding.root) {
-
         fun bindItem(data: Media) {
             binding.setVariable(BR.item, data)
             binding.executePendingBindings()

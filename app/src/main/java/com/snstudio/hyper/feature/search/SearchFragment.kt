@@ -32,11 +32,10 @@ import com.snstudio.hyper.util.RECEIVED
 import com.snstudio.hyper.util.SwipeAction
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
-class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
+class SearchFragment :
+    BaseFragment<FragmentSearchBinding, SearchViewModel>(),
     JobCompletedCallback {
-
     private lateinit var mediaViewModel: MediaViewModel
 
     private val mediaItemAdapter by lazy {
@@ -46,7 +45,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
     }
 
     override fun getViewModelClass() = SearchViewModel::class.java
+
     override fun getViewBinding() = FragmentSearchBinding.inflate(layoutInflater)
+
     override fun setupViews() {
         initMediaViewModel()
         setDataBinding()
@@ -95,16 +96,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
     override fun onJobStart(id: String) {
         ProgressLiveData.updateDownloadState(
             ProgressLiveData.DownloadState.Started(
-                viewModel.currentMedia?.title.orEmpty()
-            )
+                viewModel.currentMedia?.title.orEmpty(),
+            ),
         )
     }
 
     override fun onJobProgress(progress: Int) {
         ProgressLiveData.updateDownloadState(
             ProgressLiveData.DownloadState.InProgress(
-                progress
-            )
+                progress,
+            ),
         )
     }
 
@@ -139,20 +140,22 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
                     setHintTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.text_color
-                        )
+                            R.color.text_color,
+                        ),
                     )
                 }
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    viewModel.invokeSearch(query)
-                    return true
-                }
+            setOnQueryTextListener(
+                object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String): Boolean {
+                        viewModel.invokeSearch(query)
+                        return true
+                    }
 
-                override fun onQueryTextChange(newText: String): Boolean {
-                    return true
-                }
-            })
+                    override fun onQueryTextChange(newText: String): Boolean {
+                        return true
+                    }
+                },
+            )
         }
     }
 
@@ -160,25 +163,25 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
         with(binding.recyclerMedia) {
             adapter = mediaItemAdapter
             itemAnimator = null
-            //addDivider(requireContext())
+            // addDivider(requireContext())
             addOnScrolledToEnd { viewModel.invokeNext() }
         }
     }
 
     @SuppressLint("NotifyDataSetChanged") // Todo
     private fun attachItemTouchHelperCallback() {
-        val callback = ItemTouchHelperCallback(
-            requireContext(),
-            swipeAction = SwipeAction.DOWNLOAD,
-            onSwipedCallback = { pos ->
-                mediaItemAdapter.notifyDataSetChanged()
-                getAudioUrlForDownload(mediaItemAdapter.mediaItems[pos])
-            },
-        )
+        val callback =
+            ItemTouchHelperCallback(
+                requireContext(),
+                swipeAction = SwipeAction.DOWNLOAD,
+                onSwipedCallback = { pos ->
+                    mediaItemAdapter.notifyDataSetChanged()
+                    getAudioUrlForDownload(mediaItemAdapter.mediaItems[pos])
+                },
+            )
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerMedia)
     }
-
 
     private fun getAudioUrlForDownload(media: Media) {
         if (viewModel.isMediaSavedLocally(media)) {
@@ -213,5 +216,4 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(),
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
     }
-
 }

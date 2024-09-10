@@ -7,7 +7,6 @@ import android.app.Service
 import android.content.Context
 import com.snstudio.hyper.R
 
-
 class FrNotificationManager(
     private val service: Service,
 ) {

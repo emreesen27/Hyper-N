@@ -10,19 +10,18 @@ import androidx.room.ForeignKey
             entity = Playlist::class,
             parentColumns = ["playlistId"],
             childColumns = ["playlistId"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.CASCADE,
         ),
         ForeignKey(
             entity = Media::class,
             parentColumns = ["id"],
             childColumns = ["id"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+            onDelete = ForeignKey.CASCADE,
+        ),
+    ],
 )
 data class PlaylistMediaCrossRef(
     val playlistId: Long,
     val id: String,
-    val order: Int
+    val order: Int,
 )
-

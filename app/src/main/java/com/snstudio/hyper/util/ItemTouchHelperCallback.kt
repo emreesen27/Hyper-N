@@ -16,9 +16,8 @@ class ItemTouchHelperCallback(
     private val swipeAction: SwipeAction = SwipeAction.DELETE,
     private val onMoveCallback: ((Int, Int) -> Unit)? = null,
     private val onMovedCallback: (() -> Unit)? = null,
-    private val onSwipedCallback: ((Int) -> Unit)
+    private val onSwipedCallback: ((Int) -> Unit),
 ) : ItemTouchHelper.Callback() {
-
     private val deleteIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_delete)
     private val downloadIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.ic_download)
 
@@ -36,7 +35,10 @@ class ItemTouchHelperCallback(
         return onMoveCallback != null
     }
 
-    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+    override fun clearView(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+    ) {
         super.clearView(recyclerView, viewHolder)
         if (currentActionState == ItemTouchHelper.ACTION_STATE_DRAG) {
             onMovedCallback?.invoke()
@@ -45,7 +47,7 @@ class ItemTouchHelperCallback(
 
     override fun getMovementFlags(
         recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder
+        viewHolder: RecyclerView.ViewHolder,
     ): Int {
         val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
         val swipeFlags = ItemTouchHelper.LEFT
@@ -55,7 +57,7 @@ class ItemTouchHelperCallback(
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
-        target: RecyclerView.ViewHolder
+        target: RecyclerView.ViewHolder,
     ): Boolean {
         fromPosition = viewHolder.absoluteAdapterPosition
         toPosition = target.absoluteAdapterPosition
@@ -63,7 +65,10 @@ class ItemTouchHelperCallback(
         return true
     }
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+    override fun onSwiped(
+        viewHolder: RecyclerView.ViewHolder,
+        direction: Int,
+    ) {
         val position = viewHolder.absoluteAdapterPosition
         onSwipedCallback.invoke(position)
     }
@@ -75,7 +80,7 @@ class ItemTouchHelperCallback(
         dX: Float,
         dY: Float,
         actionState: Int,
-        isCurrentlyActive: Boolean
+        isCurrentlyActive: Boolean,
     ) {
         val itemView = viewHolder.itemView
         currentActionState = actionState
@@ -85,7 +90,11 @@ class ItemTouchHelperCallback(
         super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 
-    private fun handleSwipe(canvas: Canvas, itemView: View, dX: Float) {
+    private fun handleSwipe(
+        canvas: Canvas,
+        itemView: View,
+        dX: Float,
+    ) {
         val icon: Drawable?
         val background: ColorDrawable
 
@@ -113,7 +122,7 @@ class ItemTouchHelperCallback(
                     itemView.right + dX.toInt(),
                     itemView.top,
                     itemView.right,
-                    itemView.bottom
+                    itemView.bottom,
                 )
                 background.draw(canvas)
 

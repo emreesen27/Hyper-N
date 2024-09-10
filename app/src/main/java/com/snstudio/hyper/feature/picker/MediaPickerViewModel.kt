@@ -10,12 +10,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MediaPickerViewModel @Inject constructor(
-    private val mediaRepository: MediaRepository
-) : ViewModel() {
+class MediaPickerViewModel
+    @Inject
+    constructor(
+        mediaRepository: MediaRepository,
+    ) : ViewModel() {
+        val localMediaLiveData: LiveData<List<Media>> = mediaRepository.localMediaList.asLiveData()
 
-    val localMediaLiveData: LiveData<List<Media>> = mediaRepository.localMediaList.asLiveData()
-
-    val containsItemIsEmptyObservable = ObservableBoolean(false)
-
-}
+        val containsItemIsEmptyObservable = ObservableBoolean(false)
+    }

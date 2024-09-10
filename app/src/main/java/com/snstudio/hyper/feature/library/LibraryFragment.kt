@@ -15,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>() {
-
     private lateinit var mediaViewModel: MediaViewModel
 
     private val mediaItemAdapter: MediaItemAdapter by lazy {
@@ -57,10 +56,11 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
     }
 
     private fun createTouchHelperCallback() {
-        val callback = ItemTouchHelperCallback(
-            requireContext(),
-            onSwipedCallback = { pos -> deleteMedia(pos) },
-        )
+        val callback =
+            ItemTouchHelperCallback(
+                requireContext(),
+                onSwipedCallback = { pos -> deleteMedia(pos) },
+            )
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerMedia)
     }
@@ -71,9 +71,10 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
 
     private fun playMedia(media: Media) {
         media.localPath?.let {
-            val item = MediaItemBuilder().setMediaId(it)
-                .setMediaTitle(media.title)
-                .build()
+            val item =
+                MediaItemBuilder().setMediaId(it)
+                    .setMediaTitle(media.title)
+                    .build()
             with(mediaViewModel) {
                 playMediaItem(item)
             }
@@ -83,5 +84,4 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
     private fun initMediaViewModel() {
         mediaViewModel = ViewModelProvider(requireActivity())[MediaViewModel::class.java]
     }
-
 }

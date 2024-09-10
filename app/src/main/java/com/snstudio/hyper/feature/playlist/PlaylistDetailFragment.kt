@@ -42,14 +42,15 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
         }
     }
 
-    override fun observeData() = with(viewModel) {
-        observe(playlistWithMediaLiveData) { mediaList ->
-            mediaItemAdapter.setItems(mediaList.toMutableList())
+    override fun observeData() =
+        with(viewModel) {
+            observe(playlistWithMediaLiveData) { mediaList ->
+                mediaItemAdapter.setItems(mediaList.toMutableList())
+            }
+            observe(deleteMediaLiveData) { deletedItemPos ->
+                mediaItemAdapter.removeItem(deletedItemPos)
+            }
         }
-        observe(deleteMediaLiveData) { deletedItemPos ->
-            mediaItemAdapter.removeItem(deletedItemPos)
-        }
-    }
 
     private fun initMediaViewModel() {
         mediaViewModel = ViewModelProvider(requireActivity())[MediaViewModel::class.java]
@@ -73,12 +74,13 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
 
     private fun setPlayList(media: Media) {
         mediaItemAdapter.getSubMediaItems(media).let { mediaList ->
-            val mediaItems = mediaList.map { media ->
-                MediaItemBuilder()
-                    .setMediaId(media.localPath.orEmpty())
-                    .setMediaTitle(media.title)
-                    .build()
-            }
+            val mediaItems =
+                mediaList.map { media ->
+                    MediaItemBuilder()
+                        .setMediaId(media.localPath.orEmpty())
+                        .setMediaTitle(media.title)
+                        .build()
+                }
             mediaViewModel.setPlaylist(mediaItems)
         }
     }
@@ -88,7 +90,7 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
             selectedCallback = { mediaList ->
                 mediaList?.let { viewModel.insertMediaListToPlaylist(args.playListId, it) }
             },
-            containsItem = viewModel.playlistWithMediaLiveData.value
+            containsItem = viewModel.playlistWithMediaLiveData.value,
         ).showDialog(childFragmentManager)
     }
 
@@ -97,24 +99,28 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     }
 
     private fun createTouchHelperCallback() {
-        val callback = ItemTouchHelperCallback(
-            requireContext(),
-            onMovedCallback = { movedItem() },
-            onSwipedCallback = { pos -> removeItem(pos) },
-            onMoveCallback = { from, to -> moveItem(from, to) }
-        )
+        val callback =
+            ItemTouchHelperCallback(
+                requireContext(),
+                onMovedCallback = { movedItem() },
+                onSwipedCallback = { pos -> removeItem(pos) },
+                onMoveCallback = { from, to -> moveItem(from, to) },
+            )
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerMedia)
     }
 
-    private fun moveItem(from: Int, to: Int) {
+    private fun moveItem(
+        from: Int,
+        to: Int,
+    ) {
         mediaItemAdapter.moveItem(from, to)
     }
 
     private fun movedItem() {
         viewModel.updateOrders(
             args.playListId,
-            mediaItemAdapter.mediaItems
+            mediaItemAdapter.mediaItems,
         )
     }
 
@@ -126,5 +132,4 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
                 adapter.restoreItem(removedItem, position)
             }.show()*/
     }
-
 }

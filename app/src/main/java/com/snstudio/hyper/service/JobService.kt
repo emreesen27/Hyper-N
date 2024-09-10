@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import androidx.annotation.MainThread
-import androidx.media3.common.MediaMetadata
 import com.snstudio.hyper.core.base.BaseJob
 import com.snstudio.hyper.core.extension.removeFirst
 import com.snstudio.hyper.data.model.Media
@@ -117,7 +116,6 @@ class JobService : Service() {
         ) {
             startJob(DownloadJob(media, url, completed), context)
         }
-
 
         @MainThread
         fun cancelJob(id: Int) {

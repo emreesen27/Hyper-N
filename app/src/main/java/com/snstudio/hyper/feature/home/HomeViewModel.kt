@@ -19,58 +19,58 @@ import okhttp3.Request
 import okio.IOException
 import javax.inject.Inject
 
-
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    methodChannel: MethodChannel,
-    private val sharedPreferenceManager: SharedPreferenceManager
-) : BaseViewModel(methodChannel) {
+class HomeViewModel
+    @Inject
+    constructor(
+        methodChannel: MethodChannel,
+        private val sharedPreferenceManager: SharedPreferenceManager,
+    ) : BaseViewModel(methodChannel) {
+        private val forceUpdateMLiveData = MutableLiveData<Boolean>()
+        val forceUpdateLiveData: LiveData<Boolean> = forceUpdateMLiveData
 
-    private val _forceUpdateLiveData = MutableLiveData<Boolean>()
-    val forceUpdateLiveData: LiveData<Boolean> = _forceUpdateLiveData
+        var notificationRuntimeRequested: Boolean = false
 
-    var notificationRuntimeRequested: Boolean = false
+        val progress = ObservableBoolean(true)
 
-    val progress = ObservableBoolean(true)
+        init {
+            checkVersion()
+        }
 
-    init {
-        checkVersion()
-    }
+        fun hasNotificationRequestedPermissionBefore() = sharedPreferenceManager.getBoolean(PrefsTag.PERMISSION_NOTIFICATION)
 
-    fun hasNotificationRequestedPermissionBefore() =
-        sharedPreferenceManager.getBoolean(PrefsTag.PERMISSION_NOTIFICATION)
+        fun setNotificationPermissionRequested() = sharedPreferenceManager.putBoolean(PrefsTag.PERMISSION_NOTIFICATION, true)
 
-    fun setNotificationPermissionRequested() =
-        sharedPreferenceManager.putBoolean(PrefsTag.PERMISSION_NOTIFICATION, true)
-
-    private fun checkVersion() = viewModelScope.launch {
-        val latestVersion = fetchLatestVersion()
-        _forceUpdateLiveData.postValue(latestVersion != BuildConfig.VERSION_NAME)
-        progress.set(false)
-    }
-
-    private suspend fun fetchLatestVersion(): String? = withContext(Dispatchers.IO) {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(BuildConfig.RELEASE_VERSION)
-            .build()
-
-        return@withContext try {
-            val response = client.newCall(request).execute()
-            if (response.isSuccessful) {
-                val jsonResponse = response.body?.string()
-                jsonResponse.parseObject(JSON_TAG_NAME)
-            } else {
-                null
+        private fun checkVersion() =
+            viewModelScope.launch {
+                val latestVersion = fetchLatestVersion()
+                forceUpdateMLiveData.postValue(latestVersion != BuildConfig.VERSION_NAME)
+                progress.set(false)
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
+
+        private suspend fun fetchLatestVersion(): String? =
+            withContext(Dispatchers.IO) {
+                val client = OkHttpClient()
+                val request =
+                    Request.Builder()
+                        .url(BuildConfig.RELEASE_VERSION)
+                        .build()
+
+                return@withContext try {
+                    val response = client.newCall(request).execute()
+                    if (response.isSuccessful) {
+                        val jsonResponse = response.body?.string()
+                        jsonResponse.parseObject(JSON_TAG_NAME)
+                    } else {
+                        null
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    null
+                }
+            }
+
+        companion object {
+            const val JSON_TAG_NAME = "tag_name"
         }
     }
-
-    companion object {
-        const val JSON_TAG_NAME = "tag_name"
-    }
-
-}

@@ -1,6 +1,5 @@
 package com.snstudio.hyper.core.extension
 
-
 import android.graphics.Bitmap
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -9,9 +8,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.snstudio.hyper.R
 
 @BindingAdapter("load")
-fun ImageView.loadWithGlide(
-    path: Any,
-) {
+fun ImageView.loadWithGlide(path: Any) {
     Glide.with(context)
         .load(path)
         .centerCrop()
@@ -22,9 +19,7 @@ fun ImageView.loadWithGlide(
 }
 
 @BindingAdapter("loadBitmap")
-fun ImageView.loadBitmapWithGlide(
-    path: Bitmap,
-) {
+fun ImageView.loadBitmapWithGlide(path: Bitmap) {
     Glide.with(context)
         .load(path)
         .centerCrop()

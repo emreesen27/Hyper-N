@@ -9,7 +9,6 @@ import androidx.room.Update
 import com.snstudio.hyper.data.model.Media
 import kotlinx.coroutines.flow.Flow
 
-
 @Dao
 interface MediaDao {
     @Query("SELECT * FROM media")
@@ -23,5 +22,4 @@ interface MediaDao {
 
     @Delete
     suspend fun delete(media: Media)
-
 }

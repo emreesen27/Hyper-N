@@ -1,7 +1,6 @@
 package com.snstudio.hyper.feature.search
 
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.snstudio.hyper.core.base.BaseViewModel
@@ -18,69 +17,73 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(
-    private val methodChannel: MethodChannel,
-    private val localMediaRepository: MediaRepository
-) : BaseViewModel(methodChannel) {
+class SearchViewModel
+    @Inject
+    constructor(
+        private val methodChannel: MethodChannel,
+        private val localMediaRepository: MediaRepository,
+    ) : BaseViewModel(methodChannel) {
+        private val localMediaListMLiveData = MutableLiveData<List<Media>>()
 
-    private val _localMediaListLiveData = MutableLiveData<List<Media>>()
+        val searchProgressObservable = ObservableBoolean(false)
+        val searchResultIsEmptyObservable = ObservableBoolean(false)
 
-    val searchProgressObservable = ObservableBoolean(false)
-    val searchResultIsEmptyObservable = ObservableBoolean(false)
+        var audioActionType: AudioActionType = AudioActionType.PLAY
+            private set
 
-    var audioActionType: AudioActionType = AudioActionType.PLAY
-        private set
+        var currentMedia: Media? = null
+            private set
 
-    var currentMedia: Media? = null
-        private set
+        init {
+            receivedData(
+                RECEIVED.SEARCH_RECEIVED.received,
+                RECEIVED.AUDIO_URL_RECEIVED.received,
+                RECEIVED.NEXT_RECEIVED.received,
+            )
+            collectLocalMediaData()
+        }
 
-    init {
-        receivedData(
-            RECEIVED.SEARCH_RECEIVED.received,
-            RECEIVED.AUDIO_URL_RECEIVED.received,
-            RECEIVED.NEXT_RECEIVED.received
-        )
-        collectLocalMediaData()
-    }
+        fun invokeSearch(query: String) {
+            searchProgressObservable.set(true)
+            methodChannel.invokeMethod(INVOKE.SEARCH.invoke, query)
+        }
 
-    fun invokeSearch(query: String) {
-        searchProgressObservable.set(true)
-        methodChannel.invokeMethod(INVOKE.SEARCH.invoke, query)
-    }
+        fun invokeNext() {
+            methodChannel.invokeMethod(INVOKE.NEXT.invoke, null)
+        }
 
-    fun invokeNext() {
-        methodChannel.invokeMethod(INVOKE.NEXT.invoke, null)
-    }
+        fun invokeAudioUrl(
+            media: Media,
+            type: AudioActionType,
+        ) {
+            audioActionType = type
+            currentMedia = media
+            methodChannel.invokeMethod(INVOKE.AUDIO_URL.invoke, media.id)
+        }
 
-    fun invokeAudioUrl(media: Media, type: AudioActionType) {
-        audioActionType = type
-        currentMedia = media
-        methodChannel.invokeMethod(INVOKE.AUDIO_URL.invoke, media.id)
-    }
-
-    fun insertMediaJob(media: Media) {
-        val job = Job()
-        val scope = CoroutineScope(Dispatchers.IO + job)
-        scope.launch {
-            try {
-                localMediaRepository.insert(media)
-            } finally {
-                job.cancel()
+        fun insertMediaJob(media: Media) {
+            val job = Job()
+            val scope = CoroutineScope(Dispatchers.IO + job)
+            scope.launch {
+                try {
+                    localMediaRepository.insert(media)
+                } finally {
+                    job.cancel()
+                }
             }
         }
-    }
 
-    private fun collectLocalMediaData() = viewModelScope.launch {
-        localMediaRepository.localMediaList.collect {
-            _localMediaListLiveData.value = it
+        private fun collectLocalMediaData() =
+            viewModelScope.launch {
+                localMediaRepository.localMediaList.collect {
+                    localMediaListMLiveData.value = it
+                }
+            }
+
+        fun isMediaSavedLocally(media: Media): Boolean = localMediaListMLiveData.value?.any { media.id == it.id } ?: false
+
+        enum class AudioActionType {
+            PLAY,
+            DOWNLOAD,
         }
     }
-
-    fun isMediaSavedLocally(media: Media): Boolean =
-        _localMediaListLiveData.value?.any { media.id == it.id } ?: false
-
-    enum class AudioActionType {
-        PLAY, DOWNLOAD
-    }
-
-}

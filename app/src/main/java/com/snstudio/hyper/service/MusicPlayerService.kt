@@ -18,26 +18,29 @@ class MusicPlayerService : MediaLibraryService() {
     override fun onCreate() {
         super.onCreate()
 
-        player = ExoPlayer.Builder(applicationContext)
-            .setRenderersFactory(
-                DefaultRenderersFactory(this).setExtensionRendererMode(
-                    DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER
-                )
+        player =
+            ExoPlayer.Builder(applicationContext)
+                .setRenderersFactory(
+                    DefaultRenderersFactory(this).setExtensionRendererMode(
+                        DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER,
+                    ),
+                ).build()
+
+        session =
+            MediaLibrarySession.Builder(
+                this, player,
+                object : MediaLibrarySession.Callback {
+                    override fun onAddMediaItems(
+                        mediaSession: MediaSession,
+                        controller: MediaSession.ControllerInfo,
+                        mediaItems: MutableList<MediaItem>,
+                    ): ListenableFuture<MutableList<MediaItem>> {
+                        val updatedMediaItems =
+                            mediaItems.map { it.buildUpon().setUri(it.mediaId).build() }.toMutableList()
+                        return Futures.immediateFuture(updatedMediaItems)
+                    }
+                },
             ).build()
-
-        session = MediaLibrarySession.Builder(this, player,
-            object : MediaLibrarySession.Callback {
-                override fun onAddMediaItems(
-                    mediaSession: MediaSession,
-                    controller: MediaSession.ControllerInfo,
-                    mediaItems: MutableList<MediaItem>
-                ): ListenableFuture<MutableList<MediaItem>> {
-
-                    val updatedMediaItems =
-                        mediaItems.map { it.buildUpon().setUri(it.mediaId).build() }.toMutableList()
-                    return Futures.immediateFuture(updatedMediaItems)
-                }
-            }).build()
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession {

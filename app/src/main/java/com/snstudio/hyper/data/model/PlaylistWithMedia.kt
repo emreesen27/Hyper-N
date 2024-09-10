@@ -9,7 +9,7 @@ data class PlaylistWithMedia(
     @Relation(
         parentColumn = "playlistId",
         entityColumn = "id",
-        associateBy = Junction(PlaylistMediaCrossRef::class)
+        associateBy = Junction(PlaylistMediaCrossRef::class),
     )
-    val mediaList: List<Media>
+    val mediaList: List<Media>,
 )

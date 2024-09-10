@@ -6,6 +6,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.dagger.hilt.android")
     id("com.google.firebase.crashlytics")
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
 apply("dependencies.gradle")
@@ -42,7 +43,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             buildConfigField("String", "MY_CHANNEL", "\"$myChannelValue\"")
             buildConfigField("String", "RELEASE_VERSION", "\"$releaseVersionUrl\"")
@@ -57,5 +58,4 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-
 }

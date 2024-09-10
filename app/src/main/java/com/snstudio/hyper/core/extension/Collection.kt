@@ -29,8 +29,7 @@ fun <T> MutableCollection<T>.removeFirst(predicate: (T) -> Boolean): T? {
     return null
 }
 
-fun <K, V> MutableMap<K, V>.removeFirst(predicate: (Map.Entry<K, V>) -> Boolean): Map.Entry<K, V>? =
-    entries.removeFirst(predicate)
+fun <K, V> MutableMap<K, V>.removeFirst(predicate: (Map.Entry<K, V>) -> Boolean): Map.Entry<K, V>? = entries.removeFirst(predicate)
 
 fun List<HashMap<String, String>>.toMediaList(type: MediaItemType): MutableList<Media> {
     return this

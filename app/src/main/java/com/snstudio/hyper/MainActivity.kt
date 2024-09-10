@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity() {
             .setShowProgressPercentage(true)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -107,26 +106,27 @@ class MainActivity : AppCompatActivity() {
 
                     is ProgressLiveData.DownloadState.Failed -> {}
                 }
-
             }
         }
     }
 
     private fun initSnackDisplayListener() {
-        snackProgressBarManager.setOnDisplayListener(object :
-            SnackProgressBarManager.OnDisplayListener {
-            override fun onLayoutInflated(
-                snackProgressBarLayout: SnackProgressBarLayout,
-                overlayLayout: FrameLayout,
-                snackProgressBar: SnackProgressBar,
-                onDisplayId: Int
-            ) {
-                snackParentView = snackProgressBarLayout.parent as View
-                if (binding.playerMenu.isVisible) {
-                    moveSnack(380)
+        snackProgressBarManager.setOnDisplayListener(
+            object :
+                SnackProgressBarManager.OnDisplayListener {
+                override fun onLayoutInflated(
+                    snackProgressBarLayout: SnackProgressBarLayout,
+                    overlayLayout: FrameLayout,
+                    snackProgressBar: SnackProgressBar,
+                    onDisplayId: Int,
+                ) {
+                    snackParentView = snackProgressBarLayout.parent as View
+                    if (binding.playerMenu.isVisible) {
+                        moveSnack(380)
+                    }
                 }
-            }
-        })
+            },
+        )
     }
 
     private fun moveSnack(bottom: Int) {

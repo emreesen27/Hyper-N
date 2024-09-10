@@ -20,7 +20,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
-
     override fun getViewModelClass() = HomeViewModel::class.java
 
     override fun getViewBinding() = FragmentHomeBinding.inflate(layoutInflater)
@@ -123,5 +122,4 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
         dialog.showDialog(childFragmentManager)
     }
-
 }

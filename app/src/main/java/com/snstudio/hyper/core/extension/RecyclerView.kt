@@ -8,35 +8,35 @@ import androidx.recyclerview.widget.RecyclerView
 import com.snstudio.hyper.R
 
 fun RecyclerView.addOnScrolledToEnd(onScrolledToEnd: () -> Unit) {
+    this.addOnScrollListener(
+        object : RecyclerView.OnScrollListener() {
+            private val VISIBLE_THRESHOLD = 8
 
-    this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            private var loading = true
+            private var previousTotal = 0
 
-        private val VISIBLE_THRESHOLD = 8
+            override fun onScrollStateChanged(
+                recyclerView: RecyclerView,
+                newState: Int,
+            ) {
+                with(layoutManager as LinearLayoutManager) {
+                    val visibleItemCount = childCount
+                    val totalItemCount = itemCount
+                    val firstVisibleItem = findFirstVisibleItemPosition()
 
-        private var loading = true
-        private var previousTotal = 0
+                    if (loading && totalItemCount > previousTotal) {
+                        loading = false
+                        previousTotal = totalItemCount
+                    }
 
-        override fun onScrollStateChanged(
-            recyclerView: RecyclerView,
-            newState: Int
-        ) {
-            with(layoutManager as LinearLayoutManager) {
-                val visibleItemCount = childCount
-                val totalItemCount = itemCount
-                val firstVisibleItem = findFirstVisibleItemPosition()
-
-                if (loading && totalItemCount > previousTotal) {
-                    loading = false
-                    previousTotal = totalItemCount
-                }
-
-                if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + VISIBLE_THRESHOLD)) {
-                    onScrolledToEnd()
-                    loading = true
+                    if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + VISIBLE_THRESHOLD)) {
+                        onScrolledToEnd()
+                        loading = true
+                    }
                 }
             }
-        }
-    })
+        },
+    )
 }
 
 fun RecyclerView.addDivider(context: Context) {

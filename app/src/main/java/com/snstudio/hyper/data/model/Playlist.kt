@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class Playlist(
     @PrimaryKey(autoGenerate = true)
     val playlistId: Long = 0L,
-    val name: String
+    val name: String,
 )

@@ -9,22 +9,31 @@ import com.bumptech.glide.request.transition.Transition
 import org.json.JSONException
 import org.json.JSONObject
 
-fun String.convertToBitmap(context: Context, onSuccess: (Bitmap) -> Unit, onFailure: () -> Unit) {
+fun String.convertToBitmap(
+    context: Context,
+    onSuccess: (Bitmap) -> Unit,
+    onFailure: () -> Unit,
+) {
     Glide.with(context)
         .asBitmap()
         .load(this)
-        .into(object : CustomTarget<Bitmap>() {
-            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                onSuccess(resource)
-            }
+        .into(
+            object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: Transition<in Bitmap>?,
+                ) {
+                    onSuccess(resource)
+                }
 
-            override fun onLoadFailed(errorDrawable: Drawable?) {
-                super.onLoadFailed(errorDrawable)
-                onFailure()
-            }
+                override fun onLoadFailed(errorDrawable: Drawable?) {
+                    super.onLoadFailed(errorDrawable)
+                    onFailure()
+                }
 
-            override fun onLoadCleared(placeholder: Drawable?) {}
-        })
+                override fun onLoadCleared(placeholder: Drawable?) {}
+            },
+        )
 }
 
 fun String?.parseObject(name: String): String? {

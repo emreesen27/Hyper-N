@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.snstudio.hyper.data.model.Playlist
 import kotlinx.coroutines.flow.Flow
+
 @Dao
 interface PlaylistDao {
     @Query("SELECT * FROM playlist")
@@ -18,5 +19,3 @@ interface PlaylistDao {
     @Delete
     suspend fun delete(playlist: Playlist)
 }
-
-

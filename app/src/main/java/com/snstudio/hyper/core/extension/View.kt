@@ -15,22 +15,24 @@ fun View.gone() {
 }
 
 fun View.startColorAnimation(): ValueAnimator {
-    val colors = intArrayOf(
-        resources.getColor(R.color.main_color, null),
-        resources.getColor(R.color.main_color_mid, null),
-        resources.getColor(R.color.purple_700, null),
-        resources.getColor(R.color.purple_500, null),
-    )
+    val colors =
+        intArrayOf(
+            resources.getColor(R.color.main_color, null),
+            resources.getColor(R.color.main_color_mid, null),
+            resources.getColor(R.color.purple_700, null),
+            resources.getColor(R.color.purple_500, null),
+        )
 
-    val colorAnimator = ValueAnimator.ofArgb(*colors).apply {
-        duration = 5000
-        repeatCount = ValueAnimator.INFINITE
-        repeatMode = ValueAnimator.REVERSE
-        addUpdateListener { animator ->
-            val animatedValue = animator.animatedValue as Int
-            setBackgroundColor(animatedValue)
+    val colorAnimator =
+        ValueAnimator.ofArgb(*colors).apply {
+            duration = 5000
+            repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.REVERSE
+            addUpdateListener { animator ->
+                val animatedValue = animator.animatedValue as Int
+                setBackgroundColor(animatedValue)
+            }
         }
-    }
 
     colorAnimator.start()
     return colorAnimator

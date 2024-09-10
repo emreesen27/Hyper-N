@@ -12,9 +12,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MediaPickerDialog(
     private val selectedCallback: ((List<Media>?) -> Unit)? = null,
-    private val containsItem: List<Media>? = null
+    private val containsItem: List<Media>? = null,
 ) : BaseDialog<DialogMusicPickerBinding>() {
-
     private val mediaPickerAdapter: MediaPickerAdapter by lazy { MediaPickerAdapter() }
     private val viewModel: MediaPickerViewModel by viewModels()
 
@@ -44,9 +43,10 @@ class MediaPickerDialog(
     private fun observeData() {
         observe(viewModel.localMediaLiveData) { mediaList ->
             containsItem?.let { containsItem ->
-                val filteredList = mediaList.filterNot { mediaItem ->
-                    containsItem.any { it.id == mediaItem.id }
-                }
+                val filteredList =
+                    mediaList.filterNot { mediaItem ->
+                        containsItem.any { it.id == mediaItem.id }
+                    }
                 viewModel.containsItemIsEmptyObservable.set(filteredList.isEmpty())
                 mediaPickerAdapter.setItems(filteredList)
             }
@@ -63,5 +63,4 @@ class MediaPickerDialog(
     private fun initAdapter() {
         binding.recycler.adapter = mediaPickerAdapter
     }
-
 }

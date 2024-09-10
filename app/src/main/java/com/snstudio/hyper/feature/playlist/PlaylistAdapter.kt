@@ -20,12 +20,18 @@ class PlaylistAdapter(private val onClick: ((Playlist) -> Unit)? = null) :
 
     fun getItemWithPos(pos: Int): Playlist = items[pos]
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder =
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): PlaylistViewHolder =
         PlaylistViewHolder(
-            ItemPlayListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemPlayListBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         )
 
-    override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: PlaylistViewHolder,
+        position: Int,
+    ) {
         holder.bind(items[position])
         holder.itemView.click {
             onClick?.invoke(items[position])
@@ -36,7 +42,6 @@ class PlaylistAdapter(private val onClick: ((Playlist) -> Unit)? = null) :
 
     inner class PlaylistViewHolder(val binding: ItemPlayListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(item: Playlist) {
             binding.playlistName.text = item.name
             binding.thumbnail.text = item.name.first().uppercase()
@@ -65,5 +70,4 @@ class PlaylistAdapter(private val onClick: ((Playlist) -> Unit)? = null) :
             return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }
-
 }

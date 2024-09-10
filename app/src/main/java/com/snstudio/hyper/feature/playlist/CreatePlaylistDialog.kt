@@ -43,5 +43,4 @@ class CreatePlaylistDialog : BaseDialog<DialogCreatePlayListBinding>() {
             }
         }
     }
-
 }

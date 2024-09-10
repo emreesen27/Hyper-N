@@ -20,17 +20,17 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var player: Player
     private lateinit var mediaControllerFuture: ListenableFuture<MediaController>
 
-    private val _playerLiveData = MutableLiveData<Player>()
-    val playerLiveData: LiveData<Player> = _playerLiveData
+    private val playerMLiveData = MutableLiveData<Player>()
+    val playerLiveData: LiveData<Player> = playerMLiveData
 
-    private val _playbackStateLiveData = MutableLiveData<Unit>()
-    val playbackStateLiveData: LiveData<Unit> = _playbackStateLiveData
+    private val playbackStateMLiveData = MutableLiveData<Unit>()
+    val playbackStateLiveData: LiveData<Unit> = playbackStateMLiveData
 
-    private val _metaDataLiveData = MutableLiveData<MediaMetadata>()
-    val metaDataLiveData: LiveData<MediaMetadata> = _metaDataLiveData
+    private val metaDataMLiveData = MutableLiveData<MediaMetadata>()
+    val metaDataLiveData: LiveData<MediaMetadata> = metaDataMLiveData
 
-    private val _playerWhenReadyLiveData = MutableLiveData<Boolean>()
-    val playerWhenReadyLiveData: LiveData<Boolean> = _playerWhenReadyLiveData
+    private val playerWhenReadyMLiveData = MutableLiveData<Boolean>()
+    val playerWhenReadyLiveData: LiveData<Boolean> = playerWhenReadyMLiveData
 
     private val playlist = mutableListOf<MediaItem>()
 
@@ -40,14 +40,15 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
 
     @OptIn(UnstableApi::class)
     private fun initMediaController() {
-        val sessionToken = SessionToken(
-            getApplication(),
-            ComponentName(getApplication(), MusicPlayerService::class.java)
-        )
+        val sessionToken =
+            SessionToken(
+                getApplication(),
+                ComponentName(getApplication(), MusicPlayerService::class.java),
+            )
         mediaControllerFuture = MediaController.Builder(getApplication(), sessionToken).buildAsync()
         mediaControllerFuture.addListener({
             player = mediaControllerFuture.get()
-            _playerLiveData.value = player
+            playerMLiveData.value = player
             initPlayerListener()
         }, MoreExecutors.directExecutor())
     }
@@ -55,26 +56,27 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
     private fun initPlayerListener() {
         player.addListener(
             object : Player.Listener {
-
                 override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
-                    _metaDataLiveData.postValue(mediaMetadata)
+                    metaDataMLiveData.postValue(mediaMetadata)
                 }
 
-                override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
-                    _playerWhenReadyLiveData.postValue(playWhenReady)
+                override fun onPlayWhenReadyChanged(
+                    playWhenReady: Boolean,
+                    reason: Int,
+                ) {
+                    playerWhenReadyMLiveData.postValue(playWhenReady)
                 }
 
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     if (playbackState == Player.STATE_READY) {
-                        _playbackStateLiveData.postValue(Unit)
+                        playbackStateMLiveData.postValue(Unit)
                     }
                 }
-            }
+            },
         )
     }
 
-    fun getCurrentMediaUrl(): String =
-        player.currentMediaItem?.localConfiguration?.uri.toString()
+    fun getCurrentMediaUrl(): String = player.currentMediaItem?.localConfiguration?.uri.toString()
 
     fun getMediaMetaData(): MediaMetadata = player.mediaMetadata
 

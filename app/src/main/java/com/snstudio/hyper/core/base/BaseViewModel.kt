@@ -5,9 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-
 open class BaseViewModel(private val methodChannel: MethodChannel) : ViewModel() {
-
     private val _receivedData: MutableLiveData<MethodCall> = MutableLiveData()
     val receivedData: MutableLiveData<MethodCall> = _receivedData
 
@@ -21,5 +19,4 @@ open class BaseViewModel(private val methodChannel: MethodChannel) : ViewModel()
             }
         }
     }
-
 }

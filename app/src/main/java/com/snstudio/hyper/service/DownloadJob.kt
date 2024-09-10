@@ -15,16 +15,16 @@ class DownloadJob(
     private val url: String,
     private val callback: JobCompletedCallback,
 ) : BaseJob() {
-
     private var filePath: String? = null
 
     override fun run() {
         val pathProvider = PathProvider(service.application)
         callback.onJobStart(media.id)
         val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request =
+            Request.Builder()
+                .url(url)
+                .build()
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
