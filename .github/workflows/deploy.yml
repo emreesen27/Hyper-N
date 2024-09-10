@@ -11,10 +11,17 @@ jobs:
     steps:
       - name: Fix Git permissions
         run: git init
+
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           submodules: 'true'
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Create Google Services JSON
         id: create_google_json
