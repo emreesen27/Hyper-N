@@ -3,8 +3,10 @@ package com.snstudio.hyper.feature.playlist
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.snstudio.hyper.R
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.click
+import com.snstudio.hyper.core.extension.infoToast
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.data.MediaItemBuilder
 import com.snstudio.hyper.data.model.Media
@@ -86,11 +88,26 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     }
 
     private fun showMediaPickerDialog() {
+        val allMediaList = viewModel.localMediaListLiveData.value.orEmpty()
+        val playlistMedia = viewModel.playlistWithMediaLiveData.value.orEmpty()
+        val filteredList =
+            allMediaList.filterNot { mediaItem ->
+                playlistMedia.any { it.id == mediaItem.id }
+            }
+
+        if (allMediaList.isEmpty()) {
+            context?.let { it.infoToast(it.getString(R.string.no_music_downloaded_yet)) }
+            return
+        }
+        if (filteredList.isEmpty()) {
+            context?.let { it.infoToast(it.getString(R.string.all_music_contains)) }
+            return
+        }
+
         MediaPickerDialog(
             selectedCallback = { mediaList ->
                 mediaList?.let { viewModel.insertMediaListToPlaylist(args.playListId, it) }
             },
-            containsItem = viewModel.playlistWithMediaLiveData.value,
         ).showDialog(childFragmentManager)
     }
 

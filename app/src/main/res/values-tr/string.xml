@@ -1,39 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Title-->
     <string name="home">Ana Sayfa</string>
-    <string name="searching">Aranıyor…</string>
     <string name="song_library">Müzik Kütüphanesi</string>
     <string name="library">Kütüphane</string>
+    <string name="playlist">Çalma Listesi</string>
+    <string name="playlists">Çalma Listeleri</string>
+    <string name="new_version_available">Yeni Sürüm Mevcut</string>
+    <string name="create_playlist">Çalma Listesi Oluştur</string>
+    <!--Title End-->
+    <string name="searching">Aranıyor…</string>
     <string name="song_desc">İndirilen müzikleri dinleyin veya yönetin</string>
-    <string name="play_list">Çalma Listesi</string>
     <string name="play_list_desc">Çalma listeleri oluşturun ve yönetin</string>
     <string name="delete">Sil</string>
     <string name="detail">Detay</string>
-    <string name="playlist_name">Çalma Listesi Adı</string>
-    <string name="playlists">Çalma Listeleri</string>
+    <string name="playlist_name">Çalma listesi adı</string>
     <string name="save">Kaydet</string>
-    <string name="create_playlist">Çalma Listesi Oluştur</string>
     <string name="create">Oluştur</string>
-    <string name="playlist_empty_click">Henüz bir liste oluşturmadınız\n Liste oluşturmak için buraya dokunun</string>
-    <string name="music_empty_click">Henüz müzik eklemediniz\n Müzik eklemek için buraya dokunun</string>
+    <string name="playlist_empty_click">Henüz bir liste oluşturmadınız\n Oluşturmak için buraya dokunun</string>
+    <string name="music_empty_click">Henüz müzik eklemediniz\n Eklemek için buraya dokunun</string>
     <string name="library_music_empty_click">Henüz müzik indirmediniz\n Arama ekranına gitmek için buraya dokunun</string>
     <string name="no_music">Listeye eklemek için mevcut müzik yok</string>
     <string name="already_in_lib">Bu müzik zaten kütüphanenizde mevcut</string>
     <string name="please_wait_download">Lütfen mevcut öğenin indirilmesini bekleyin</string>
     <string name="search_music">Müzik Ara</string>
-    <string name="notification_name">Hyper İndirme Servisi</string>
+    <string name="notification_name">Hyper indirme servisi</string>
     <string name="notification_desc">Hyper\'ın indirme servisi için bildirim kanalı</string>
     <string name="no_result_found">Sonuç bulunamadı</string>
     <string name="cannot_be_empty">Boş olamaz</string>
     <string name="three_characters_required">En az 3 karakter gerekli</string>
     <string name="music_already_added_info">Zaten eklenmiş olan müzikler burada listelenmez</string>
     <string name="downloading">İndiriliyor…</string>
-    <string name="new_version_available">Yeni sürüm mevcut</string>
     <string name="download_new_version">Uygulamayı kullanmaya devam etmek için lütfen yeni sürümü indirin</string>
     <string name="cancel">İptal</string>
     <string name="download">İndir</string>
     <string name="ok">Tamam</string>
     <string name="how_do_download">İndirmek istediğiniz müziği sola kaydırarak indirmeye başlayabilirsiniz</string>
     <string name="how_to_delete">Müziği silmek için sola kaydırın</string>
-
+    <string name="no_music_downloaded_yet">Henüz bir müzik indirilmemiş</string>
+    <string name="all_music_contains">Bu liste eklenebilecek tüm müzikleri içeriyor</string>
 </resources>

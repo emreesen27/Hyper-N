@@ -20,7 +20,7 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.0-Beta1"
+        versionName = "1.0.0-Beta"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -67,4 +67,39 @@ tasks.register("printVersionName") {
     doLast {
         println(android.defaultConfig.versionName)
     }
+}
+
+tasks.register("installGitHook") {
+    doLast {
+        val gitHooksDir = file("$rootDir/.git/hooks")
+        val preCommitHook = file("$rootDir/scripts/pre-commit")
+        val commitMsgHook = file("$rootDir/scripts/commit-msg")
+
+        if (!gitHooksDir.exists()) {
+            println("Git hooks directory does not exist.")
+            return@doLast
+        }
+
+        if (preCommitHook.exists()) {
+            val destinationPreCommitHook = file("$gitHooksDir/pre-commit")
+            preCommitHook.copyTo(destinationPreCommitHook, overwrite = true)
+            destinationPreCommitHook.setExecutable(true)
+            println("Pre-commit hook installed successfully.")
+        } else {
+            println("Pre-commit hook script does not exist.")
+        }
+
+        if (commitMsgHook.exists()) {
+            val destinationCommitMsgHook = file("$gitHooksDir/commit-msg")
+            commitMsgHook.copyTo(destinationCommitMsgHook, overwrite = true)
+            destinationCommitMsgHook.setExecutable(true)
+            println("Commit-msg hook installed successfully.")
+        } else {
+            println("Commit-msg hook script does not exist.")
+        }
+    }
+}
+
+tasks.named("preBuild") {
+    dependsOn("installGitHook")
 }

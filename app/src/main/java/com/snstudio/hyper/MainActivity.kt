@@ -40,8 +40,9 @@ class MainActivity : AppCompatActivity() {
             binding.root,
             lifecycleOwner = this,
         ).apply {
-            setBackgroundColor(R.color.secondary_background_color)
-            setProgressBarColor(R.color.main_color)
+            setBackgroundColor(R.color.main_color)
+            setProgressBarColor(R.color.text_color)
+            setProgressTextColor(R.color.text_color)
             setViewToMove(binding.playerView)
             useRoundedCornerBackground(true)
             setMessageMaxLines(1)

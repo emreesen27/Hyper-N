@@ -8,4 +8,5 @@ data class Playlist(
     @PrimaryKey(autoGenerate = true)
     val playlistId: Long = 0L,
     val name: String,
+    val creationDate: Long,
 )

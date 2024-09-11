@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "Checking code formatting"
+
+./gradlew app:ktlintCheck --daemon
+
+STATUS=$?
+
+[ $STATUS -ne 0 ] && exit 1
+exit 0

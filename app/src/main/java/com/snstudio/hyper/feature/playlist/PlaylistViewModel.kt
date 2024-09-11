@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.snstudio.hyper.data.local.repository.MediaRepository
 import com.snstudio.hyper.data.local.repository.PlaylistMediaCrossRepository
 import com.snstudio.hyper.data.local.repository.PlaylistRepository
 import com.snstudio.hyper.data.model.Media
@@ -17,9 +18,13 @@ import javax.inject.Inject
 class PlaylistViewModel
     @Inject
     constructor(
+        private val localMediaRepository: MediaRepository,
         private val playlistRepository: PlaylistRepository,
         private val playlistMediaCrossRepository: PlaylistMediaCrossRepository,
     ) : ViewModel() {
+        private val localMediaListMLiveData = MutableLiveData<List<Media>>()
+        val localMediaListLiveData: LiveData<List<Media>> = localMediaListMLiveData
+
         private val playlistMLiveData = MutableLiveData<List<Playlist>>()
         val playlistLiveData: LiveData<List<Playlist>> = playlistMLiveData
 
@@ -31,7 +36,15 @@ class PlaylistViewModel
 
         init {
             getPlayList()
+            collectLocalMediaData()
         }
+
+        private fun collectLocalMediaData() =
+            viewModelScope.launch {
+                localMediaRepository.localMediaList.collect {
+                    localMediaListMLiveData.value = it
+                }
+            }
 
         private fun getPlayList() =
             viewModelScope.launch {
