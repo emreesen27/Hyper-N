@@ -116,7 +116,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         val dialog = VersionDialog()
         dialog.onClick = { choose ->
             if (choose) {
-                context?.openUrlInBrowser(BuildConfig.RELEASE_DOWNLOAD_VERSION.plus(lastVersion))
+                context?.openUrlInBrowser(BuildConfig.RELEASE_DOWNLOAD.plus(lastVersion))
             } else {
                 dialog.dismiss()
                 activity?.finish()

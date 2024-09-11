@@ -38,7 +38,7 @@ android {
             applicationIdSuffix = ".debug"
             buildConfigField("String", "MY_CHANNEL", "\"$myChannelValue\"")
             buildConfigField("String", "RELEASE_VERSION", "\"$releaseVersionUrl\"")
-            buildConfigField("String", "RELEASE_DOWNLOAD_VERSION", "\"$releaseDownloadUrl\"")
+            buildConfigField("String", "RELEASE_DOWNLOAD", "\"$releaseDownloadUrl\"")
         }
 
         getByName("release") {
@@ -49,7 +49,7 @@ android {
             )
             buildConfigField("String", "MY_CHANNEL", "\"$myChannelValue\"")
             buildConfigField("String", "RELEASE_VERSION", "\"$releaseVersionUrl\"")
-            buildConfigField("String", "RELEASE_DOWNLOAD_VERSION", "\"$releaseDownloadUrl\"")
+            buildConfigField("String", "RELEASE_DOWNLOAD", "\"$releaseDownloadUrl\"")
         }
     }
 
