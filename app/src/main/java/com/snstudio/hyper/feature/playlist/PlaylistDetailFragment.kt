@@ -105,6 +105,7 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
         }
 
         MediaPickerDialog(
+            mediaItems = filteredList,
             selectedCallback = { mediaList ->
                 mediaList?.let { viewModel.insertMediaListToPlaylist(args.playListId, it) }
             },
