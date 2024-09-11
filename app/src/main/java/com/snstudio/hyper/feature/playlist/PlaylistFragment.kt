@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel>() {
     private val playlistAdapter by lazy {
-        PlaylistAdapter(onClick = {
+        PlaylistAdapter(requireContext(), onClick = {
             navigatePlaylistDetail(it)
         })
     }
@@ -54,7 +54,12 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
     private fun showCreatePlaylistDialog() {
         val dialog = CreatePlaylistDialog()
         dialog.onClick = { playlistName ->
-            viewModel.insertPlaylist(Playlist(name = playlistName))
+            viewModel.insertPlaylist(
+                Playlist(
+                    name = playlistName,
+                    creationDate = System.currentTimeMillis(),
+                ),
+            )
             dialog.dismiss()
         }
         dialog.showDialog(childFragmentManager)
@@ -68,7 +73,13 @@ class PlaylistFragment : BaseFragment<FragmentPlaylistBinding, PlaylistViewModel
         val callback =
             ItemTouchHelperCallback(
                 requireContext(),
-                onSwipedCallback = { pos -> viewModel.deletePlaylist(playlistAdapter.getItemWithPos(pos)) },
+                onSwipedCallback = { pos ->
+                    viewModel.deletePlaylist(
+                        playlistAdapter.getItemWithPos(
+                            pos,
+                        ),
+                    )
+                },
             )
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerPlaylist)

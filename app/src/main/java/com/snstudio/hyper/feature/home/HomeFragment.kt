@@ -27,7 +27,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun observeData() {
         observe(viewModel.forceUpdateLiveData) { lastVersion ->
             lastVersion?.let {
-                if(lastVersion != BuildConfig.VERSION_NAME) {
+                if (lastVersion != BuildConfig.VERSION_NAME) {
                     showVersionDialog(it)
                 }
             }

@@ -6,17 +6,13 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/_10sdp">
 
-    <com.google.android.material.textview.MaterialTextView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/thumbnail"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
-        android:background="@drawable/text_border"
-        android:gravity="center"
-        android:textColor="@color/text_color"
-        android:textSize="@dimen/_24ssp"
+        android:src="@drawable/ic_music_square"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="P" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/playlistName"
