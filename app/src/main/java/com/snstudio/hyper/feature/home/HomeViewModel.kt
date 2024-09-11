@@ -26,8 +26,8 @@ class HomeViewModel
         methodChannel: MethodChannel,
         private val sharedPreferenceManager: SharedPreferenceManager,
     ) : BaseViewModel(methodChannel) {
-        private val forceUpdateMLiveData = MutableLiveData<Boolean>()
-        val forceUpdateLiveData: LiveData<Boolean> = forceUpdateMLiveData
+        private val forceUpdateMLiveData = MutableLiveData<String?>()
+        val forceUpdateLiveData: LiveData<String?> = forceUpdateMLiveData
 
         var notificationRuntimeRequested: Boolean = false
 
@@ -44,7 +44,7 @@ class HomeViewModel
         private fun checkVersion() =
             viewModelScope.launch {
                 val latestVersion = fetchLatestVersion()
-                forceUpdateMLiveData.postValue(latestVersion != BuildConfig.VERSION_NAME)
+                forceUpdateMLiveData.postValue(latestVersion)
                 progress.set(false)
             }
 

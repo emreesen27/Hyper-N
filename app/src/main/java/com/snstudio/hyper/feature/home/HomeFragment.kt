@@ -25,9 +25,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun getViewBinding() = FragmentHomeBinding.inflate(layoutInflater)
 
     override fun observeData() {
-        observe(viewModel.forceUpdateLiveData) { update ->
-            if (update) {
-                 showVersionDialog()
+        observe(viewModel.forceUpdateLiveData) { lastVersion ->
+            lastVersion?.let {
+                if(lastVersion != BuildConfig.VERSION_NAME) {
+                    showVersionDialog(it)
+                }
             }
         }
     }
@@ -110,11 +112,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
-    private fun showVersionDialog() {
+    private fun showVersionDialog(lastVersion: String) {
         val dialog = VersionDialog()
         dialog.onClick = { choose ->
             if (choose) {
-                context?.openUrlInBrowser(BuildConfig.RELEASE_VERSION)
+                context?.openUrlInBrowser(BuildConfig.RELEASE_DOWNLOAD.plus(lastVersion))
             } else {
                 dialog.dismiss()
                 activity?.finish()
