@@ -100,7 +100,6 @@ tasks.register("installGitHook") {
     }
 }
 
-
 tasks.named("build") {
     dependsOn("installGitHook")
 }
