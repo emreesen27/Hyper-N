@@ -32,11 +32,13 @@ android {
 
     val myChannelValue = "nativeBridgeChannel"
     val releaseVersionUrl = "https://api.github.com/repos/emreesen27/Hyper-N/releases/latest"
+    val releaseDownloadUrl = "https://github.com/emreesen27/Hyper-N/releases/tag/"
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
             buildConfigField("String", "MY_CHANNEL", "\"$myChannelValue\"")
             buildConfigField("String", "RELEASE_VERSION", "\"$releaseVersionUrl\"")
+            buildConfigField("String", "RELEASE_DOWNLOAD_VERSION", "\"$releaseDownloadUrl\"")
         }
 
         getByName("release") {
@@ -47,6 +49,7 @@ android {
             )
             buildConfigField("String", "MY_CHANNEL", "\"$myChannelValue\"")
             buildConfigField("String", "RELEASE_VERSION", "\"$releaseVersionUrl\"")
+            buildConfigField("String", "RELEASE_DOWNLOAD_VERSION", "\"$releaseDownloadUrl\"")
         }
     }
 
