@@ -39,7 +39,7 @@
             android:background="@drawable/rounded_bg"
             android:paddingHorizontal="@dimen/_5sdp"
             android:paddingVertical="@dimen/_2sdp"
-            android:text="@string/play_list"
+            android:text="@string/playlist"
             android:textAlignment="center"
             android:textColor="@color/text_color"
             android:textSize="@dimen/_13ssp"

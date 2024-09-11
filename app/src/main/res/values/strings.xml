@@ -4,19 +4,23 @@
     <string name="app_name" translatable="false">Hyper</string>
     <string name="progress" translatable="false">%% %1$d</string>
 
+    <!--Title-->
     <string name="home">Home</string>
-    <string name="searching">Searching…</string>
-    <string name="song_library">Song library</string>
+    <string name="song_library">Song Library</string>
     <string name="library">Library</string>
+    <string name="playlist">Playlist</string>
+    <string name="playlists">Playlists</string>
+    <string name="new_version_available">New Version Available</string>
+    <string name="create_playlist">Create Playlist</string>
+    <!--Title End-->
+
+    <string name="searching">Searching…</string>
     <string name="song_desc">Listen to or manage downloaded songs</string>
-    <string name="play_list">Playlist</string>
     <string name="play_list_desc">Create and manage playlists</string>
     <string name="delete">Delete</string>
     <string name="detail">Detail</string>
-    <string name="playlist_name">Playlist Name</string>
-    <string name="playlists">Playlists</string>
+    <string name="playlist_name">Playlist name</string>
     <string name="save">Save</string>
-    <string name="create_playlist">Create Playlist</string>
     <string name="create">Create</string>
     <string name="playlist_empty_click">You haven\'t created a list yet\n Tap here to create one</string>
     <string name="music_empty_click">You haven\'t added any music yet\n Tap here to add some</string>
@@ -25,18 +29,19 @@
     <string name="already_in_lib">This music is already in your library</string>
     <string name="please_wait_download">Please wait for the current item to finish downloading</string>
     <string name="search_music">Search music</string>
-    <string name="notification_name">Hyper Download Service</string>
+    <string name="notification_name">Hyper download service</string>
     <string name="notification_desc">Notification channel for Hyper\'s download service</string>
     <string name="no_result_found">No results found</string>
     <string name="cannot_be_empty">Cannot be empty</string>
     <string name="three_characters_required">At least 3 characters required</string>
     <string name="music_already_added_info">Music that are already added will not be listed here</string>
     <string name="downloading">Downloading…</string>
-    <string name="new_version_available">New version available</string>
     <string name="download_new_version">To continue using the app, please download the new version</string>
     <string name="cancel">Cancel</string>
     <string name="download">Download</string>
     <string name="ok">OK</string>
     <string name="how_do_download">You can start downloading the music you want by swiping left</string>
     <string name="how_to_delete">Swipe left to delete music</string>
+    <string name="no_music_downloaded_yet">No music has been downloaded yet</string>
+    <string name="all_music_contains">This list contains all the music that can be added</string>
 </resources>
