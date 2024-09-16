@@ -8,6 +8,9 @@ Overview
 
  Read [this](https://github.com/emreesen27/Hyper-N/blob/develop/CONTRIBUTING.md) before contributing.
 
+ ### Preview
+ Look [here](https://github.com/emreesen27/Hyper-N/blob/develop/PREVIEW.md) for application screenshots.
+
 ### Features
   
 - **Open Source, Light, and Smooth** <br/>
