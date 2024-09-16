@@ -4,6 +4,10 @@ Simple Music Downloader for Android
 
 Overview
 ---
+### Contributing
+
+ Read [this](https://github.com/emreesen27/Hyper-N/blob/develop/CONTRIBUTING.md) before contributing.
+
 ### Features
   
 - **Open Source, Light, and Smooth** <br/>
@@ -24,9 +28,7 @@ Seamlessly download your favorite songs and play them directly within the app, e
 - **High-Quality Music Downloads** <br/>
 Get access to high-quality audio files for the best listening experience.
 
-### Contributing
 
- Read [this](https://github.com/emreesen27/Android-Sn-File-Manager/blob/develop/CONTRIBUTING.md) before contributing
 
 
 <div align="center">
