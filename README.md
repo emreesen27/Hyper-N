@@ -4,9 +4,8 @@ Simple Music Downloader for Android
 
 Overview
 ---
-### Contributing
-
- Read [this](https://github.com/emreesen27/Hyper-N/blob/develop/CONTRIBUTING.md) before contributing.
+### Run & Contributing
+ Read [this](https://github.com/emreesen27/Hyper-N/blob/develop/CONTRIBUTING.md) before running the project or contributing
 
  ### Preview
  Look [here](https://github.com/emreesen27/Hyper-N/blob/develop/PREVIEW.md) for application screenshots.
