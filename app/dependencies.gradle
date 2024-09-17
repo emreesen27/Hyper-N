@@ -1,64 +1,66 @@
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation(libs.core.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    implementation(libs.constraint.layout)
+    implementation(libs.legacy.support)
+    implementation(libs.lifecycle.livedata)
+    implementation(libs.lifecycle.viewmodel)
 
     // Http
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation(libs.okhttp)
 
     // Navigation-ktx
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     // Splash
-    implementation("androidx.core:core-splashscreen:1.1.0-rc01")
+    implementation(libs.splashscreen)
 
     // Recycler
-    implementation("com.github.sparrow007:carouselrecyclerview:1.2.6")
+    implementation(libs.carousel.recyclerview)
 
     // Glide
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.15.0")
+    implementation(libs.glide.bump)
+    annotationProcessor(libs.glide.compiler)
 
     // Sdp & Ssp
-    implementation("com.intuit.sdp:sdp-android:1.1.0")
-    implementation("com.intuit.ssp:ssp-android:1.1.0")
+    implementation(libs.sdp)
+    implementation(libs.ssp)
 
     // Progress
-    implementation("com.github.emreesen27:Android-Nested-Progress:v1.0.2")
-    implementation("com.github.tingyik90:snackprogressbar:6.4.2")
+    implementation(libs.nested.progress)
+    implementation(libs.snackprogressbar)
 
     // Expo-Media
-    implementation("androidx.media3:media3-exoplayer:1.3.0")
-    implementation("androidx.media3:media3-exoplayer-dash:1.3.0")
-    implementation("androidx.media3:media3-ui:1.3.0")
-    implementation("androidx.media3:media3-session:1.3.0")
+    implementation(libs.media3.exoplayer.player)
+    implementation(libs.media3.exoplayer.dash)
+    implementation(libs.media3.ui)
+    implementation(libs.media3.session)
 
     // Hyper-Explode
-    debugImplementation("com.snstudio.hyper.explode:flutter_debug:1.0")
-    releaseImplementation("com.snstudio.hyper.explode:flutter_release:1.0")
+    debugImplementation(libs.hyper.explode.debug)
+    releaseImplementation(libs.hyper.explode.release)
 
     // Room
-    implementation 'androidx.room:room-ktx:2.6.1'
-    kapt "androidx.room:room-compiler:2.6.1"
+    implementation(libs.room.ktx)
+    //noinspection KaptUsageInsteadOfKsp
+    kapt(libs.room.compiler)
 
     // Toast
-    implementation 'com.github.GrenderG:Toasty:1.5.2'
+    implementation(libs.toasty)
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-crashlytics")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    // Test
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.espresso.core)
 }
