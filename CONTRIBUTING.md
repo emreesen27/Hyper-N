@@ -1,3 +1,25 @@
+### Run
+
+Clone the project.
+ ```
+git clone
+```
+You first need to navigate into the explode module.
+```
+cd explode
+```
+
+Fetch the dependencies:
+```
+flutter pub get
+```
+Build it as an AAR:
+```
+flutter build aar
+```
+
+After these steps, you should be able to build the project. The google.service.json file is added through the pipeline during the release process. To compile the project locally, you need to create and add your own google.service.json file.
+
 #### Contribute
 
 During the commit process, both commit-msg and lint checks are automatically executed. Committing triggers the lint task. If any issues arise, you can manually trigger the lint check with the following command:
