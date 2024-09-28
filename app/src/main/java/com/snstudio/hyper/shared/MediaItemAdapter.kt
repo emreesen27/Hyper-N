@@ -15,7 +15,7 @@ import com.snstudio.hyper.databinding.ItemMediaSearchBinding
 import com.snstudio.hyper.util.MediaItemType
 
 class MediaItemAdapter(
-    private val onClick: ((Media) -> Unit)? = null,
+    private val onClick: ((Media, Int) -> Unit)? = null,
 ) : RecyclerView.Adapter<MediaItemAdapter.AutoCompleteViewHolder>() {
     var mediaItems: MutableList<Media> = mutableListOf()
         private set
@@ -31,11 +31,6 @@ class MediaItemAdapter(
         val diffResult = DiffUtil.calculateDiff(MediaListDiffCallback(mediaItems, newItems))
         mediaItems = updatedList
         diffResult.dispatchUpdatesTo(this)
-    }
-
-    fun getSubMediaItems(media: Media): MutableList<Media> {
-        val index = mediaItems.indexOf(media)
-        return mediaItems.subList(index, mediaItems.size)
     }
 
     fun moveItem(
@@ -109,14 +104,14 @@ class MediaItemAdapter(
         private fun bindMedia(media: Media) {
             val itemBinding = binding as ItemMediaBinding
             itemBinding.root.click {
-                adapter.onClick?.invoke(media)
+                adapter.onClick?.invoke(media, absoluteAdapterPosition)
             }
         }
 
         private fun bindMediaSearchType(media: Media) {
             val itemBinding = binding as ItemMediaSearchBinding
             itemBinding.root.click {
-                adapter.onClick?.invoke(media)
+                adapter.onClick?.invoke(media, absoluteAdapterPosition)
             }
         }
 

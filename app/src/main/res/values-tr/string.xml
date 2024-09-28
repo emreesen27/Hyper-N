@@ -39,4 +39,7 @@
     <string name="how_to_delete">Müziği silmek için sola kaydırın</string>
     <string name="no_music_downloaded_yet">Henüz bir müzik indirilmemiş</string>
     <string name="all_music_contains">Bu liste eklenebilecek tüm müzikleri içeriyor</string>
+    <string name="err">Hata !</string>
+    <string name="unexpected_error">Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin</string>
+    <string name="yt_explode_error">Veriler işlenirken bir hata oluştu. Lütfen uygulamanın en son sürümünü kullandığınızdan emin olun.</string>
 </resources>

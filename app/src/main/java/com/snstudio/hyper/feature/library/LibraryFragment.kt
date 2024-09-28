@@ -20,7 +20,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
     private lateinit var mediaViewModel: MediaViewModel
 
     private val mediaItemAdapter: MediaItemAdapter by lazy {
-        MediaItemAdapter(onClick = { media ->
+        MediaItemAdapter(onClick = { media, _ ->
             playMedia(media)
         })
     }
