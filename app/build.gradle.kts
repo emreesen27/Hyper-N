@@ -19,8 +19,8 @@ android {
         applicationId = "com.snstudio.hyper"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0-Beta1"
+        versionCode = 3
+        versionName = "1.0.0-Beta2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
