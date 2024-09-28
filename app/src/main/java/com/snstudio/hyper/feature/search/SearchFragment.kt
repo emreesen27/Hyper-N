@@ -26,6 +26,8 @@ import com.snstudio.hyper.shared.MediaItemAdapter
 import com.snstudio.hyper.shared.MediaViewModel
 import com.snstudio.hyper.shared.ProgressLiveData
 import com.snstudio.hyper.util.DATA_KEY
+import com.snstudio.hyper.util.EXCEPTION
+import com.snstudio.hyper.util.ErrorDialog
 import com.snstudio.hyper.util.InfoDialog
 import com.snstudio.hyper.util.ItemTouchHelperCallback
 import com.snstudio.hyper.util.MediaItemType
@@ -40,7 +42,7 @@ class SearchFragment :
     private lateinit var mediaViewModel: MediaViewModel
 
     private val mediaItemAdapter by lazy {
-        MediaItemAdapter(onClick = { media ->
+        MediaItemAdapter(onClick = { media, _ ->
             viewModel.invokeAudioUrl(media, SearchViewModel.AudioActionType.PLAY)
         })
     }
@@ -74,7 +76,13 @@ class SearchFragment :
                     }
 
                     RECEIVED.AUDIO_URL_RECEIVED.received -> {
-                        it.argument<String>(DATA_KEY)?.let { url ->
+                        it.argument<HashMap<String, String>>(DATA_KEY)?.let { data ->
+                            val url = data["url"].orEmpty()
+                            val errorCode = data["errorCode"]
+                            if (!errorCode.isNullOrEmpty()) {
+                                showErrorDialog(errorCode)
+                                return@observe
+                            }
                             when (audioActionType) {
                                 SearchViewModel.AudioActionType.PLAY -> {
                                     playMedia(url)
@@ -225,5 +233,15 @@ class SearchFragment :
             ).showDialog(childFragmentManager)
             viewModel.setTrueInfoDialogStatus()
         }
+    }
+
+    private fun showErrorDialog(code: String) {
+        val errMessage =
+            if (code == EXCEPTION.YT_EXPLODE_EXCEPTION.code) {
+                R.string.yt_explode_error
+            } else {
+                R.string.unexpected_error
+            }
+        ErrorDialog(errMessage = errMessage).showDialog(childFragmentManager)
     }
 }

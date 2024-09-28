@@ -90,11 +90,15 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
         player.stop()
     }
 
-    fun setPlaylist(mediaItems: List<MediaItem>) {
+    fun setPlaylist(
+        mediaItems: List<MediaItem>,
+        startPosition: Int = 0,
+    ) {
         playlist.clear()
         playlist.addAll(mediaItems)
         player.setMediaItems(mediaItems)
         player.prepare()
+        player.seekTo(startPosition, 0)
         player.play()
     }
 }
