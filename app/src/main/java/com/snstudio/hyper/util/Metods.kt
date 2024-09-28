@@ -13,3 +13,8 @@ enum class INVOKE(val invoke: String) {
     AUDIO_URL("getAudioUrl"),
     NEXT("nextPage"),
 }
+
+enum class EXCEPTION(val code: String) {
+    YT_EXPLODE_EXCEPTION("403"),
+    UNEXPECTED("0"),
+}

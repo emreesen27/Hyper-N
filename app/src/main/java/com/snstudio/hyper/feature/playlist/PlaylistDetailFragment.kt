@@ -9,7 +9,6 @@ import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.infoToast
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.data.MediaItemBuilder
-import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.databinding.FragmentPlaylistDetailBinding
 import com.snstudio.hyper.feature.picker.MediaPickerDialog
 import com.snstudio.hyper.shared.MediaItemAdapter
@@ -22,8 +21,8 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     private lateinit var mediaViewModel: MediaViewModel
     private val args: PlaylistDetailFragmentArgs by navArgs()
     private val mediaItemAdapter by lazy {
-        MediaItemAdapter(onClick = {
-            setPlayList(it)
+        MediaItemAdapter(onClick = { _, pos ->
+            setPlayList(pos)
         })
     }
 
@@ -74,17 +73,15 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
         viewModel.getMediaForPlaylistOrdered(args.playListId)
     }
 
-    private fun setPlayList(media: Media) {
-        mediaItemAdapter.getSubMediaItems(media).let { mediaList ->
-            val mediaItems =
-                mediaList.map { media ->
-                    MediaItemBuilder()
-                        .setMediaId(media.localPath.orEmpty())
-                        .setMediaTitle(media.title)
-                        .build()
-                }
-            mediaViewModel.setPlaylist(mediaItems)
-        }
+    private fun setPlayList(pos: Int) {
+        val mediaItems =
+            mediaItemAdapter.mediaItems.map { media ->
+                MediaItemBuilder()
+                    .setMediaId(media.localPath.orEmpty())
+                    .setMediaTitle(media.title)
+                    .build()
+            }
+        mediaViewModel.setPlaylist(mediaItems, pos)
     }
 
     private fun showMediaPickerDialog() {

@@ -44,4 +44,8 @@
     <string name="how_to_delete">Swipe left to delete music</string>
     <string name="no_music_downloaded_yet">No music has been downloaded yet</string>
     <string name="all_music_contains">This list contains all the music that can be added</string>
+    <string name="err">Error !</string>
+    <string name="unexpected_error">An unexpected error has occurred. Try again later.</string>
+    <string name="yt_explode_error">An error occurred while processing the data. Please make sure you are using the latest version of the application.</string>
+
 </resources>

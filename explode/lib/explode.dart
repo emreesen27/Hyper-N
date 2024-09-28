@@ -22,12 +22,16 @@ class Explode {
   }
 
   getAudioUrl(String videoId) async {
-    var manifest =
-        await _explode.videos.streamsClient.getManifest(VideoId(videoId));
-    String url = manifest.audioOnly.last.url.toString();
-
+    Map<String, String> result = {'url': '', 'errorCode': ''};
+    try {
+      var manifest =
+          await _explode.videos.streamsClient.getManifest(VideoId(videoId));
+      result['url'] = manifest.audioOnly.last.url.toString();
+    } catch (e) {
+      result['errorCode'] = e is YoutubeExplodeException ? '403' : '0';
+    }
     await ChannelBridge.instance.channel
-        .invokeMethod('receiveAudioUrl', {'data': url});
+        .invokeMethod('receiveAudioUrl', {'data': result});
   }
 
   List<Map<String, String>> _fetchVideoList(VideoSearchList? videos) {
