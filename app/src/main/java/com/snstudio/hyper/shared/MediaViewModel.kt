@@ -32,6 +32,9 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
     private val playerWhenReadyMLiveData = MutableLiveData<Boolean>()
     val playerWhenReadyLiveData: LiveData<Boolean> = playerWhenReadyMLiveData
 
+    private val showPlayerMenuMLiveData = MutableLiveData<Boolean>()
+    val showPlayerMenuLiveData: LiveData<Boolean> = showPlayerMenuMLiveData
+
     private val playlist = mutableListOf<MediaItem>()
 
     init {
@@ -68,9 +71,10 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 override fun onPlaybackStateChanged(playbackState: Int) {
+                    /*
                     if (playbackState == Player.STATE_READY) {
                         playbackStateMLiveData.postValue(Unit)
-                    }
+                    }*/
                 }
             },
         )
@@ -79,6 +83,10 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
     fun getCurrentMediaUrl(): String = player.currentMediaItem?.localConfiguration?.uri.toString()
 
     fun getMediaMetaData(): MediaMetadata = player.mediaMetadata
+
+    fun showPLayerMenu(show: Boolean) {
+        showPlayerMenuMLiveData.postValue(show)
+    }
 
     fun playMediaItem(item: MediaItem) {
         player.setMediaItem(item)
