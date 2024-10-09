@@ -15,7 +15,6 @@ import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.gone
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.core.extension.startColorAnimation
-import com.snstudio.hyper.core.extension.visible
 import com.snstudio.hyper.databinding.ActivityMainBinding
 import com.snstudio.hyper.shared.MediaViewModel
 import com.snstudio.hyper.shared.ProgressLiveData
@@ -78,7 +77,11 @@ class MainActivity : AppCompatActivity() {
                 binding.playerView.player = player
             }
             observe(playbackStateLiveData) {
-                binding.playerMenu.visible()
+                // binding.playerMenu.visible()
+                // moveSnack(380)
+            }
+            observe(showPlayerMenuLiveData) {
+                binding.playerMenu.isVisible = it
                 moveSnack(380)
             }
             observe(playerWhenReadyLiveData) { ready ->
