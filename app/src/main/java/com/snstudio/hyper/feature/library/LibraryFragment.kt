@@ -79,6 +79,7 @@ class LibraryFragment : BaseFragment<FragmentLibraryBinding, LibraryViewModel>()
                     .setMediaTitle(media.title)
                     .build()
             with(mediaViewModel) {
+                showPLayerMenu(true)
                 playMediaItem(item)
             }
         }

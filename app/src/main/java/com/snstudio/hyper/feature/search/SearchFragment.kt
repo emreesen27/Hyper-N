@@ -43,6 +43,7 @@ class SearchFragment :
 
     private val mediaItemAdapter by lazy {
         MediaItemAdapter(onClick = { media, _ ->
+            mediaViewModel.showPLayerMenu(true)
             viewModel.invokeAudioUrl(media, SearchViewModel.AudioActionType.PLAY)
         })
     }
@@ -81,6 +82,7 @@ class SearchFragment :
                             val errorCode = data["errorCode"]
                             if (!errorCode.isNullOrEmpty()) {
                                 showErrorDialog(errorCode)
+                                mediaViewModel.showPLayerMenu(false)
                                 return@observe
                             }
                             when (audioActionType) {

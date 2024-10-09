@@ -81,6 +81,7 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
                     .setMediaTitle(media.title)
                     .build()
             }
+        mediaViewModel.showPLayerMenu(true)
         mediaViewModel.setPlaylist(mediaItems, pos)
     }
 
