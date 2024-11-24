@@ -76,6 +76,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                     RECEIVED.HIGHLIGHTS_RECEIVED.received -> {
                         call.argument<List<HashMap<String, String>>>(DATA_KEY)?.let { data ->
                             adapterHighlights.setItems(data.toMediaList(MediaItemType.REMOTE))
+                            if (data.isNotEmpty()) {
+                                viewModel.highlightsInitialized = true
+                            }
                             skeletonHighlights?.showOriginal()
                         }
                     }
@@ -114,6 +117,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             recyclerDownloads.adapter = lastDownloadsAdapter
         }
         viewModel.initReceive()
+        getHighlights()
         initMediaViewModel()
         initSkeletonHighlights()
         initSkeletonDownloads()
@@ -133,6 +137,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     private fun initMediaViewModel() {
         mediaViewModel = ViewModelProvider(requireActivity())[MediaViewModel::class.java]
+    }
+
+    private fun getHighlights() {
+        with(viewModel) {
+            if (!highlightsInitialized) getHighlights()
+        }
     }
 
     private val notificationPermissionLauncher =
@@ -186,15 +196,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     private fun showVersionDialog(lastVersion: String) {
-        val dialog = VersionDialog()
-        dialog.onClick = { choose ->
-            if (choose) {
-                context?.openUrlInBrowser(BuildConfig.RELEASE_DOWNLOAD.plus(lastVersion))
-            } else {
-                dialog.dismiss()
+        if (!viewModel.isVersionDialogShown) {
+            val dialog = VersionDialog()
+            dialog.onClick = { choose ->
+                if (choose) {
+                    context?.openUrlInBrowser(BuildConfig.RELEASE_DOWNLOAD.plus(lastVersion))
+                } else {
+                    viewModel.isVersionDialogShown = true
+                    dialog.dismiss()
+                }
             }
+            dialog.showDialog(childFragmentManager)
         }
-        dialog.showDialog(childFragmentManager)
     }
 
     private fun initSkeletonHighlights() {

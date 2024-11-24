@@ -34,7 +34,7 @@
     <string name="three_characters_required">En az 3 karakter gerekli</string>
     <string name="music_already_added_info">Zaten eklenmiş olan müzikler burada listelenmez</string>
     <string name="downloading">İndiriliyor…</string>
-    <string name="download_new_version">Uygulamayı kullanmaya devam etmek için lütfen yeni sürümü indirin</string>
+    <string name="download_new_version">Yeni sürüm mevcut !</string>
     <string name="cancel">İptal</string>
     <string name="download">İndir</string>
     <string name="play">Çal</string>

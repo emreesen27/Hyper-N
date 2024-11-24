@@ -40,9 +40,12 @@ class HomeViewModel
         var currentMedia: Media? = null
             private set
 
+        var highlightsInitialized: Boolean = false
+
+        var isVersionDialogShown: Boolean = false
+
         init {
             collectLocalMediaData()
-            getHighlights()
             checkVersion()
         }
 
@@ -95,7 +98,7 @@ class HomeViewModel
                 }
             }
 
-        private fun getHighlights() {
+        fun getHighlights() {
             methodChannel.invokeMethod(
                 INVOKE.HIGHLIGHTS.invoke,
                 listOf(

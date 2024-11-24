@@ -55,7 +55,8 @@
             android:layout_height="@dimen/_25sdp"
             android:layout_gravity="center"
             android:padding="@dimen/_4sdp"
-            android:src="@drawable/ic_play" />
+            android:src="@drawable/ic_play"
+            android:visibility="invisible" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@id/exo_pause"
@@ -63,7 +64,8 @@
             android:layout_height="@dimen/_25sdp"
             android:layout_gravity="center"
             android:padding="@dimen/_3sdp"
-            android:src="@drawable/ic_pause" />
+            android:src="@drawable/ic_pause"
+            android:visibility="invisible" />
 
     </FrameLayout>
 
