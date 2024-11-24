@@ -14,6 +14,7 @@ data class Media(
     val url: String?,
     val duration: Long?,
     val thumbnail: String?,
+    val thumbnailMax: String?,
     val publishYear: String?,
     val uploadYear: String?,
     val viewCount: String?,

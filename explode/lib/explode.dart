@@ -46,6 +46,24 @@ class Explode {
     return videoList;
   }
 
+  Future<void> getHighlights(List<String> highlights) async {
+    List<Map<String, String>> videoList = [];
+    List<Future<Video>> futures = [];
+
+    for (var element in highlights) {
+      futures.add(_explode.videos.get(element));
+    }
+
+    List<Video> videos = await Future.wait(futures);
+
+    for (var video in videos) {
+      videoList.add(_mapToVideo(video));
+    }
+
+    await ChannelBridge.instance.channel
+        .invokeMethod('receiveHighlightsData', {'data': videoList});
+  }
+
   _mapToVideo(Video video) {
     Map<String, String> videoData = {
       "id": video.id.value,
@@ -55,6 +73,7 @@ class Explode {
       'url': video.url,
       "duration": video.duration?.inMilliseconds.toString() ?? "",
       "thumbnail": video.thumbnails.mediumResUrl,
+      "thumbnailMax": video.thumbnails.maxResUrl,
       "publishYear": video.publishDate?.year.toString() ?? "",
       "uploadYear": video.uploadDate?.year.toString() ?? "",
       "viewCount": video.engagement.viewCount.toString(),

@@ -16,55 +16,67 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_color"
         tools:context=".feature.home.HomeFragment">
 
         <com.snstudio.hyper.core.component.HyperColorizedBar
             android:id="@+id/colorizedBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="@{vm.progress ? View.GONE : View.VISIBLE}"
             app:iconDrawables="@array/home_drawables"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleText="@string/app_name" />
+            app:titleText="@string/home" />
 
-        <include
-            android:id="@+id/musicCard"
-            layout="@layout/layout_music_card"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/highlightsTitle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_20sdp"
-            android:visibility="@{vm.progress ? View.GONE : View.VISIBLE}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/highlights"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_15ssp"
             app:layout_constraintTop_toBottomOf="@+id/colorizedBar" />
 
-        <include
-            android:id="@+id/playList"
-            layout="@layout/layout_play_list_card"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:visibility="@{vm.progress ? View.GONE : View.VISIBLE}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/musicCard" />
 
-        <com.sn.lib.NestedProgress
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerHighlights"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="@{vm.progress == true ? View.VISIBLE : View.GONE}"
-            app:innerLoaderColor="@color/text_color"
-            app:innerLoaderStrokeWidth="@dimen/_2sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.40"
-            app:outerLoaderColor="@color/main_color"
-            app:outerLoaderStrokeWidth="@dimen/_2sdp" />
+            app:layout_constraintTop_toBottomOf="@+id/highlightsTitle"
+            tools:listitem="@layout/item_highlights" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/downloadTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:text="@string/recent_downloads"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_15ssp"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerHighlights" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerDownloads"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/downloadTitle"
+            tools:listitem="@layout/item_highlights" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -43,6 +43,7 @@ fun List<HashMap<String, String>>.toMediaList(type: MediaItemType): MutableList<
                 url = hashMap["url"] ?: "",
                 duration = hashMap["duration"]?.toLongOrNull() ?: 0L,
                 thumbnail = hashMap["thumbnail"] ?: "",
+                thumbnailMax = hashMap["thumbnailMax"] ?: "",
                 publishYear = hashMap["publishYear"],
                 uploadYear = hashMap["uploadYear"],
                 viewCount = hashMap["viewCount"] ?: "",

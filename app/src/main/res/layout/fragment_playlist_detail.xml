@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -8,57 +8,103 @@
         <variable
             name="vm"
             type="com.snstudio.hyper.feature.playlist.PlaylistViewModel" />
-
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".feature.playlist.PlaylistDetailFragment">
+        android:fillViewport="true">
 
-
-        <com.snstudio.hyper.core.component.HyperColorizedBar
-            android:id="@+id/colorizedBar"
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:iconDrawables="@array/playlist_detail_drawables"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:titleText="@string/playlists" />
+            tools:context=".feature.playlist.PlaylistDetailFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerMedia"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:paddingHorizontal="@dimen/_10sdp"
-            android:visibility="@{vm.playlistWithMediaLiveData.empty ? View.GONE : View.VISIBLE}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/colorizedBar"
-            tools:listitem="@layout/item_media" />
+            <com.snstudio.hyper.core.component.HyperColorizedBar
+                android:id="@+id/colorizedBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:iconDrawables="@array/playlist_detail_drawables"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:titleText="@string/playlists" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/playAll"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:text="@string/play_all"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/_13ssp"
+                android:visibility="@{vm.playlistWithMediaLiveData.empty ? View.GONE : View.VISIBLE}"
+                app:backgroundTint="@color/background_color"
+                app:icon="@drawable/ic_play_small"
+                app:iconTint="@color/text_color"
+                app:layout_constraintEnd_toStartOf="@+id/shuffle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/colorizedBar"
+                app:rippleColor="@color/secondary_background_color"
+                app:strokeColor="@color/main_color"
+                app:strokeWidth="2dp" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/noMusicItem"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:drawableTop="@drawable/ic_music"
-            android:gravity="center"
-            android:text="@string/music_empty_click"
-            android:textAlignment="center"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/_13ssp"
-            android:visibility="@{vm.playlistWithMediaLiveData.empty ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/shuffle"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:text="@string/shuffle"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/_13ssp"
+                android:visibility="@{vm.playlistWithMediaLiveData.empty ? View.GONE : View.VISIBLE}"
+                app:backgroundTint="@color/main_color"
+                app:icon="@drawable/ic_shuffle"
+                app:iconTint="@color/text_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/playAll"
+                app:layout_constraintTop_toBottomOf="@+id/colorizedBar"
+                app:rippleColor="@color/secondary_background_color"
+                app:strokeColor="@color/main_color"
+                app:strokeWidth="2dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerMedia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingTop="@dimen/_5sdp"
+                android:visibility="@{vm.playlistWithMediaLiveData.empty ? View.GONE : View.VISIBLE}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/playAll"
+                tools:listitem="@layout/item_media" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/noMusicItem"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:drawableTop="@drawable/ic_music"
+                android:gravity="center"
+                android:text="@string/music_empty_click"
+                android:textAlignment="center"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/_13ssp"
+                android:visibility="@{vm.playlistWithMediaLiveData.empty ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

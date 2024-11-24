@@ -1,19 +1,21 @@
 package com.snstudio.hyper.feature.search
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.util.TypedValue
+import android.view.ContextThemeWrapper
+import android.view.View
 import android.widget.EditText
+import android.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.lifecycle.lifecycleScope
 import com.snstudio.hyper.R
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.addOnScrolledToEnd
 import com.snstudio.hyper.core.extension.convertToBitmap
 import com.snstudio.hyper.core.extension.infoToast
-import com.snstudio.hyper.core.extension.observe
+import com.snstudio.hyper.core.extension.isValidImageUrl
 import com.snstudio.hyper.core.extension.restoreScrollPosition
 import com.snstudio.hyper.core.extension.toMediaList
 import com.snstudio.hyper.core.extension.waningToast
@@ -28,12 +30,10 @@ import com.snstudio.hyper.shared.ProgressLiveData
 import com.snstudio.hyper.util.DATA_KEY
 import com.snstudio.hyper.util.EXCEPTION
 import com.snstudio.hyper.util.ErrorDialog
-import com.snstudio.hyper.util.InfoDialog
-import com.snstudio.hyper.util.ItemTouchHelperCallback
 import com.snstudio.hyper.util.MediaItemType
 import com.snstudio.hyper.util.RECEIVED
-import com.snstudio.hyper.util.SwipeAction
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchFragment :
@@ -42,9 +42,11 @@ class SearchFragment :
     private lateinit var mediaViewModel: MediaViewModel
 
     private val mediaItemAdapter by lazy {
-        MediaItemAdapter(onClick = { media, _ ->
+        MediaItemAdapter(onItemCLick = { media, _ ->
             mediaViewModel.showPLayerMenu(true)
             viewModel.invokeAudioUrl(media, SearchViewModel.AudioActionType.PLAY)
+        }, onMenuClick = { media, view ->
+            showPopupMenu(media, view)
         })
     }
 
@@ -55,7 +57,6 @@ class SearchFragment :
     override fun setupViews() {
         initMediaViewModel()
         initMediaRecycler()
-        attachItemTouchHelperCallback()
         initSearch()
         with(binding) {
             vm = viewModel
@@ -65,42 +66,43 @@ class SearchFragment :
 
     override fun observeData() {
         with(viewModel) {
-            observe(receivedData) {
-                when (it.method) {
-                    RECEIVED.SEARCH_RECEIVED.received -> {
-                        it.argument<List<HashMap<String, String>>>(DATA_KEY)?.let { data ->
-                            viewModel.searchProgressObservable.set(false)
-                            viewModel.searchResultIsEmptyObservable.set(data.isEmpty())
-                            mediaItemAdapter.setItems(data.toMediaList(MediaItemType.SEARCH))
-                            showInfoDialog()
-                        }
-                    }
-
-                    RECEIVED.AUDIO_URL_RECEIVED.received -> {
-                        it.argument<HashMap<String, String>>(DATA_KEY)?.let { data ->
-                            val url = data["url"].orEmpty()
-                            val errorCode = data["errorCode"]
-                            if (!errorCode.isNullOrEmpty()) {
-                                showErrorDialog(errorCode)
-                                mediaViewModel.showPLayerMenu(false)
-                                return@observe
-                            }
-                            when (audioActionType) {
-                                SearchViewModel.AudioActionType.PLAY -> {
-                                    playMedia(url)
-                                }
-
-                                SearchViewModel.AudioActionType.DOWNLOAD -> {
-                                    startDownloadService(url)
-                                }
+            viewLifecycleOwner.lifecycleScope.launch {
+                receivedData.collect {
+                    when (it.method) {
+                        RECEIVED.SEARCH_RECEIVED.received -> {
+                            it.argument<List<HashMap<String, String>>>(DATA_KEY)?.let { data ->
+                                viewModel.searchProgressObservable.set(false)
+                                viewModel.searchResultIsEmptyObservable.set(data.isEmpty())
+                                mediaItemAdapter.setItems(data.toMediaList(MediaItemType.REMOTE))
                             }
                         }
-                    }
 
-                    RECEIVED.NEXT_RECEIVED.received -> {
-                        it.argument<List<HashMap<String, String>>>(DATA_KEY)?.let { data ->
-                            mediaItemAdapter.addItem(data.toMediaList(MediaItemType.SEARCH))
-                            binding.recyclerMedia.restoreScrollPosition()
+                        RECEIVED.AUDIO_URL_RECEIVED.received -> {
+                            it.argument<HashMap<String, String>>(DATA_KEY)?.let { data ->
+                                val url = data["url"].orEmpty()
+                                val errorCode = data["errorCode"]
+                                if (!errorCode.isNullOrEmpty()) {
+                                    showErrorDialog(errorCode)
+                                    mediaViewModel.showPLayerMenu(false)
+                                    return@collect
+                                }
+                                when (audioActionType) {
+                                    SearchViewModel.AudioActionType.PLAY -> {
+                                        playMedia(url)
+                                    }
+
+                                    SearchViewModel.AudioActionType.DOWNLOAD -> {
+                                        startDownloadService(url)
+                                    }
+                                }
+                            }
+                        }
+
+                        RECEIVED.NEXT_RECEIVED.received -> {
+                            it.argument<List<HashMap<String, String>>>(DATA_KEY)?.let { data ->
+                                mediaItemAdapter.addItem(data.toMediaList(MediaItemType.REMOTE))
+                                binding.recyclerMedia.restoreScrollPosition()
+                            }
                         }
                     }
                 }
@@ -110,23 +112,26 @@ class SearchFragment :
 
     override fun onJobStart(id: String) {
         ProgressLiveData.updateDownloadState(
-            ProgressLiveData.DownloadState.Started(
-                viewModel.currentMedia?.title.orEmpty(),
-            ),
+            ProgressLiveData.DownloadState.Started(id, viewModel.currentMedia?.title.orEmpty()),
         )
     }
 
-    override fun onJobProgress(progress: Int) {
+    override fun onJobProgress(
+        media: Media,
+        progress: Int,
+    ) {
         ProgressLiveData.updateDownloadState(
             ProgressLiveData.DownloadState.InProgress(
+                media,
                 progress,
             ),
         )
     }
 
     override fun onJobCompleted(media: Media) {
-        ProgressLiveData.updateDownloadState(ProgressLiveData.DownloadState.Completed)
-        media.thumbnail?.convertToBitmap(requireContext(), onSuccess = { bitmap ->
+        ProgressLiveData.updateDownloadState(ProgressLiveData.DownloadState.Completed(media.id))
+        val thumb = media.thumbnailMax ?: media.thumbnail
+        thumb?.convertToBitmap(requireContext(), onSuccess = { bitmap ->
             val localMedia = media.copy(bitmap = bitmap, type = MediaItemType.LOCAL.key)
             viewModel.insertMediaJob(localMedia)
         }, onFailure = {})
@@ -135,11 +140,15 @@ class SearchFragment :
     private fun playMedia(url: String) {
         with(viewModel) {
             currentMedia?.let { media ->
-                val item =
-                    MediaItemBuilder().setMediaId(url)
-                        .setMediaTitle(media.title)
-                        .build()
-                mediaViewModel.playMediaItem(item)
+                media.thumbnailMax.isValidImageUrl(requireContext()) { isValid ->
+                    val thumb = if (isValid) media.thumbnailMax else media.thumbnail
+                    val item =
+                        MediaItemBuilder().setMediaId(url)
+                            .setArtWorkUrl(thumb.orEmpty())
+                            .setMediaTitle(media.title)
+                            .build()
+                    mediaViewModel.playMediaItem(item)
+                }
             }
         }
     }
@@ -178,24 +187,8 @@ class SearchFragment :
         with(binding.recyclerMedia) {
             adapter = mediaItemAdapter
             itemAnimator = null
-            // addDivider(requireContext())
             addOnScrolledToEnd { viewModel.invokeNext() }
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged") // Todo
-    private fun attachItemTouchHelperCallback() {
-        val callback =
-            ItemTouchHelperCallback(
-                requireContext(),
-                swipeAction = SwipeAction.DOWNLOAD,
-                onSwipedCallback = { pos ->
-                    mediaItemAdapter.notifyDataSetChanged()
-                    getAudioUrlForDownload(mediaItemAdapter.mediaItems[pos])
-                },
-            )
-        val itemTouchHelper = ItemTouchHelper(callback)
-        itemTouchHelper.attachToRecyclerView(binding.recyclerMedia)
     }
 
     private fun getAudioUrlForDownload(media: Media) {
@@ -204,7 +197,7 @@ class SearchFragment :
             return
         }
 
-        if (JobService.runningJobCount > 0) {
+        if (JobService.runningJobCount >= 3) {
             context?.waningToast(getString(R.string.please_wait_download))
             return
         }
@@ -227,16 +220,6 @@ class SearchFragment :
         mediaViewModel = ViewModelProvider(requireActivity())[MediaViewModel::class.java]
     }
 
-    private fun showInfoDialog() {
-        if (!viewModel.getInfoDialogStatus()) {
-            InfoDialog(
-                titleResId = R.string.how_do_download,
-                imageResId = R.drawable.download_info,
-            ).showDialog(childFragmentManager)
-            viewModel.setTrueInfoDialogStatus()
-        }
-    }
-
     private fun showErrorDialog(code: String) {
         val errMessage =
             if (code == EXCEPTION.YT_EXPLODE_EXCEPTION.code) {
@@ -245,5 +228,34 @@ class SearchFragment :
                 R.string.unexpected_error
             }
         ErrorDialog(errMessage = errMessage).showDialog(childFragmentManager)
+    }
+
+    private fun showPopupMenu(
+        media: Media,
+        view: View,
+    ) {
+        val popupMenu = PopupMenu(ContextThemeWrapper(context, R.style.PopupMenuTheme), view)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            popupMenu.setForceShowIcon(true)
+        }
+        popupMenu.menuInflater.inflate(R.menu.search_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.download -> {
+                    getAudioUrlForDownload(media)
+                    true
+                }
+
+                R.id.play -> {
+                    mediaViewModel.showPLayerMenu(true)
+                    viewModel.invokeAudioUrl(media, SearchViewModel.AudioActionType.PLAY)
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        popupMenu.show()
     }
 }

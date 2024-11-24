@@ -1,75 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="vm"
-            type="com.snstudio.hyper.shared.MediaViewModel" />
-    </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        tools:context=".MainActivity">
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/baseNavHost"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/navigation" />
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/playerMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:visibility="gone"
-            tools:visibility="visible">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/mediaName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:maxLines="1"
-                android:paddingHorizontal="@dimen/_5sdp"
-                android:text="@{vm.metaDataLiveData.title}"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_12ssp"
-                app:layout_constraintBottom_toBottomOf="@+id/btnClose"
-                app:layout_constraintEnd_toStartOf="@+id/btnClose"
-                app:layout_constraintStart_toStartOf="parent"
+            <fragment
+                android:id="@+id/baseNavHost"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:defaultNavHost="true"
+                app:layout_constraintBottom_toTopOf="@+id/miniPlayerView"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="@string/app_name" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/btnClose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/transparent"
-                android:src="@drawable/ic_cancel"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:navGraph="@navigation/navigation"
+                tools:ignore="FragmentTagUsage" />
 
             <androidx.media3.ui.LegacyPlayerControlView
-                android:id="@+id/playerView"
+                android:id="@+id/miniPlayerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnClose"
-                app:show_buffering="when_playing"
-                app:show_fastforward_button="true"
-                app:show_next_button="true"
-                app:show_previous_button="true"
-                app:show_rewind_button="true"
-                app:show_shuffle_button="false"
+                android:visibility="gone"
+                app:controller_layout_id="@layout/custom_player_control_view"
+                app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+                app:show_timeout="-1" />
+
+            <me.ibrahimsn.lib.SmoothBottomBar
+                android:id="@+id/bottomBar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:backgroundColor="@color/secondary_background_color"
+                app:indicatorColor="@color/third_background_color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:menu="@menu/bottom_bar_menu"
+                app:textSize="@dimen/_12ssp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/playerBottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:background="@color/secondary_background_color"
+            android:visibility="gone"
+            app:behavior_hideable="false"
+            android:clickable="true"
+            android:focusable="true"
+            app:behavior_peekHeight="0dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <androidx.media3.ui.LegacyPlayerControlView
+                android:id="@+id/fullPlayerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:controller_layout_id="@layout/custom_player_full_control_view"
                 app:show_timeout="-1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

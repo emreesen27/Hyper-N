@@ -8,6 +8,7 @@ lifecycle = "2.7.0"
 okhttp = "4.12.0"
 navigation = "2.7.7"
 hilt = "2.48"
+skeletonlayout = "5.0.0"
 splashscreen = "1.1.0-rc01"
 carouselRecyclerView = "1.2.6"
 glide = "4.16.0"
@@ -15,7 +16,7 @@ glideCompiler = "4.15.0"
 sdp = "1.1.0"
 ssp = "1.1.0"
 nestedProgress = "v1.0.2"
-snackProgressBar = "6.4.2"
+smoothbottombar = "1.7.9"
 media3 = "1.3.0"
 hyperExplode = "1.0"
 room = "2.6.1"
@@ -42,6 +43,7 @@ navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 
+skeletonlayout = { module = "com.faltenreich:skeletonlayout", version.ref = "skeletonlayout" }
 splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
 
 carousel-recyclerview = { module = "com.github.sparrow007:carouselrecyclerview", version.ref = "carouselRecyclerView" }
@@ -53,7 +55,6 @@ sdp = { module = "com.intuit.sdp:sdp-android", version.ref = "sdp" }
 ssp = { module = "com.intuit.ssp:ssp-android", version.ref = "ssp" }
 
 nested-progress = { module = "com.github.emreesen27:Android-Nested-Progress", version.ref = "nestedProgress" }
-snackprogressbar = { module = "com.github.tingyik90:snackprogressbar", version.ref = "snackProgressBar" }
 
 media3-exoplayer-player = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 media3-exoplayer-dash = { module = "androidx.media3:media3-exoplayer-dash", version.ref = "media3" }
@@ -67,6 +68,7 @@ room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
 toasty = { module = "com.github.GrenderG:Toasty", version.ref = "toasty" }
+smoothbottombar = { group = "com.github.ibrahimsn98", name = "SmoothBottomBar", version.ref = "smoothbottombar" }
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }

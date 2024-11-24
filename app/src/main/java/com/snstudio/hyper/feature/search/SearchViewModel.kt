@@ -7,9 +7,7 @@ import com.snstudio.hyper.core.base.BaseViewModel
 import com.snstudio.hyper.data.local.repository.MediaRepository
 import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.util.INVOKE
-import com.snstudio.hyper.util.PrefsTag
 import com.snstudio.hyper.util.RECEIVED
-import com.snstudio.hyper.util.SharedPreferenceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope
@@ -24,7 +22,6 @@ class SearchViewModel
     constructor(
         private val methodChannel: MethodChannel,
         private val localMediaRepository: MediaRepository,
-        private val sharedPreferenceManager: SharedPreferenceManager,
     ) : BaseViewModel(methodChannel) {
         private val localMediaListMLiveData = MutableLiveData<List<Media>>()
 
@@ -82,12 +79,6 @@ class SearchViewModel
                     localMediaListMLiveData.value = it
                 }
             }
-
-        fun setTrueInfoDialogStatus() {
-            sharedPreferenceManager.putBoolean(PrefsTag.DOWNLOAD_INFO_DIALOG_SHOW, true)
-        }
-
-        fun getInfoDialogStatus(): Boolean = sharedPreferenceManager.getBoolean(PrefsTag.DOWNLOAD_INFO_DIALOG_SHOW)
 
         fun isMediaSavedLocally(media: Media): Boolean = localMediaListMLiveData.value?.any { media.id == it.id } ?: false
 

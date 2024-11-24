@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_info_background"
+        android:background="@drawable/bg_rounded_info"
         android:drawableStart="@drawable/ic_info"
         android:drawablePadding="@dimen/_10sdp"
         android:text="@string/music_already_added_info"

@@ -19,6 +19,10 @@ void main() {
       explode.dispose();
     } else if (call.method == 'nextPage') {
       explode.nextPage();
+    } else if (call.method == 'highlights') {
+      List<dynamic> args = call.arguments;
+      List<String> highlights = args.cast<String>();
+      explode.getHighlights(highlights);
     }
   });
 }
