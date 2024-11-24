@@ -1,5 +1,10 @@
 package com.snstudio.hyper.feature.playlist
 
+import android.annotation.SuppressLint
+import android.os.Build
+import android.view.ContextThemeWrapper
+import android.view.View
+import android.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -9,6 +14,7 @@ import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.infoToast
 import com.snstudio.hyper.core.extension.observe
 import com.snstudio.hyper.data.MediaItemBuilder
+import com.snstudio.hyper.data.model.Media
 import com.snstudio.hyper.databinding.FragmentPlaylistDetailBinding
 import com.snstudio.hyper.feature.picker.MediaPickerDialog
 import com.snstudio.hyper.shared.MediaItemAdapter
@@ -21,9 +27,9 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     private lateinit var mediaViewModel: MediaViewModel
     private val args: PlaylistDetailFragmentArgs by navArgs()
     private val mediaItemAdapter by lazy {
-        MediaItemAdapter(onClick = { _, pos ->
+        MediaItemAdapter(onItemCLick = { _, pos ->
             setPlayList(pos)
-        })
+        }, onMenuClick = { media, view -> showPopupMenu(media, view) })
     }
 
     override fun getViewModelClass() = PlaylistViewModel::class.java
@@ -43,13 +49,20 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun observeData() =
         with(viewModel) {
             observe(playlistWithMediaLiveData) { mediaList ->
                 mediaItemAdapter.setItems(mediaList.toMutableList())
+                /*
+                binding.listInfo.text = context?.getString(
+                    R.string.media_list_info,
+                    mediaList.size,
+                    mediaList.sumOf { it.duration ?: 0 }.toDuration()
+                )*/
             }
-            observe(deleteMediaLiveData) { deletedItemPos ->
-                mediaItemAdapter.removeItem(deletedItemPos)
+            observe(deleteMediaLiveData) { deletedItem ->
+                mediaItemAdapter.removeItem(deletedItem)
             }
         }
 
@@ -58,14 +71,22 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     }
 
     private fun initClickListener() {
-        binding.colorizedBar.setOnIconClickListener { index ->
-            when (index) {
-                0 -> showMediaPickerDialog()
-                else -> return@setOnIconClickListener
+        with(binding) {
+            noMusicItem.click {
+                showMediaPickerDialog()
             }
-        }
-        binding.noMusicItem.click {
-            showMediaPickerDialog()
+            playAll.click {
+                setPlayList(0)
+            }
+            shuffle.click {
+                setPlayList(0, true)
+            }
+            colorizedBar.setOnIconClickListener { index ->
+                when (index) {
+                    0 -> showMediaPickerDialog()
+                    else -> return@setOnIconClickListener
+                }
+            }
         }
     }
 
@@ -73,16 +94,25 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
         viewModel.getMediaForPlaylistOrdered(args.playListId)
     }
 
-    private fun setPlayList(pos: Int) {
+    private fun setPlayList(
+        pos: Int,
+        shuffle: Boolean = false,
+    ) {
         val mediaItems =
-            mediaItemAdapter.mediaItems.map { media ->
-                MediaItemBuilder()
-                    .setMediaId(media.localPath.orEmpty())
-                    .setMediaTitle(media.title)
-                    .build()
-            }
+            mediaItemAdapter.mediaItems
+                .let { items ->
+                    if (shuffle) items.shuffled() else items
+                }
+                .map { media ->
+                    MediaItemBuilder()
+                        .setMediaId(media.localPath.orEmpty())
+                        .setArtWorkBitmap(media.bitmap)
+                        .setMediaTitle(media.title)
+                        .build()
+                }
+
         mediaViewModel.showPLayerMenu(true)
-        mediaViewModel.setPlaylist(mediaItems, pos)
+        mediaViewModel.setPlaylist(mediaItems, if (shuffle) 0 else pos)
     }
 
     private fun showMediaPickerDialog() {
@@ -117,10 +147,8 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
     private fun createTouchHelperCallback() {
         val callback =
             ItemTouchHelperCallback(
-                requireContext(),
-                onMovedCallback = { movedItem() },
-                onSwipedCallback = { pos -> removeItem(pos) },
                 onMoveCallback = { from, to -> moveItem(from, to) },
+                onMovedCallback = { movedItem() },
             )
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerMedia)
@@ -140,12 +168,29 @@ class PlaylistDetailFragment : BaseFragment<FragmentPlaylistDetailBinding, Playl
         )
     }
 
-    private fun removeItem(pos: Int) {
-        viewModel.deleteMediaFromPlaylist(args.playListId, mediaItemAdapter.mediaItems[pos].id, pos)
-        /* Todo
-        Snackbar.make(viewHolder.itemView, "Item deleted", Snackbar.LENGTH_LONG)
-            .setAction("Undo") {
-                adapter.restoreItem(removedItem, position)
-            }.show()*/
+    private fun removeItem(media: Media) {
+        viewModel.deleteMediaFromPlaylist(args.playListId, media)
+    }
+
+    private fun showPopupMenu(
+        media: Media,
+        view: View,
+    ) {
+        val popupMenu = PopupMenu(ContextThemeWrapper(context, R.style.PopupMenuTheme), view)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            popupMenu.setForceShowIcon(true)
+        }
+        popupMenu.menuInflater.inflate(R.menu.playlist_detail_menu, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.remove -> {
+                    removeItem(media)
+                    true
+                }
+
+                else -> false
+            }
+        }
+        popupMenu.show()
     }
 }

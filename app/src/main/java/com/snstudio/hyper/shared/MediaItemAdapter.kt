@@ -1,6 +1,7 @@
 package com.snstudio.hyper.shared
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -15,7 +16,8 @@ import com.snstudio.hyper.databinding.ItemMediaSearchBinding
 import com.snstudio.hyper.util.MediaItemType
 
 class MediaItemAdapter(
-    private val onClick: ((Media, Int) -> Unit)? = null,
+    private val onItemCLick: ((Media, Int) -> Unit)? = null,
+    private val onMenuClick: ((Media, View) -> Unit)? = null,
 ) : RecyclerView.Adapter<MediaItemAdapter.AutoCompleteViewHolder>() {
     var mediaItems: MutableList<Media> = mutableListOf()
         private set
@@ -42,24 +44,19 @@ class MediaItemAdapter(
         notifyItemMoved(fromPosition, toPosition)
     }
 
-    fun removeItem(position: Int) {
-        mediaItems.removeAt(position)
-        notifyItemRemoved(position)
-    }
-
-    fun restoreItem(
-        item: Media,
-        position: Int,
-    ) { // Todo
-        mediaItems.add(position, item)
-        notifyItemInserted(position)
+    fun removeItem(media: Media) {
+        mediaItems.indexOfFirst { it.id == media.id }.takeIf { it != RecyclerView.NO_POSITION }
+            ?.let { index ->
+                mediaItems.removeAt(index)
+                notifyItemRemoved(index)
+            }
     }
 
     override fun getItemViewType(position: Int): Int {
         val item = mediaItems[position]
         return when (item.type) {
             MediaItemType.LOCAL.key -> R.layout.item_media
-            MediaItemType.SEARCH.key -> R.layout.item_media_search
+            MediaItemType.REMOTE.key -> R.layout.item_media_search
             else -> throw RuntimeException("invalid object")
         }
     }
@@ -102,16 +99,16 @@ class MediaItemAdapter(
         }
 
         private fun bindMedia(media: Media) {
-            val itemBinding = binding as ItemMediaBinding
-            itemBinding.root.click {
-                adapter.onClick?.invoke(media, absoluteAdapterPosition)
+            (binding as ItemMediaBinding).apply {
+                root.click { adapter.onItemCLick?.invoke(media, absoluteAdapterPosition) }
+                menu.click { adapter.onMenuClick?.invoke(media, it) }
             }
         }
 
         private fun bindMediaSearchType(media: Media) {
-            val itemBinding = binding as ItemMediaSearchBinding
-            itemBinding.root.click {
-                adapter.onClick?.invoke(media, absoluteAdapterPosition)
+            (binding as ItemMediaSearchBinding).apply {
+                root.click { adapter.onItemCLick?.invoke(media, absoluteAdapterPosition) }
+                menu.click { adapter.onMenuClick?.invoke(media, it) }
             }
         }
 

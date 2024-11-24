@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <rotate
+            android:fromDegrees="-90"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:toDegrees="-90">
+            <shape
+                android:innerRadiusRatio="3"
+                android:shape="ring"
+                android:thickness="4dp"
+                android:useLevel="false">
+                <solid android:color="@color/third_background_color" />
+            </shape>
+        </rotate>
+    </item>
+
+    <item>
+        <rotate
+            android:fromDegrees="-90"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:toDegrees="-90">
+            <shape
+                android:innerRadiusRatio="3"
+                android:shape="ring"
+                android:thickness="4dp"
+                android:useLevel="true">
+                <solid android:color="@color/main_color" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>

@@ -1,8 +1,9 @@
 package com.snstudio.hyper.feature.playlist
 
 import android.content.Context
-import android.graphics.PorterDuff
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -15,16 +16,16 @@ import com.snstudio.hyper.databinding.ItemPlayListBinding
 
 class PlaylistAdapter(
     private val context: Context,
-    private val onClick: ((Playlist) -> Unit)? = null,
-) :
-    RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
+    private val onItemCLick: ((Playlist) -> Unit)? = null,
+    private val onMenuClick: ((Playlist, View) -> Unit)? = null,
+) : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
     private var items: MutableList<Playlist> = mutableListOf()
 
     private val colorList =
         listOf(
             R.color.main_color,
-            R.color.main_color_mid,
-            R.color.main_color_light,
+            R.color.old_main_color_mid,
+            R.color.old_main_color_light,
             R.color.purple_500,
             R.color.purple_700,
         )
@@ -34,8 +35,6 @@ class PlaylistAdapter(
         items = newItems.toMutableList()
         diffResult.dispatchUpdatesTo(this)
     }
-
-    fun getItemWithPos(pos: Int): Playlist = items[pos]
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -51,7 +50,7 @@ class PlaylistAdapter(
     ) {
         holder.bind(items[position])
         holder.itemView.click {
-            onClick?.invoke(items[position])
+            onItemCLick?.invoke(items[position])
         }
     }
 
@@ -62,10 +61,15 @@ class PlaylistAdapter(
         fun bind(item: Playlist) {
             val randomColorResId = colorList.random()
             val color = ContextCompat.getColor(context, randomColorResId)
-
-            binding.playlistName.text = item.name
-            binding.thumbnail.setColorFilter(color, PorterDuff.Mode.SRC_IN)
-            binding.description.text = item.creationDate.formatAsDate()
+            with(binding) {
+                thumbnail.backgroundTintList = ColorStateList.valueOf(color)
+                thumbnail.text = item.name.first().toString()
+                playlistName.text = item.name
+                description.text = item.creationDate.formatAsDate()
+                menu.click {
+                    onMenuClick?.invoke(item, it)
+                }
+            }
         }
     }
 

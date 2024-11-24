@@ -6,13 +6,18 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/_10sdp">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/thumbnail"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
-        android:src="@drawable/ic_music_square"
+        android:background="@drawable/bg_playlist_name"
+        android:gravity="center"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/_16ssp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="X" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/playlistName"
@@ -24,7 +29,7 @@
         android:text="@{item.title}"
         android:textColor="@color/text_color"
         android:textSize="@dimen/_14ssp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/menu"
         app:layout_constraintStart_toEndOf="@+id/thumbnail"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/app_name" />
@@ -40,9 +45,19 @@
         android:text="@string/app_name"
         android:textColor="@color/secondary_text_color"
         android:textSize="@dimen/_13ssp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/menu"
         app:layout_constraintStart_toEndOf="@+id/thumbnail"
         app:layout_constraintTop_toBottomOf="@+id/playlistName"
         tools:text="@string/app_name" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/menu"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:background="@color/background_color"
+        android:src="@drawable/ic_more"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

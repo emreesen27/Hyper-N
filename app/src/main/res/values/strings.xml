@@ -10,14 +10,17 @@
     <string name="library">Library</string>
     <string name="playlist">Playlist</string>
     <string name="playlists">Playlists</string>
-    <string name="new_version_available">New Version Available</string>
+    <string name="new_version_available">New Version Available !</string>
     <string name="create_playlist">Create Playlist</string>
+    <string name="highlights">Highlights</string>
+    <string name="recent_downloads">Recent Downloads</string>
     <!--Title End-->
 
     <string name="searching">Searching…</string>
     <string name="song_desc">Listen to or manage downloaded songs</string>
     <string name="play_list_desc">Create and manage playlists</string>
     <string name="delete">Delete</string>
+    <string name="remove">Remove</string>
     <string name="detail">Detail</string>
     <string name="playlist_name">Playlist name</string>
     <string name="save">Save</string>
@@ -27,7 +30,7 @@
     <string name="library_music_empty_click">You haven\'t downloaded any music yet\n Tap here to go to the search screen</string>
     <string name="no_music">No music available to add to the list</string>
     <string name="already_in_lib">This music is already in your library</string>
-    <string name="please_wait_download">Please wait for the current item to finish downloading</string>
+    <string name="please_wait_download">Please wait for the current items to finish downloading</string>
     <string name="search_music">Search music</string>
     <string name="notification_name">Hyper download service</string>
     <string name="notification_desc">Notification channel for Hyper\'s download service</string>
@@ -36,16 +39,19 @@
     <string name="three_characters_required">At least 3 characters required</string>
     <string name="music_already_added_info">Music that are already added will not be listed here</string>
     <string name="downloading">Downloading…</string>
-    <string name="download_new_version">To continue using the app, please download the new version</string>
+    <string name="download_new_version">Upgrade to the new version for a more stable experience</string>
     <string name="cancel">Cancel</string>
     <string name="download">Download</string>
+    <string name="play">Play</string>
+    <string name="play_all">Play all</string>
+    <string name="shuffle">Shuffle</string>
     <string name="ok">OK</string>
-    <string name="how_do_download">You can start downloading the music you want by swiping left</string>
-    <string name="how_to_delete">Swipe left to delete music</string>
+    <string name="selected_item_deleted">The selected item will be deleted. Do you want to proceed ?</string>
     <string name="no_music_downloaded_yet">No music has been downloaded yet</string>
     <string name="all_music_contains">This list contains all the music that can be added</string>
     <string name="err">Error !</string>
     <string name="unexpected_error">An unexpected error has occurred. Try again later.</string>
     <string name="yt_explode_error">An error occurred while processing the data. Please make sure you are using the latest version of the application.</string>
-
+    <string name="media_list_info">%1$d Song - %2$s</string>
+    <string name="search_and_download_music">Search and download music</string>
 </resources>

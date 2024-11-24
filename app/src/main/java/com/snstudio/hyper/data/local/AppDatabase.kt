@@ -12,7 +12,7 @@ import com.snstudio.hyper.data.model.PlaylistMediaCrossRef
 
 @Database(
     entities = [Media::class, Playlist::class, PlaylistMediaCrossRef::class],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 @TypeConverters(Converters::class)

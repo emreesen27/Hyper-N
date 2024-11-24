@@ -44,7 +44,7 @@ abstract class BaseDialog<VBinding : ViewBinding> : DialogFragment() {
         binding = getViewBinding()
         isCancelable = setCancelable
         setStyle(STYLE_NO_TITLE, R.style.DialogTheme_transparent)
-        dialog?.window?.setBackgroundDrawableResource(R.drawable.dialog_rounded)
+        dialog?.window?.setBackgroundDrawableResource(R.drawable.bg_dialog_rounded)
     }
 
     override fun onCreateView(
