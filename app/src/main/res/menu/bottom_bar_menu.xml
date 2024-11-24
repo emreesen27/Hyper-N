@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home" />
+
+    <item
+        android:id="@+id/libraryFragment"
+        android:icon="@drawable/ic_library_music"
+        android:title="@string/library" />
+
+    <item
+        android:id="@+id/playlistFragment"
+        android:icon="@drawable/ic_playlist"
+        android:title="@string/playlist" />
+
+</menu>

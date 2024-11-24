@@ -31,8 +31,8 @@ class PlaylistViewModel
         private val playlistWithMediaMLiveData = MutableLiveData<List<Media>>()
         val playlistWithMediaLiveData: LiveData<List<Media>> = playlistWithMediaMLiveData
 
-        private val _deleteMediaLiveData = MutableLiveData<Int>()
-        val deleteMediaLiveData: LiveData<Int> = _deleteMediaLiveData
+        private val _deleteMediaLiveData = MutableLiveData<Media>()
+        val deleteMediaLiveData: LiveData<Media> = _deleteMediaLiveData
 
         init {
             getPlayList()
@@ -90,11 +90,10 @@ class PlaylistViewModel
 
         fun deleteMediaFromPlaylist(
             playlistId: Long,
-            mediaId: String,
-            pos: Int,
+            media: Media,
         ) = viewModelScope.launch {
-            playlistMediaCrossRepository.deleteMediaFromPlaylist(playlistId, mediaId)
+            playlistMediaCrossRepository.deleteMediaFromPlaylist(playlistId, media.id)
         }.invokeOnCompletion { throwable ->
-            if (throwable == null) _deleteMediaLiveData.postValue(pos)
+            if (throwable == null) _deleteMediaLiveData.postValue(media)
         }
     }

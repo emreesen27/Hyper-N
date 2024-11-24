@@ -6,6 +6,7 @@ import androidx.annotation.OptIn
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
@@ -15,6 +16,10 @@ import androidx.media3.session.SessionToken
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.snstudio.hyper.service.MusicPlayerService
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class MediaViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var player: Player
@@ -23,17 +28,16 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
     private val playerMLiveData = MutableLiveData<Player>()
     val playerLiveData: LiveData<Player> = playerMLiveData
 
-    private val playbackStateMLiveData = MutableLiveData<Unit>()
-    val playbackStateLiveData: LiveData<Unit> = playbackStateMLiveData
-
     private val metaDataMLiveData = MutableLiveData<MediaMetadata>()
     val metaDataLiveData: LiveData<MediaMetadata> = metaDataMLiveData
 
-    private val playerWhenReadyMLiveData = MutableLiveData<Boolean>()
-    val playerWhenReadyLiveData: LiveData<Boolean> = playerWhenReadyMLiveData
-
     private val showPlayerMenuMLiveData = MutableLiveData<Boolean>()
     val showPlayerMenuLiveData: LiveData<Boolean> = showPlayerMenuMLiveData
+
+    private val progressMLiveData = MutableLiveData<Int>()
+    val progressLiveData: LiveData<Int> = progressMLiveData
+
+    private var progressUpdateJob: Job? = null
 
     private val playlist = mutableListOf<MediaItem>()
 
@@ -67,22 +71,55 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
                     playWhenReady: Boolean,
                     reason: Int,
                 ) {
-                    playerWhenReadyMLiveData.postValue(playWhenReady)
+                    if (playWhenReady) {
+                        startProgressUpdate()
+                    } else {
+                        stopProgressUpdate()
+                    }
                 }
 
                 override fun onPlaybackStateChanged(playbackState: Int) {
-                    /*
-                    if (playbackState == Player.STATE_READY) {
-                        playbackStateMLiveData.postValue(Unit)
-                    }*/
+                    when (playbackState) {
+                        Player.STATE_READY -> {
+                            startProgressUpdate()
+                        }
+
+                        Player.STATE_ENDED, Player.STATE_IDLE -> {
+                            stopProgressUpdate()
+                        }
+
+                        else -> return
+                    }
                 }
             },
         )
     }
 
-    fun getCurrentMediaUrl(): String = player.currentMediaItem?.localConfiguration?.uri.toString()
+    private fun startProgressUpdate() {
+        progressUpdateJob?.cancel()
+        progressUpdateJob =
+            viewModelScope.launch {
+                while (isActive) {
+                    updateProgress()
+                    delay(1000)
+                }
+            }
+    }
 
-    fun getMediaMetaData(): MediaMetadata = player.mediaMetadata
+    private fun stopProgressUpdate() {
+        progressUpdateJob?.cancel()
+        progressUpdateJob = null
+    }
+
+    private fun updateProgress() {
+        val duration = player.duration
+        val currentPosition = player.currentPosition
+
+        if (duration > 0) {
+            val progress = ((currentPosition.toFloat() / duration.toFloat()) * 100).toInt()
+            progressMLiveData.postValue(progress)
+        }
+    }
 
     fun showPLayerMenu(show: Boolean) {
         showPlayerMenuMLiveData.postValue(show)
@@ -94,8 +131,8 @@ class MediaViewModel(application: Application) : AndroidViewModel(application) {
         player.play()
     }
 
-    fun stopPlayer() {
-        player.stop()
+    fun releasePLayer() {
+        player.release()
     }
 
     fun setPlaylist(

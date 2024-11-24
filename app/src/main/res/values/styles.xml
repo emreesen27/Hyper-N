@@ -13,4 +13,14 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="PopupMenuTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:background">@color/secondary_background_color</item>
+    </style>
+
+    <style name="CircleImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20%</item>
+    </style>
+
 </resources>

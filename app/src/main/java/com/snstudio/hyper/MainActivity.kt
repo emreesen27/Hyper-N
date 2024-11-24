@@ -1,26 +1,30 @@
 package com.snstudio.hyper
 
-import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
+import android.view.ViewPropertyAnimator
+import android.widget.PopupMenu
+import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.isVisible
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.textview.MaterialTextView
 import com.snstudio.hyper.core.extension.click
 import com.snstudio.hyper.core.extension.gone
+import com.snstudio.hyper.core.extension.loadArtwork
 import com.snstudio.hyper.core.extension.observe
-import com.snstudio.hyper.core.extension.startColorAnimation
+import com.snstudio.hyper.core.extension.slideDownToggle
+import com.snstudio.hyper.core.extension.slideInUp
+import com.snstudio.hyper.core.extension.slideOutDown
 import com.snstudio.hyper.databinding.ActivityMainBinding
 import com.snstudio.hyper.shared.MediaViewModel
-import com.snstudio.hyper.shared.ProgressLiveData
-import com.tingyik90.snackprogressbar.SnackProgressBar
-import com.tingyik90.snackprogressbar.SnackProgressBarLayout
-import com.tingyik90.snackprogressbar.SnackProgressBarManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,42 +35,100 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private var animator: ValueAnimator? = null
-    private var snackParentView: View? = null
-
-    private val snackProgressBarManager by lazy {
-        SnackProgressBarManager(
-            binding.root,
-            lifecycleOwner = this,
-        ).apply {
-            setBackgroundColor(R.color.main_color)
-            setProgressBarColor(R.color.text_color)
-            setProgressTextColor(R.color.text_color)
-            setViewToMove(binding.playerView)
-            useRoundedCornerBackground(true)
-            setMessageMaxLines(1)
-        }
-    }
-
-    private val progressSnackBar by lazy {
-        SnackProgressBar(SnackProgressBar.TYPE_CIRCULAR, getString(R.string.downloading))
-            .setIsIndeterminate(false)
-            .setProgressMax(100)
-            .setAllowUserInput(true)
-            .setShowProgressPercentage(true)
-    }
+    private lateinit var navController: NavController
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+    private var currentAnimation: ViewPropertyAnimator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        viewModel.createMusicFolder()
+        createMusicFolder()
+        initNavController()
+        setupSmoothBottomMenu()
+        initNavDestinationListener()
         observeData()
         initPlayerMenuButtonsListener()
-        initSnackDisplayListener()
+        setupBottomSheet()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaViewModel.releasePLayer()
+    }
+
+    private fun createMusicFolder() {
+        viewModel.createMusicFolder()
+    }
+
+    private fun setupBottomSheet() {
+        bottomSheetBehavior =
+            BottomSheetBehavior.from(binding.playerBottomSheet)
+
+        bottomSheetBehavior.apply {
+            isHideable = false
+            peekHeight = 0
+            state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        bottomSheetBehavior.addBottomSheetCallback(
+            object :
+                BottomSheetBehavior.BottomSheetCallback() {
+                @OptIn(UnstableApi::class)
+                override fun onStateChanged(
+                    bottomSheet: View,
+                    newState: Int,
+                ) {
+                    currentAnimation?.cancel()
+                    if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                        currentAnimation = binding.miniPlayerView.slideOutDown()
+                    } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                        window.navigationBarColor = getColor(R.color.secondary_background_color)
+                        currentAnimation = binding.miniPlayerView.slideInUp()
+                    }
+                }
+
+                override fun onSlide(
+                    bottomSheet: View,
+                    slideOffset: Float,
+                ) {
+                    binding.miniPlayerView.alpha = 1 - slideOffset
+                }
+            },
+        )
+    }
+
+    @Deprecated("Deprecated in Java") // Todo
+    override fun onBackPressed() {
+        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private fun expandBottomSheet() {
         with(binding) {
-            vm = mediaViewModel
-            lifecycleOwner = this@MainActivity
+            playerBottomSheet.apply {
+                visibility = View.VISIBLE
+                alpha = 0f
+            }
+
+            playerBottomSheet.animate()
+                .alpha(1f)
+                .setDuration(200)
+                .withStartAction {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                }.start()
+
+            miniPlayerView.animate()
+                .translationY(-miniPlayerView.height.toFloat())
+                .alpha(0f)
+                .setDuration(200)
+                .withEndAction {
+                    miniPlayerView.translationY = 0f
+                    miniPlayerView.alpha = 1f
+                }.start()
         }
     }
 
@@ -74,78 +136,69 @@ class MainActivity : AppCompatActivity() {
     private fun observeData() {
         with(mediaViewModel) {
             observe(playerLiveData) { player ->
-                binding.playerView.player = player
-            }
-            observe(playbackStateLiveData) {
-                // binding.playerMenu.visible()
-                // moveSnack(380)
-            }
-            observe(showPlayerMenuLiveData) {
-                binding.playerMenu.isVisible = it
-                moveSnack(380)
-            }
-            observe(playerWhenReadyLiveData) { ready ->
-                if (ready) {
-                    animator = binding.playerMenu.startColorAnimation()
+                with(binding) {
+                    miniPlayerView.player = player
+                    fullPlayerView.player = player
                 }
             }
-            observe(ProgressLiveData.mediaDownloadStateLiveData) { state ->
-                when (state) {
-                    is ProgressLiveData.DownloadState.Started -> {
-                        snackProgressBarManager.show(
-                            progressSnackBar,
-                            SnackProgressBarManager.LENGTH_INDEFINITE,
-                        )
-                        progressSnackBar.setMessage(state.message)
-                        snackProgressBarManager.updateTo(progressSnackBar)
-                    }
 
-                    is ProgressLiveData.DownloadState.InProgress -> {
-                        snackProgressBarManager.setProgress(state.progress)
-                    }
-
-                    is ProgressLiveData.DownloadState.Completed -> {
-                        snackProgressBarManager.dismiss()
-                    }
-
-                    is ProgressLiveData.DownloadState.Failed -> {}
+            observe(progressLiveData) { value ->
+                binding.miniPlayerView.findViewById<ProgressBar>(R.id.progressCircular).apply {
+                    progress = value
                 }
+            }
+            observe(metaDataLiveData) { metadata ->
+                with(binding) {
+                    miniPlayerView.apply {
+                        slideDownToggle(true)
+                        findViewById<AppCompatImageView>(R.id.image).loadArtwork(metadata)
+                        findViewById<MaterialTextView>(R.id.title).apply {
+                            text = metadata.title
+                            isSelected = true
+                        }
+                    }
+                    fullPlayerView.apply {
+                        findViewById<MaterialTextView>(R.id.title).apply {
+                            text = metadata.title
+                            isSelected = true
+                        }
+                        findViewById<AppCompatImageView>(R.id.image).loadArtwork(metadata)
+                    }
+                }
+            }
+            observe(showPlayerMenuLiveData) { visibility ->
+                if (visibility) binding.miniPlayerView.show() else binding.miniPlayerView.gone()
             }
         }
     }
 
-    private fun initSnackDisplayListener() {
-        snackProgressBarManager.setOnDisplayListener(
-            object :
-                SnackProgressBarManager.OnDisplayListener {
-                override fun onLayoutInflated(
-                    snackProgressBarLayout: SnackProgressBarLayout,
-                    overlayLayout: FrameLayout,
-                    snackProgressBar: SnackProgressBar,
-                    onDisplayId: Int,
-                ) {
-                    snackParentView = snackProgressBarLayout.parent as View
-                    if (binding.playerMenu.isVisible) {
-                        moveSnack(380)
-                    }
-                }
-            },
-        )
+    private fun initNavController() {
+        navController = findNavController(R.id.baseNavHost)
     }
 
-    private fun moveSnack(bottom: Int) {
-        val params = snackParentView?.layoutParams as? ViewGroup.MarginLayoutParams
-        params?.setMargins(0, 0, 0, bottom)
-        snackParentView?.layoutParams = params
+    private fun setupSmoothBottomMenu() {
+        val popupMenu = PopupMenu(this, null)
+        popupMenu.inflate(R.menu.bottom_bar_menu)
+        val menu = popupMenu.menu
+        binding.bottomBar.setupWithNavController(menu, navController)
+    }
+
+    private fun initNavDestinationListener() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.searchFragment, R.id.playlistDetail -> {
+                    binding.bottomBar.slideDownToggle(false)
+                }
+
+                else -> binding.bottomBar.slideDownToggle(true)
+            }
+        }
     }
 
     private fun initPlayerMenuButtonsListener() {
-        with(binding) {
-            btnClose.click {
-                mediaViewModel.stopPlayer()
-                playerMenu.gone()
-                moveSnack(50)
-            }
+        binding.miniPlayerView.click {
+            window.navigationBarColor = getColor(R.color.background_color)
+            expandBottomSheet()
         }
     }
 }

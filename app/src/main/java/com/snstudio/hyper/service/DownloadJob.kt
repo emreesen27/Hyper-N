@@ -47,7 +47,7 @@ class DownloadJob(
                         downloadedBytes += bytesRead
                         val progress = ((downloadedBytes.toDouble() / totalBytes) * 100).toInt()
                         postNotification(media.title, progress)
-                        callback.onJobProgress(progress)
+                        callback.onJobProgress(media, progress)
                     }
                 }
             }

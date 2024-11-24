@@ -5,8 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/secondary_background_color"
-    android:padding="@dimen/_10sdp">
+    android:padding="@dimen/_15sdp">
 
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_45sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:src="@drawable/ic_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
@@ -19,32 +30,36 @@
         android:textSize="@dimen/_13ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/how_do_download" />
+        app:layout_constraintTop_toBottomOf="@+id/image"
+        tools:text="@string/app_name" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_80sdp"
-        android:layout_marginHorizontal="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:layout_marginEnd="@dimen/_25sdp"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textColor="@color/main_color"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/ok"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/close"
+        android:id="@+id/ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_25sdp"
         android:gravity="center"
         android:text="@string/ok"
         android:textColor="@color/main_color"
         android:textSize="@dimen/_14ssp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

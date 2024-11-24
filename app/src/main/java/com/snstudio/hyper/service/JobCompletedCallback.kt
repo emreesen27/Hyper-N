@@ -14,8 +14,12 @@ interface JobCompletedCallback {
      * Called to report the job's progress.
      *
      * @param progress The current progress of the job as a percentage (0-100).
+     * @param media The media object produced or processed by the job.
      */
-    fun onJobProgress(progress: Int)
+    fun onJobProgress(
+        media: Media,
+        progress: Int,
+    )
 
     /**
      * Called when the job is completed.

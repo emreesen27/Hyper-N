@@ -34,7 +34,9 @@ dependencies {
 
     // Progress
     implementation(libs.nested.progress)
-    implementation(libs.snackprogressbar)
+
+    // BottomBar
+    implementation(libs.smoothbottombar)
 
     // Expo-Media
     implementation(libs.media3.exoplayer.player)
@@ -53,6 +55,9 @@ dependencies {
 
     // Toast
     implementation(libs.toasty)
+
+    // Skeleton
+    implementation libs.skeletonlayout
 
     // Firebase
     implementation(platform(libs.firebase.bom))
