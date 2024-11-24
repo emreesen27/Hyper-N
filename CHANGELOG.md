@@ -1,4 +1,5 @@
 ## v1.0.0-Stable (24.11.2024)
+* Stable version !
 * The interface has been completely redesigned for a sleeker and more intuitive user experience.
 * Performance enhancements have been implemented to ensure a smoother and faster experience.
 * The music player has been improved for a better listening experience.

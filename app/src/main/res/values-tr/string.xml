@@ -6,7 +6,7 @@
     <string name="library">Kütüphane</string>
     <string name="playlist">Çalma Listesi</string>
     <string name="playlists">Çalma Listeleri</string>
-    <string name="new_version_available">Yeni Sürüm Mevcut</string>
+    <string name="new_version_available">Yeni Sürüm Mevcut !</string>
     <string name="create_playlist">Çalma Listesi Oluştur</string>
     <string name="highlights">Öne Çıkanlar</string>
     <string name="recent_downloads">Son İndirlenler</string>
@@ -34,7 +34,7 @@
     <string name="three_characters_required">En az 3 karakter gerekli</string>
     <string name="music_already_added_info">Zaten eklenmiş olan müzikler burada listelenmez</string>
     <string name="downloading">İndiriliyor…</string>
-    <string name="download_new_version">Yeni sürüm mevcut !</string>
+    <string name="download_new_version">Daha kararlı bir deneyim için yeni sürüme yükseltin</string>
     <string name="cancel">İptal</string>
     <string name="download">İndir</string>
     <string name="play">Çal</string>

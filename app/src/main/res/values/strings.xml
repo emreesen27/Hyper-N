@@ -10,7 +10,7 @@
     <string name="library">Library</string>
     <string name="playlist">Playlist</string>
     <string name="playlists">Playlists</string>
-    <string name="new_version_available">New Version Available</string>
+    <string name="new_version_available">New Version Available !</string>
     <string name="create_playlist">Create Playlist</string>
     <string name="highlights">Highlights</string>
     <string name="recent_downloads">Recent Downloads</string>
@@ -39,7 +39,7 @@
     <string name="three_characters_required">At least 3 characters required</string>
     <string name="music_already_added_info">Music that are already added will not be listed here</string>
     <string name="downloading">Downloading…</string>
-    <string name="download_new_version">New version available !</string>
+    <string name="download_new_version">Upgrade to the new version for a more stable experience</string>
     <string name="cancel">Cancel</string>
     <string name="download">Download</string>
     <string name="play">Play</string>
