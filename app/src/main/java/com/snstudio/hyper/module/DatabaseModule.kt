@@ -6,6 +6,7 @@ import com.snstudio.hyper.data.local.AppDatabase
 import com.snstudio.hyper.data.local.dao.MediaDao
 import com.snstudio.hyper.data.local.dao.PlaylistDao
 import com.snstudio.hyper.data.local.dao.PlaylistMediaCrossRefDao
+import com.snstudio.hyper.data.local.migration.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,6 +41,6 @@ object DatabaseModule {
             appContext,
             AppDatabase::class.java,
             "Hyper",
-        ).fallbackToDestructiveMigration().build()
+        ).addMigrations(MIGRATION_1_2).build()
     }
 }
