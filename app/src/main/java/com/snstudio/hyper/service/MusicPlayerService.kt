@@ -64,8 +64,6 @@ class MusicPlayerService : MediaLibraryService() {
         super.onTaskRemoved(rootIntent)
         stopSelf()
         stopForeground(STOP_FOREGROUND_REMOVE)
-        player.release()
-        session.release()
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession {
@@ -73,8 +71,8 @@ class MusicPlayerService : MediaLibraryService() {
     }
 
     override fun onDestroy() {
+        super.onDestroy()
         player.release()
         session.release()
-        super.onDestroy()
     }
 }
