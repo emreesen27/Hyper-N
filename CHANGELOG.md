@@ -1,3 +1,6 @@
+## v1.0.2 (30.01.2025)
+* Explode module updated.
+
 ## v1.0.1-Stable (08.12.2024)
 * Minor UI improvements.
 * [FIX] Resolved a crash caused by releasing the media session instance multiple times.
