@@ -1,6 +1,7 @@
 package com.snstudio.hyper.feature.search
 
 import android.os.Build
+import android.os.Bundle
 import android.util.TypedValue
 import android.view.ContextThemeWrapper
 import android.view.View
@@ -10,6 +11,9 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
 import com.snstudio.hyper.R
 import com.snstudio.hyper.core.base.BaseFragment
 import com.snstudio.hyper.core.extension.addOnScrolledToEnd
@@ -40,6 +44,7 @@ class SearchFragment :
     BaseFragment<FragmentSearchBinding, SearchViewModel>(),
     JobCompletedCallback {
     private lateinit var mediaViewModel: MediaViewModel
+    private val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
 
     private val mediaItemAdapter by lazy {
         MediaItemAdapter(onItemCLick = { media, _ ->
@@ -171,6 +176,7 @@ class SearchFragment :
             setOnQueryTextListener(
                 object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String): Boolean {
+                        logSearchEvent(query)
                         viewModel.invokeSearch(query)
                         return true
                     }
@@ -257,5 +263,13 @@ class SearchFragment :
         }
 
         popupMenu.show()
+    }
+
+    fun logSearchEvent(query: String) {
+        val bundle =
+            Bundle().apply {
+                putString(FirebaseAnalytics.Param.SEARCH_TERM, query)
+            }
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SEARCH, bundle)
     }
 }
